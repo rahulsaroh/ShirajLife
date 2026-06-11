@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Anti-FOUC: apply theme before paint -->
+    <script>
+        (function () {
+            var t = localStorage.getItem('theme') ||
+                (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            document.documentElement.setAttribute('data-theme', t);
+        })();
+    </script>
+
+    <title>Services | Shiraj Life</title>
+    <meta name="description" content="Custom digital services designed for Indian businesses and startups. High-performance apps, websites, automation pipelines, and custom databases at highly competitive prices.">
+    <link rel="stylesheet" href="shared.css">
+    
+    <style>
+        /* ==========================================
+           SERVICES PAGE SPECIFIC CSS
+           ========================================== */
+        .services-intro {
+            font-size: 1.15rem;
+            color: var(--txt-1);
+            max-width: 800px;
+            margin-bottom: var(--sp-xl);
+            line-height: 1.75;
+        }
+
+        .services-intro strong {
+            color: var(--txt-0);
+        }
+
+        /* 3D Tilt Card Overrides for Services */
+        .service-card {
+            transform: perspective(1000px) rotateX(var(--rotate-x, 0deg)) rotateY(var(--rotate-y, 0deg));
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--r-lg);
+            padding: var(--sp-lg);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 480px;
+            transform-style: preserve-3d;
+            transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        @media (min-width: 992px) {
+            .service-card {
+                padding: var(--sp-xl);
+                min-height: 520px;
+            }
+        }
+
+        .service-card:hover {
+            border-color: var(--glow-clr, var(--acc));
+            box-shadow: 0 10px 30px var(--glow-clr-glow, rgba(10, 87, 80, 0.05)), 
+                        0 1px 8px var(--glow-clr-glow-lg, rgba(10, 87, 80, 0.1));
+        }
+
+        /* Individual service card colors */
+        .service-card.card-website {
+            --glow-clr: var(--dev-clr);
+            --glow-clr-glow: var(--dev-glow);
+            --glow-clr-glow-lg: var(--dev-glow-lg);
+        }
+        .service-card.card-app {
+            --glow-clr: var(--ai-clr);
+            --glow-clr-glow: var(--ai-glow);
+            --glow-clr-glow-lg: var(--ai-glow-lg);
+        }
+        .service-card.card-automation {
+            --glow-clr: var(--finance-clr);
+            --glow-clr-glow: var(--finance-glow);
+            --glow-clr-glow-lg: var(--finance-glow-lg);
+        }
+        .service-card.card-database {
+            --glow-clr: var(--data-clr);
+            --glow-clr-glow: var(--data-glow);
+            --glow-clr-glow-lg: var(--data-glow-lg);
+        }
+
+        /* Spotlights hover effect overlay */
+        .service-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(
+                280px circle at var(--x, 50%) var(--y, 50%),
+                var(--glow-clr-glow-lg, rgba(10, 87, 80, 0.1)) 0%,
+                transparent 80%
+            );
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .service-card:hover::before {
+            opacity: 1;
+        }
+
+        /* Card Content Nesting for 3D translation */
+        .service-card-header {
+            transform: translateZ(35px);
+            margin-bottom: var(--sp-md);
+        }
+
+        .service-card-body {
+            transform: translateZ(25px);
+            flex-grow: 1;
+            margin-bottom: var(--sp-lg);
+        }
+
+        .service-card-footer {
+            transform: translateZ(30px);
+            border-top: 1px solid var(--border);
+            padding-top: var(--sp-md);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        /* UI Badges & Sub-text */
+        .service-price-pill {
+            display: inline-flex;
+            align-items: center;
+            font-family: var(--font-mono);
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 5px 12px;
+            border-radius: var(--r-full);
+            background: var(--glow-clr-glow, rgba(10, 87, 80, 0.08));
+            color: var(--glow-clr, var(--acc));
+            border: 1px solid rgba(var(--glow-clr), 0.2);
+            margin-bottom: var(--sp-sm);
+        }
+
+        .service-price-amount {
+            font-size: 1.45rem;
+            font-weight: 900;
+            font-family: var(--font-display);
+            color: var(--glow-clr, var(--txt-0));
+            display: flex;
+            align-items: baseline;
+            gap: 2px;
+        }
+
+        .service-price-amount span {
+            font-size: 0.78rem;
+            font-weight: 500;
+            color: var(--txt-2);
+            font-family: var(--font-sans);
+        }
+
+        .service-title {
+            font-size: clamp(1.35rem, 3.5vw, 1.7rem);
+            font-weight: 800;
+            margin-bottom: 8px;
+            color: var(--txt-0);
+            letter-spacing: -0.02em;
+        }
+
+        .service-desc {
+            font-size: 0.92rem;
+            line-height: 1.55;
+            color: var(--txt-1);
+            margin-bottom: var(--sp-md);
+        }
+
+        /* Custom Checklist styling inside card */
+        .service-features {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .service-features li {
+            display: flex;
+            align-items: start;
+            gap: 10px;
+            font-size: 0.88rem;
+            color: var(--txt-1);
+            line-height: 1.5;
+        }
+
+        .service-features li svg {
+            width: 15px;
+            height: 15px;
+            color: var(--glow-clr, var(--acc));
+            margin-top: 3px;
+            flex-shrink: 0;
+            stroke: currentColor;
+            stroke-width: 3;
+            fill: none;
+        }
+
+        .service-features li strong {
+            color: var(--txt-0);
+            font-weight: 600;
+        }
+
+        /* Tech Pills wrapper */
+        .service-tech-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 14px;
+        }
+
+        .tech-pill {
+            font-family: var(--font-mono);
+            font-size: 0.65rem;
+            font-weight: 600;
+            background: var(--bg-1);
+            color: var(--txt-1);
+            border: 1px solid var(--border);
+            padding: 3px 8px;
+            border-radius: var(--r-sm);
+            transition: all 0.2s ease;
+        }
+
+        .service-card:hover .tech-pill {
+            border-color: rgba(var(--glow-clr), 0.15);
+            background: var(--bg-2);
+            color: var(--txt-0);
+        }
+
+        /* Why Choose Section styling */
+        .why-choose-section {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--r-lg);
+            padding: var(--sp-lg);
+            margin-top: var(--sp-2xl);
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--sh-sm);
+        }
+
+        @media (min-width: 768px) {
+            .why-choose-section {
+                padding: var(--sp-xl);
+            }
+        }
+
+        .why-choose-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: var(--sp-xl);
+            margin-top: var(--sp-lg);
+        }
+
+        @media (min-width: 768px) {
+            .why-choose-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .why-card {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .why-card-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: var(--r-md);
+            background: var(--acc-glow);
+            color: var(--acc);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 6px;
+        }
+
+        .why-card-icon svg {
+            width: 20px;
+            height: 20px;
+            stroke-width: 2;
+            fill: none;
+            stroke: currentColor;
+        }
+
+        .why-card-title {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--txt-0);
+        }
+
+        .why-card-desc {
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: var(--txt-1);
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <header id="header">
+        <div class="container nav-container">
+            <a href="index.html" class="logo" aria-label="Shiraj Life Home">
+                shiraj<span>life</span>
+            </a>
+
+            <nav class="nav-links" aria-label="Main Navigation">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="about.html" class="nav-link">About</a>
+                <a href="pillars.html" class="nav-link">Pillars</a>
+                <a href="services.html" class="nav-link active">Services</a>
+                <a href="work.html" class="nav-link">Work</a>
+                <a href="toolkit.html" class="nav-link">Toolkit</a>
+                <a href="clients.html" class="nav-link">Clients</a>
+                <a href="contact.html" class="nav-link">Contact</a>
+            </nav>
+
+            <div class="nav-actions">
+                <button class="theme-toggle" id="theme-toggle" aria-label="Toggle visual theme">
+                    <svg class="moon-icon" viewBox="0 0 24 24">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+                    </svg>
+                    <svg class="sun-icon" viewBox="0 0 24 24">
+                        <circle cx="12" cy="12" r="5" />
+                        <line x1="12" y1="1" x2="12" y2="3" />
+                        <line x1="12" y1="21" x2="12" y2="23" />
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                        <line x1="1" y1="12" x2="3" y2="12" />
+                        <line x1="21" y1="12" x2="23" y2="12" />
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+                    </svg>
+                </button>
+
+                <button class="mobile-nav-btn" id="mobile-menu-btn" aria-label="Toggle menu navigation drawer">
+                    <svg viewBox="0 0 24 24">
+                        <line x1="3" y1="12" x2="21" y2="12" />
+                        <line x1="3" y1="6" x2="21" y2="6" />
+                        <line x1="3" y1="18" x2="21" y2="18" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- MOBILE DRAWER -->
+    <div class="mobile-drawer" id="mobile-drawer">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="about.html" class="nav-link">About</a>
+        <a href="pillars.html" class="nav-link">Pillars</a>
+        <a href="services.html" class="nav-link active">Services</a>
+        <a href="work.html" class="nav-link">Work</a>
+        <a href="toolkit.html" class="nav-link">Toolkit</a>
+        <a href="clients.html" class="nav-link">Clients</a>
+        <a href="contact.html" class="nav-link">Contact</a>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <main>
+        <section>
+            <div class="container">
+                <!-- Back navigation -->
+                <div class="back-nav">
+                    <a href="index.html" class="btn-text">
+                        <svg viewBox="0 0 24 24" style="transform: rotate(180deg); margin-right: 4px;">
+                            <line x1="5" y1="12" x2="19" y2="12" />
+                            <polyline points="12 5 19 12 12 19" />
+                        </svg>
+                        Back to Home
+                    </a>
+                </div>
+
+                <div class="section-header reveal">
+                    <span class="section-eyebrow">Offerings</span>
+                    <h2 class="section-title">High-execution services at Indian competitive prices.</h2>
+                </div>
+
+                <p class="services-intro reveal" style="transition-delay: 0.05s;">
+                    Empowering Indian businesses, startups, and retail shops with professional digital engineering. 
+                    I combine <strong>engineering logic</strong> with <strong>management strategy</strong> to design clean, high-performance systems. No shortcuts, no premium overheads—just robust code that drives growth.
+                </p>
+
+                <div class="work-grid">
+
+                    <!-- SERVICE 1: Website Development -->
+                    <div class="service-card card-website reveal" style="transition-delay: 0.1s;">
+                        <div>
+                            <div class="service-card-header">
+                                <div class="service-price-pill">Web Development</div>
+                                <div class="service-price-amount">₹4,999 <span>starting price</span></div>
+                            </div>
+                            
+                            <div class="service-card-body">
+                                <h3 class="service-title">Websites Built for Conversion</h3>
+                                <p class="service-desc">
+                                    Get high-speed, SEO-optimized, and fully responsive websites. Ideal for capturing local leads, building retail storefronts, and presenting corporate portfolios.
+                                </p>
+                                
+                                <ul class="service-features">
+                                    <li>
+                                        <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                        <span><strong>Landing Pages (₹4,999)</strong>: High-converting single-page layout with call-to-actions.</span>
+                                    </li>
+                                    <li>
+                                        <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                        <span><strong>Corporate Websites (₹9,999)</strong>: Up to 5 custom, lightning-fast sections detailing services and brand info.</span>
+                                    </li>
+                                    <li>
+                                        <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                        <span><strong>E-commerce Storefronts (₹19,999)</strong>: Custom checkout flows, cart features, and UPI payment integration.</span>
+                                    </li>
+                                    <li>
+                                        <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                        <span><strong>Technical SEO</strong>: Structured Schema markup, optimized metadata, and clean indexable layouts.</span>
+                                    </li>
+                                </ul>
+
+                                <div class="service-tech-tags">
+                                    <span class="tech-pill">HTML5/CSS3</span>
+                                    <span class="tech-pill">Vite</span>
+                                    <span class="tech-pill">React</span>
+                                    <span class="tech-pill">Vanilla JS</span>
+                                    <span class="tech-pill">PageSpeed Opt</span>
+                                    <span class="tech-pill">SEO</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="service-card-footer">
+                            <a href="contact.html?subject=Web+Development+Query" class="btn-text">
+                                Enquire Now
+                                <svg viewBox="0 0 24 24">
+                                    <line x1="5" y1="12" x2="19" y2="12" />
+                                    <polyline points="12 5 19 12 12 19" />
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- SERVICE 2: App Development -->
+                    <div class="service-card card-app reveal" style="transition-delay: 0.15s;">
+                        <div>
+                            <div class="service-card-header">
+                                <div class="service-price-pill">Mobile Applications</div>
+                                <div class="service-price-amount">₹24,999 <span>starting price</span></div>
+                            </div>
+                            
+                            <div class="service-card-body">
+                                <h3 class="service-title">Cross-Platform Mobile Apps</h3>
+                                <p class="service-desc">
+                                    Native Android & iOS applications developed with a single, highly optimized codebase. Perfect for startups and local services looking for a premium mobile footprint.
+                                </p>
+                                
+                                <ul class="service-features">
+                                    <li>
+                                        <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                        <span><strong>MVP / Utility Apps (₹24,999)</strong>: Quick-to-market applications to test layouts and core functions.</span>
+                                    </li>
+                                    <li>
+                                        <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                        <span><strong>Standard Business Apps (₹49,999)</strong>: Multiple user roles, REST API sync, and secure database backends.</span>
+                                    </li>
+                                    <li>
+                                        <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                        <span><strong>Enterprise Booking Platforms (₹79,999)</strong>: Advanced features, push notification engines, and admin panels.</span>
+                                    </li>
+                                    <li>
+                                        <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                        <span><strong>Payment Integration</strong>: Ready-to-use checkout APIs supporting Razorpay, Paytm, and local UPI.</span>
+                                    </li>
+                                </ul>
+
+                                <div class="service-tech-tags">
+                                    <span class="tech-pill">Flutter</span>
+                                    <span class="tech-pill">Dart</span>
+                                    <span class="tech-pill">Firebase</span>
+                                    <span class="tech-pill">SQLite/Hive</span>
+                                    <span class="tech-pill">REST APIs</span>
+                                    <span class="tech-pill">UPI Integrations</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="service-card-footer">
+                            <a href="contact.html?subject=Mobile+App+Development+Query" class="btn-text">
+                                Enquire Now
+                                <svg viewBox="0 0 24 24">
+                                    <line x1="5" y1="12" x2="19" y2="12" />
+                                    <polyline points="12 5 19 12 12 19" />
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- SERVICE 3: Business Automation -->
+                    <div class="service-card card-automation reveal" style="transition-delay: 0.2s;">
+                        <div>
+                            <div class="service-card-header">
+                                <div class="service-price-pill">Process Automation</div>
+                                <div class="service-price-amount">₹7,999 <span>starting price</span></div>
+                            </div>
+                            
+                            <div class="service-card-body">
+                                <h3 class="service-title">Repetitive Work Eliminated</h3>
+                                <p class="service-desc">
+                                    Optimize daily operations, connect fragmented tools, and auto-sync business logs. Remove human manual error from your accounting, sales pipelines, and reports.
+                                </p>
+                                
+                                <ul class="service-features">
+                                    <li>
+                                        <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                        <span><strong>Task Scripting (₹7,999)</strong>: Auto-format sheets, export daily CSV logs, and auto-backup client data.</span>
+                                    </li>
+                                    <li>
+                                        <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                        <span><strong>WhatsApp Cloud API Integrations (₹14,999)</strong>: Trigger real-time transaction receipts and alerts directly to customers' phones.</span>
+                                    </li>
+                                    <li>
+                                        <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                        <span><strong>Data Pipeline Crawlers (₹29,999)</strong>: Extract rates, aggregate competitor product data, and populate dashboards automatically.</span>
+                                    </li>
+                                </ul>
+
+                                <div class="service-tech-tags">
+                                    <span class="tech-pill">Python</span>
+                                    <span class="tech-pill">Selenium/Scrapy</span>
+                                    <span class="tech-pill">WhatsApp API</span>
+                                    <span class="tech-pill">Zapier/Make</span>
+                                    <span class="tech-pill">Cron Jobs</span>
+                                    <span class="tech-pill">JSON/CSV API</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="service-card-footer">
+                            <a href="contact.html?subject=Business+Automation+Query" class="btn-text">
+                                Enquire Now
+                                <svg viewBox="0 0 24 24">
+                                    <line x1="5" y1="12" x2="19" y2="12" />
+                                    <polyline points="12 5 19 12 12 19" />
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- SERVICE 4: Database & Analytics -->
+                    <div class="service-card card-database reveal" style="transition-delay: 0.25s;">
+                        <div>
+                            <div class="service-card-header">
+                                <div class="service-price-pill">Databases & Analytics</div>
+                                <div class="service-price-amount">₹9,999 <span>starting price</span></div>
+                            </div>
+                            
+                            <div class="service-card-body">
+                                <h3 class="service-title">Relational Data & BI Insights</h3>
+                                <p class="service-desc">
+                                    Transition from messy Excel sheets to robust, scalable relational databases. Build automated reporting templates to analyze revenue, audits, and operational parameters.
+                                </p>
+                                
+                                <ul class="service-features">
+                                    <li>
+                                        <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                        <span><strong>DB Setup & Design (₹9,999)</strong>: Clean relational structures designed to secure operational data.</span>
+                                    </li>
+                                    <li>
+                                        <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                        <span><strong>BI reporting Pipelines (₹24,999)</strong>: Build custom SQL transforms that display KPIs to Tableau or PowerBI dashboards.</span>
+                                    </li>
+                                    <li>
+                                        <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                        <span><strong>Audit Automation Logs</strong>: Relational structures equipped with triggers to catch mathematical discrepancies.</span>
+                                    </li>
+                                </ul>
+
+                                <div class="service-tech-tags">
+                                    <span class="tech-pill">PostgreSQL</span>
+                                    <span class="tech-pill">MySQL</span>
+                                    <span class="tech-pill">SQLite</span>
+                                    <span class="tech-pill">SQL Optimization</span>
+                                    <span class="tech-pill">Pandas ETL</span>
+                                    <span class="tech-pill">BI Dashboards</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="service-card-footer">
+                            <a href="contact.html?subject=Database+Analytics+Query" class="btn-text">
+                                Enquire Now
+                                <svg viewBox="0 0 24 24">
+                                    <line x1="5" y1="12" x2="19" y2="12" />
+                                    <polyline points="12 5 19 12 12 19" />
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- WHY CHOOSE SECTION -->
+                <div class="why-choose-section reveal" style="transition-delay: 0.3s;">
+                    <span class="section-eyebrow">The Edge</span>
+                    <h2 class="section-title" style="margin-bottom: 8px;">Why work with me?</h2>
+                    <p style="color: var(--txt-1); font-size: 0.98rem; max-width: 700px; margin-bottom: 24px;">
+                        I build solutions that address specific business requirements. My dual focus on operational integrity and clean software engineering guarantees high-end systems that function perfectly.
+                    </p>
+
+                    <div class="why-choose-grid">
+                        <!-- Edge 1 -->
+                        <div class="why-card">
+                            <div class="why-card-icon">
+                                <svg viewBox="0 0 24 24">
+                                    <circle cx="12" cy="12" r="10"/>
+                                    <line x1="12" y1="16" x2="12" y2="12"/>
+                                    <line x1="12" y1="8" x2="12.01" y2="8"/>
+                                </svg>
+                            </div>
+                            <h3 class="why-card-title">Audit-Grade Integrity</h3>
+                            <p class="why-card-desc">
+                                Over 9 years of hands-on experience auditing operations and systems inside the Government of India ensures that every data validation, trigger, and database calculation is structurally sound.
+                            </p>
+                        </div>
+                        
+                        <!-- Edge 2 -->
+                        <div class="why-card">
+                            <div class="why-card-icon">
+                                <svg viewBox="0 0 24 24">
+                                    <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+                                    <line x1="8" y1="21" x2="16" y2="21"/>
+                                    <line x1="12" y1="17" x2="12" y2="21"/>
+                                </svg>
+                            </div>
+                            <h3 class="why-card-title">Dual Engineering + MBA Focus</h3>
+                            <p class="why-card-desc">
+                                I don't just write code. My academic foundation in both engineering and business management allows me to translate complex functional processes into high-performing software systems.
+                            </p>
+                        </div>
+
+                        <!-- Edge 3 -->
+                        <div class="why-card">
+                            <div class="why-card-icon">
+                                <svg viewBox="0 0 24 24">
+                                    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+                                </svg>
+                            </div>
+                            <h3 class="why-card-title">Direct Local Execution</h3>
+                            <p class="why-card-desc">
+                                Cut out agency markups, middleman project managers, and overheads. You work directly with me to define, build, deploy, and support your digital platform.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="container footer-content">
+            <span class="footer-logo">shiraj<span>life</span></span>
+            <span class="footer-copy">&copy; 2026 Shiraj. Stacked &amp; Compiled in Mumbai. All Rights Reserved.</span>
+        </div>
+    </footer>
+
+    <!-- SCRIPTS -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const header = document.getElementById('header');
+
+            /* Scrolled header state */
+            window.addEventListener('scroll', () => {
+                header.classList.toggle('scrolled', window.scrollY > 24);
+            }, { passive: true });
+
+            /* Theme toggle */
+            const themeBtn = document.getElementById('theme-toggle');
+            themeBtn.addEventListener('click', () => {
+                const current = document.documentElement.getAttribute('data-theme');
+                const next = current === 'dark' ? 'light' : 'dark';
+                document.documentElement.setAttribute('data-theme', next);
+                localStorage.setItem('theme', next);
+            });
+
+            /* Mobile menu */
+            const mobileBtn = document.getElementById('mobile-menu-btn');
+            const mobileDrawer = document.getElementById('mobile-drawer');
+            const hamburgerSVG = `<svg viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>`;
+            const closeSVG = `<svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`;
+
+            function closeDrawer() {
+                mobileDrawer.classList.remove('open');
+                mobileBtn.innerHTML = hamburgerSVG;
+            }
+
+            mobileBtn.addEventListener('click', e => {
+                e.stopPropagation();
+                const isOpen = mobileDrawer.classList.toggle('open');
+                mobileBtn.innerHTML = isOpen ? closeSVG : hamburgerSVG;
+            });
+
+            mobileDrawer.querySelectorAll('.nav-link').forEach(l => l.addEventListener('click', closeDrawer));
+            document.addEventListener('click', e => {
+                if (!mobileDrawer.contains(e.target) && !mobileBtn.contains(e.target)) closeDrawer();
+            });
+
+            /* ─── 3D GLOWING CARDS TILT ─── */
+            const cards = document.querySelectorAll('.service-card');
+            cards.forEach(card => {
+                let frameId = null;
+
+                card.addEventListener('mousemove', e => {
+                    if (frameId) {
+                        cancelAnimationFrame(frameId);
+                    }
+
+                    frameId = requestAnimationFrame(() => {
+                        const rect = card.getBoundingClientRect();
+                        const x = e.clientX - rect.left;
+                        const y = e.clientY - rect.top;
+
+                        const centerX = rect.width / 2;
+                        const centerY = rect.height / 2;
+
+                        const rotateX = ((centerY - y) / centerY) * 10;
+                        const rotateY = ((x - centerX) / centerX) * 10;
+
+                        card.style.setProperty('--x', `${x}px`);
+                        card.style.setProperty('--y', `${y}px`);
+                        card.style.setProperty('--rotate-x', `${rotateX}deg`);
+                        card.style.setProperty('--rotate-y', `${rotateY}deg`);
+                    });
+                });
+
+                card.addEventListener('mouseleave', () => {
+                    if (frameId) {
+                        cancelAnimationFrame(frameId);
+                    }
+                    card.style.setProperty('--rotate-x', '0deg');
+                    card.style.setProperty('--rotate-y', '0deg');
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>

@@ -168,6 +168,7 @@
                 <a href="index.html" class="nav-link">Home</a>
                 <a href="about.html" class="nav-link">About</a>
                 <a href="pillars.html" class="nav-link">Pillars</a>
+                <a href="services.html" class="nav-link">Services</a>
                 <a href="work.html" class="nav-link">Work</a>
                 <a href="toolkit.html" class="nav-link">Toolkit</a>
                 <a href="clients.html" class="nav-link">Clients</a>
@@ -208,6 +209,7 @@
         <a href="index.html" class="nav-link">Home</a>
         <a href="about.html" class="nav-link">About</a>
         <a href="pillars.html" class="nav-link">Pillars</a>
+        <a href="services.html" class="nav-link">Services</a>
         <a href="work.html" class="nav-link">Work</a>
         <a href="toolkit.html" class="nav-link">Toolkit</a>
         <a href="clients.html" class="nav-link">Clients</a>
@@ -322,6 +324,13 @@
             window.addEventListener('scroll', () => {
                 header.classList.toggle('scrolled', window.scrollY > 24);
             }, { passive: true });
+
+            /* Pre-populate subject from URL search parameter */
+            const urlParams = new URLSearchParams(window.location.search);
+            const subjectParam = urlParams.get('subject');
+            if (subjectParam && document.getElementById('subject')) {
+                document.getElementById('subject').value = subjectParam;
+            }
 
             /* Theme toggle */
             const themeBtn = document.getElementById('theme-toggle');
