@@ -87,6 +87,31 @@
             --sh-acc: 0 8px 28px rgba(10, 87, 80, 0.22);
             --sel-bg: #0a5750;
             --sel-txt: #ffffff;
+
+            /* Light mode 3D card colors */
+            --dev-clr: #0891b2;
+            --dev-glow: rgba(8, 145, 178, 0.07);
+            --dev-glow-lg: rgba(8, 145, 178, 0.15);
+
+            --ai-clr: #7c3aed;
+            --ai-glow: rgba(124, 58, 237, 0.07);
+            --ai-glow-lg: rgba(124, 58, 237, 0.15);
+
+            --data-clr: #059669;
+            --data-glow: rgba(5, 150, 105, 0.07);
+            --data-glow-lg: rgba(5, 150, 105, 0.15);
+
+            --finance-clr: #d97706;
+            --finance-glow: rgba(217, 119, 6, 0.07);
+            --finance-glow-lg: rgba(217, 119, 6, 0.15);
+
+            --content-clr: #db2777;
+            --content-glow: rgba(219, 39, 119, 0.07);
+            --content-glow-lg: rgba(219, 39, 119, 0.15);
+
+            --health-clr: #dc2626;
+            --health-glow: rgba(220, 38, 38, 0.07);
+            --health-glow-lg: rgba(220, 38, 38, 0.15);
         }
 
         [data-theme="dark"] {
@@ -112,6 +137,31 @@
             --sh-acc: 0 8px 28px rgba(19, 184, 166, 0.20);
             --sel-bg: #13b8a6;
             --sel-txt: #0d1012;
+
+            /* Dark mode 3D card colors */
+            --dev-clr: #22d3ee;
+            --dev-glow: rgba(34, 211, 238, 0.15);
+            --dev-glow-lg: rgba(34, 211, 238, 0.35);
+
+            --ai-clr: #a78bfa;
+            --ai-glow: rgba(167, 139, 250, 0.15);
+            --ai-glow-lg: rgba(167, 139, 250, 0.35);
+
+            --data-clr: #34d399;
+            --data-glow: rgba(52, 211, 153, 0.15);
+            --data-glow-lg: rgba(52, 211, 153, 0.35);
+
+            --finance-clr: #fb923c;
+            --finance-glow: rgba(251, 146, 60, 0.15);
+            --finance-glow-lg: rgba(251, 146, 60, 0.35);
+
+            --content-clr: #f472b6;
+            --content-glow: rgba(244, 114, 182, 0.15);
+            --content-glow-lg: rgba(244, 114, 182, 0.35);
+
+            --health-clr: #f87171;
+            --health-glow: rgba(248, 113, 113, 0.15);
+            --health-glow-lg: rgba(248, 113, 113, 0.35);
         }
 
         /* ==========================================
@@ -1278,26 +1328,120 @@
             }
         }
 
+        /* Card Theme Links to Variables */
+        .skills-category.card-dev {
+            --glow-clr: var(--dev-clr);
+            --glow-clr-glow: var(--dev-glow);
+            --glow-clr-glow-lg: var(--dev-glow-lg);
+        }
+        .skills-category.card-ai {
+            --glow-clr: var(--ai-clr);
+            --glow-clr-glow: var(--ai-glow);
+            --glow-clr-glow-lg: var(--ai-glow-lg);
+        }
+        .skills-category.card-data {
+            --glow-clr: var(--data-clr);
+            --glow-clr-glow: var(--data-glow);
+            --glow-clr-glow-lg: var(--data-glow-lg);
+        }
+        .skills-category.card-finance {
+            --glow-clr: var(--finance-clr);
+            --glow-clr-glow: var(--finance-glow);
+            --glow-clr-glow-lg: var(--finance-glow-lg);
+        }
+        .skills-category.card-content {
+            --glow-clr: var(--content-clr);
+            --glow-clr-glow: var(--content-glow);
+            --glow-clr-glow-lg: var(--content-glow-lg);
+        }
+        .skills-category.card-health {
+            --glow-clr: var(--health-clr);
+            --glow-clr-glow: var(--health-glow);
+            --glow-clr-glow-lg: var(--health-glow-lg);
+        }
+
         .skills-category {
             background: var(--card);
             border: 1px solid var(--border);
             border-radius: var(--r-lg);
             padding: var(--sp-lg);
-            transition: all 0.25s ease;
+            position: relative;
+            overflow: hidden;
+            transform-style: preserve-3d;
+            transform: perspective(1000px) rotateX(var(--rotate-x, 0deg)) rotateY(var(--rotate-y, 0deg));
+            transition: transform 0.15s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.3s ease, border-color 0.3s ease;
+        }
+
+        /* Ambient spotlight background glow */
+        .skills-category::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(
+                300px circle at var(--x, 0px) var(--y, 0px),
+                var(--glow-clr-glow),
+                transparent 80%
+            );
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 1;
+        }
+
+        /* Cursor-following border glow outline */
+        .skills-category::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(
+                120px circle at var(--x, 0px) var(--y, 0px),
+                var(--glow-clr),
+                transparent 60%
+            );
+            border-radius: var(--r-lg);
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 0;
+            padding: 1.5px;
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
         }
 
         .skills-category:hover {
-            border-color: var(--border-hi);
-            box-shadow: var(--sh-md);
+            border-color: transparent;
+            box-shadow: 
+                0 15px 35px -10px var(--glow-clr-glow-lg),
+                0 0 15px -3px var(--glow-clr-glow);
+        }
+
+        .skills-category:hover::before,
+        .skills-category:hover::after {
+            opacity: 1;
         }
 
         .skills-cat-header {
+            position: relative;
+            z-index: 2;
             display: flex;
             align-items: center;
             gap: 9px;
             margin-bottom: var(--sp-md);
             padding-bottom: var(--sp-xs);
             border-bottom: 1px solid var(--border);
+            transform: translateZ(20px);
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+
+        .skills-category:hover .skills-cat-header {
+            border-color: var(--glow-clr-glow);
         }
 
         .skills-cat-icon {
@@ -1309,6 +1453,13 @@
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
+            transition: all 0.3s ease;
+        }
+
+        .skills-category:hover .skills-cat-icon {
+            background: var(--glow-clr-glow);
+            box-shadow: 0 4px 10px var(--glow-clr-glow);
+            transform: translateZ(10px) scale(1.05);
         }
 
         .skills-cat-icon svg {
@@ -1317,18 +1468,33 @@
             stroke: var(--acc);
             fill: none;
             stroke-width: 2;
+            transition: all 0.3s ease;
+        }
+
+        .skills-category:hover .skills-cat-icon svg {
+            stroke: var(--glow-clr);
+            transform: scale(1.1);
         }
 
         .skills-cat-title {
             font-size: 0.95rem;
             font-weight: 700;
             letter-spacing: -0.01em;
+            transition: color 0.3s ease;
+        }
+
+        .skills-category:hover .skills-cat-title {
+            color: var(--glow-clr);
         }
 
         .skills-list {
+            position: relative;
+            z-index: 2;
             display: flex;
             flex-wrap: wrap;
             gap: 6px;
+            transform: translateZ(15px);
+            transition: transform 0.3s ease;
         }
 
         .skill-item {
@@ -1345,10 +1511,11 @@
         }
 
         .skill-item:hover {
-            background: var(--acc-glow);
-            border-color: var(--border-acc);
-            color: var(--acc);
-            transform: translateY(-2px);
+            background: var(--glow-clr-glow);
+            border-color: var(--glow-clr);
+            color: var(--glow-clr);
+            transform: translateZ(10px) scale(1.05);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
         }
 
         /* ==========================================
@@ -2062,7 +2229,7 @@
 
                 <div class="skills-grid">
                     <!-- Development -->
-                    <div class="skills-category reveal" style="transition-delay:0.08s;">
+                    <div class="skills-category card-dev reveal" style="transition-delay:0.08s;">
                         <div class="skills-cat-header">
                             <div class="skills-cat-icon">
                                 <svg viewBox="0 0 24 24">
@@ -2084,7 +2251,7 @@
                     </div>
 
                     <!-- AI & Automation -->
-                    <div class="skills-category reveal" style="transition-delay:0.16s;">
+                    <div class="skills-category card-ai reveal" style="transition-delay:0.16s;">
                         <div class="skills-cat-header">
                             <div class="skills-cat-icon">
                                 <svg viewBox="0 0 24 24">
@@ -2106,7 +2273,7 @@
                     </div>
 
                     <!-- Data & Databases -->
-                    <div class="skills-category reveal" style="transition-delay:0.24s;">
+                    <div class="skills-category card-data reveal" style="transition-delay:0.24s;">
                         <div class="skills-cat-header">
                             <div class="skills-cat-icon">
                                 <svg viewBox="0 0 24 24">
@@ -2127,7 +2294,7 @@
                     </div>
 
                     <!-- Finance & Analysis -->
-                    <div class="skills-category reveal" style="transition-delay:0.32s;">
+                    <div class="skills-category card-finance reveal" style="transition-delay:0.32s;">
                         <div class="skills-cat-header">
                             <div class="skills-cat-icon">
                                 <svg viewBox="0 0 24 24">
@@ -2148,7 +2315,7 @@
                     </div>
 
                     <!-- Content & Digital -->
-                    <div class="skills-category reveal" style="transition-delay:0.40s;">
+                    <div class="skills-category card-content reveal" style="transition-delay:0.40s;">
                         <div class="skills-cat-header">
                             <div class="skills-cat-icon">
                                 <svg viewBox="0 0 24 24">
@@ -2173,7 +2340,7 @@
                     </div>
 
                     <!-- Health & Fitness -->
-                    <div class="skills-category reveal" style="transition-delay:0.48s;">
+                    <div class="skills-category card-health reveal" style="transition-delay:0.48s;">
                         <div class="skills-cat-header">
                             <div class="skills-cat-icon">
                                 <svg viewBox="0 0 24 24">
@@ -2582,6 +2749,44 @@
                     }, 1500);
                 });
             }
+
+            /* ─── 10. 3D GLOWING CARDS ─── */
+            const skillsCards = document.querySelectorAll('.skills-category');
+            skillsCards.forEach(card => {
+                let frameId = null;
+
+                card.addEventListener('mousemove', e => {
+                    if (frameId) {
+                        cancelAnimationFrame(frameId);
+                    }
+
+                    frameId = requestAnimationFrame(() => {
+                        const rect = card.getBoundingClientRect();
+                        const x = e.clientX - rect.left;
+                        const y = e.clientY - rect.top;
+
+                        const centerX = rect.width / 2;
+                        const centerY = rect.height / 2;
+
+                        // Max 12 degrees rotation
+                        const rotateX = ((centerY - y) / centerY) * 12;
+                        const rotateY = ((x - centerX) / centerX) * 12;
+
+                        card.style.setProperty('--x', `${x}px`);
+                        card.style.setProperty('--y', `${y}px`);
+                        card.style.setProperty('--rotate-x', `${rotateX}deg`);
+                        card.style.setProperty('--rotate-y', `${rotateY}deg`);
+                    });
+                });
+
+                card.addEventListener('mouseleave', () => {
+                    if (frameId) {
+                        cancelAnimationFrame(frameId);
+                    }
+                    card.style.setProperty('--rotate-x', '0deg');
+                    card.style.setProperty('--rotate-y', '0deg');
+                });
+            });
 
         });
     </script>
