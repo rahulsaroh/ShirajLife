@@ -2675,18 +2675,27 @@
 
             if (contactForm) {
                 contactForm.addEventListener('submit', e => {
-                    e.preventDefault();
                     const name = document.getElementById('name').value.trim();
                     const email = document.getElementById('email').value.trim();
                     const subject = document.getElementById('subject').value.trim();
                     const message = document.getElementById('message').value.trim();
 
                     if (!name || !email || !subject || !message) {
+                        e.preventDefault();
                         formStatus.className = 'form-status error';
                         formStatus.textContent = 'Please fill out all required fields.';
                         return;
                     }
 
+                    // If running locally as a file, submit via standard form POST to bypass local CORS rules
+                    if (window.location.protocol === 'file:') {
+                        contactForm.action = "https://formsubmit.co/rahulsaroh007@gmail.com";
+                        contactForm.method = "POST";
+                        return; // Let browser submit form naturally
+                    }
+
+                    // Otherwise use AJAX submit
+                    e.preventDefault();
                     formStatus.className = '';
                     formStatus.style.display = 'block';
                     formStatus.textContent = 'Sending…';
@@ -2714,8 +2723,12 @@
                         }
                     })
                     .catch(error => {
+                        // Fallback to standard submit if fetch fails (e.g. adblocker, network issues)
                         formStatus.className = 'form-status error';
-                        formStatus.textContent = 'Oops! There was a problem submitting your form. Please try again or email directly.';
+                        formStatus.textContent = 'Submitting form...';
+                        contactForm.action = "https://formsubmit.co/rahulsaroh007@gmail.com";
+                        contactForm.method = "POST";
+                        contactForm.submit();
                     });
                 });
             }
