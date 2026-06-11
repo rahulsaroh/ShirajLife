@@ -142,8 +142,22 @@
             opacity: 1;
         }
 
-        /* Testimonials section styling */
-        .testimonial-card {
+        /* Testimonials & Reviews section styling */
+        .reviews-section-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: var(--sp-lg);
+            margin-top: var(--sp-md);
+            align-items: start;
+        }
+
+        @media (min-width: 992px) {
+            .reviews-section-grid {
+                grid-template-columns: 1.1fr 1.9fr;
+            }
+        }
+
+        .write-review-card, .reviews-list-card {
             background: var(--card);
             border: 1px solid var(--border);
             border-radius: var(--r-lg);
@@ -151,37 +165,179 @@
             box-shadow: var(--sh-sm);
             display: flex;
             flex-direction: column;
-            gap: 16px;
-            position: relative;
+            gap: var(--sp-sm);
         }
 
-        .testimonial-card::after {
-            content: '"';
+        .reviews-sub-title {
             font-family: var(--font-display);
-            font-size: 5rem;
-            color: var(--acc);
-            opacity: 0.08;
-            position: absolute;
-            top: -10px;
-            right: 20px;
-            line-height: 1;
-            pointer-events: none;
-        }
-
-        .testimonial-text {
-            font-style: italic;
-            font-size: 0.98rem;
-            line-height: 1.7;
+            font-size: 1.25rem;
+            font-weight: 800;
             color: var(--txt-0);
+            border-bottom: 1px solid var(--border);
+            padding-bottom: var(--sp-xs);
+            margin-bottom: var(--sp-xs);
         }
 
-        .testimonial-author {
+        .review-form-element {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .review-form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .review-label {
             font-family: var(--font-mono);
-            font-size: 0.75rem;
+            font-size: 0.72rem;
             font-weight: 600;
-            color: var(--acc);
+            color: var(--txt-1);
+            letter-spacing: 0.04em;
             text-transform: uppercase;
-            letter-spacing: 0.05em;
+        }
+
+        .review-input {
+            background: var(--bg-0);
+            border: 1.5px solid var(--border);
+            border-radius: var(--r-md);
+            padding: 0.65rem var(--sp-sm);
+            color: var(--txt-0);
+            font-family: var(--font-sans);
+            font-size: 0.9rem;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        .review-input:focus {
+            border-color: var(--acc);
+            background: var(--card);
+            box-shadow: 0 0 0 3px var(--acc-glow);
+        }
+
+        .review-textarea {
+            resize: vertical;
+            min-height: 110px;
+        }
+
+        /* Star selector */
+        .star-rating-selector {
+            display: flex;
+            gap: 8px;
+            margin-top: 4px;
+        }
+
+        .star-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 4px;
+            color: var(--txt-2);
+            transition: transform 0.15s ease, color 0.15s ease;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .star-btn svg {
+            width: 24px;
+            height: 24px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2;
+        }
+
+        .star-btn.active, .star-btn:hover {
+            color: #fbbf24;
+        }
+        
+        .star-btn.active svg {
+            fill: #fbbf24;
+        }
+
+        /* Scrollable reviews box */
+        .reviews-scroll-box {
+            max-height: 380px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: var(--sp-sm);
+            padding-right: 8px;
+        }
+
+        .reviews-scroll-box::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .reviews-scroll-box::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .reviews-scroll-box::-webkit-scrollbar-thumb {
+            background: var(--border-hi);
+            border-radius: var(--r-full);
+        }
+
+        .reviews-scroll-box::-webkit-scrollbar-thumb:hover {
+            background: var(--acc);
+        }
+
+        .review-item-card {
+            background: var(--bg-0);
+            border: 1px solid var(--border);
+            border-radius: var(--r-md);
+            padding: var(--sp-md);
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            transition: all 0.25s ease;
+        }
+
+        .review-item-card:hover {
+            border-color: var(--border-hi);
+            background: var(--bg-1);
+        }
+
+        .review-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .reviewer-meta-name {
+            font-weight: 700;
+            color: var(--txt-0);
+            font-size: 0.95rem;
+        }
+
+        .review-item-date {
+            font-family: var(--font-mono);
+            font-size: 0.65rem;
+            color: var(--txt-2);
+        }
+
+        .review-item-rating {
+            display: flex;
+            gap: 3px;
+            color: #fbbf24;
+            margin-top: 2px;
+        }
+
+        .review-item-rating svg {
+            width: 14px;
+            height: 14px;
+            fill: #fbbf24;
+            stroke: #fbbf24;
+        }
+
+        .review-item-text {
+            font-size: 0.88rem;
+            line-height: 1.6;
+            color: var(--txt-1);
+            font-style: italic;
         }
     </style>
 </head>
@@ -192,7 +348,7 @@
     <header id="header">
         <div class="container nav-container">
             <a href="index.html" class="logo" aria-label="Shiraj Life Home">
-                shiraj<span>life</span>
+                Shiraj<span>Life</span>
             </a>
 
             <nav class="nav-links" aria-label="Main Navigation">
@@ -317,13 +473,52 @@
                     <h2 class="section-title">Testimonials.</h2>
                 </div>
 
-                <div style="display: grid; grid-template-columns: 1fr; gap: var(--sp-md); margin-top: var(--sp-md);">
-                    <!-- Testimonial 1 -->
-                    <div class="testimonial-card reveal" style="transition-delay:0.08s;">
-                        <p class="testimonial-text">
-                            "Shiraj built an incredibly elegant, high-contrast, responsive landing page for Diwan Fashion House boutique. The customized outfit form and styling portfolios look absolutely stunning and have significantly improved client registrations."
-                        </p>
-                        <span class="testimonial-author">— Ritu, Founder of Diwan Fashion House</span>
+                <div class="reviews-section-grid">
+                    <!-- Left: Form to Write a Review -->
+                    <div class="write-review-card reveal" style="transition-delay: 0.08s;">
+                        <h3 class="reviews-sub-title">Write a Review</h3>
+                        <form id="review-form" class="review-form-element">
+                            <div class="review-form-group">
+                                <label for="reviewer-name" class="review-label">Your Name</label>
+                                <input type="text" id="reviewer-name" class="review-input" placeholder="e.g. Ritu Sharma" required>
+                            </div>
+                            
+                            <div class="review-form-group">
+                                <label class="review-label">Your Rating</label>
+                                <div class="star-rating-selector" id="rating-star-selector">
+                                    <button type="button" class="star-btn active" data-rating="1" aria-label="1 Star">
+                                        <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                                    </button>
+                                    <button type="button" class="star-btn active" data-rating="2" aria-label="2 Stars">
+                                        <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                                    </button>
+                                    <button type="button" class="star-btn active" data-rating="3" aria-label="3 Stars">
+                                        <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                                    </button>
+                                    <button type="button" class="star-btn active" data-rating="4" aria-label="4 Stars">
+                                        <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                                    </button>
+                                    <button type="button" class="star-btn active" data-rating="5" aria-label="5 Stars">
+                                        <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="review-form-group">
+                                <label for="reviewer-text" class="review-label">Your Review</label>
+                                <textarea id="reviewer-text" class="review-input review-textarea" placeholder="Share your experience working with Shiraj..." required></textarea>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary" style="margin-top: 8px; align-self: flex-start;">Submit Review</button>
+                        </form>
+                    </div>
+
+                    <!-- Right: Scrollable Reviews List -->
+                    <div class="reviews-list-card reveal" style="transition-delay: 0.16s;">
+                        <h3 class="reviews-sub-title">Client Reviews &amp; Ratings</h3>
+                        <div class="reviews-scroll-box" id="reviews-scroll-box">
+                            <!-- Reviews will be generated here by JS -->
+                        </div>
                     </div>
                 </div>
 
@@ -334,7 +529,7 @@
     <!-- FOOTER -->
     <footer>
         <div class="container footer-content">
-            <span class="footer-logo">shiraj<span>life</span></span>
+            <span class="footer-logo">Shiraj<span>Life</span></span>
             <span class="footer-copy">&copy; 2026 Shiraj. Stacked &amp; Compiled in Mumbai. All Rights Reserved.</span>
         </div>
     </footer>
@@ -379,6 +574,128 @@
             document.addEventListener('click', e => {
                 if (!mobileDrawer.contains(e.target) && !mobileBtn.contains(e.target)) closeDrawer();
             });
+
+            /* ─── CLIENT REVIEWS & RATING SYSTEM ─── */
+            const reviewsScrollBox = document.getElementById('reviews-scroll-box');
+            const reviewForm = document.getElementById('review-form');
+            const starSelector = document.getElementById('rating-star-selector');
+            const starButtons = starSelector.querySelectorAll('.star-btn');
+            let selectedRating = 5;
+
+            // Handle Star Selector
+            starButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    selectedRating = parseInt(btn.getAttribute('data-rating'));
+                    starButtons.forEach(b => {
+                        const rVal = parseInt(b.getAttribute('data-rating'));
+                        if (rVal <= selectedRating) {
+                            b.classList.add('active');
+                        } else {
+                            b.classList.remove('active');
+                        }
+                    });
+                });
+            });
+
+            // Initial mock data
+            const initialReviews = [
+                {
+                    name: "Ritu",
+                    rating: 5,
+                    text: "Shiraj built an incredibly elegant, high-contrast, responsive landing page for Diwan Fashion House boutique. The customized outfit form and styling portfolios look absolutely stunning and have significantly improved client registrations.",
+                    date: "2026-02-20"
+                }
+            ];
+
+            function loadReviews() {
+                let list = localStorage.getItem('shiraj_life_reviews');
+                if (!list) {
+                    localStorage.setItem('shiraj_life_reviews', JSON.stringify(initialReviews));
+                    return initialReviews;
+                }
+                return JSON.parse(list);
+            }
+
+            function saveReviews(list) {
+                localStorage.setItem('shiraj_life_reviews', JSON.stringify(list));
+            }
+
+            function renderReviews() {
+                if (!reviewsScrollBox) return;
+                const list = loadReviews();
+                reviewsScrollBox.innerHTML = '';
+                
+                list.forEach(review => {
+                    const card = document.createElement('div');
+                    card.className = 'review-item-card';
+                    
+                    // Generate stars
+                    let starsHTML = '';
+                    for (let i = 0; i < 5; i++) {
+                        if (i < review.rating) {
+                            starsHTML += `<svg viewBox="0 0 24 24" style="width: 14px; height: 14px; fill: #fbbf24; stroke: #fbbf24;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`;
+                        } else {
+                            starsHTML += `<svg viewBox="0 0 24 24" style="width: 14px; height: 14px; fill:none; stroke:#9aa1ac; stroke-width: 2;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`;
+                        }
+                    }
+                    
+                    card.innerHTML = `
+                        <div class="review-item-header">
+                            <div>
+                                <span class="reviewer-meta-name">${escapeHTML(review.name)}</span>
+                                <div class="review-item-rating">${starsHTML}</div>
+                            </div>
+                            <span class="review-item-date">${review.date}</span>
+                        </div>
+                        <p class="review-item-text">"${escapeHTML(review.text)}"</p>
+                    `;
+                    reviewsScrollBox.appendChild(card);
+                });
+            }
+
+            function escapeHTML(str) {
+                return str.replace(/[&<>'"]/g, 
+                    tag => ({
+                        '&': '&amp;',
+                        '<': '&lt;',
+                        '>': '&gt;',
+                        "'": '&#39;',
+                        '"': '&quot;'
+                    }[tag] || tag)
+                );
+            }
+
+            // Form Submit handler
+            if (reviewForm) {
+                reviewForm.addEventListener('submit', e => {
+                    e.preventDefault();
+                    const nameVal = document.getElementById('reviewer-name').value.trim();
+                    const textVal = document.getElementById('reviewer-text').value.trim();
+                    
+                    if (!nameVal || !textVal) return;
+                    
+                    const newReview = {
+                        name: nameVal,
+                        rating: selectedRating,
+                        text: textVal,
+                        date: new Date().toISOString().split('T')[0]
+                    };
+                    
+                    const currentList = loadReviews();
+                    currentList.unshift(newReview); // add to beginning
+                    saveReviews(currentList);
+                    renderReviews();
+                    
+                    // Reset form fields
+                    reviewForm.reset();
+                    // Reset selected stars back to 5
+                    selectedRating = 5;
+                    starButtons.forEach(btn => btn.classList.add('active'));
+                });
+            }
+
+            // Initial render
+            renderReviews();
 
             /* ─── 3D GLOWING CARDS TILT ─── */
             const clientCards = document.querySelectorAll('.client-card');
