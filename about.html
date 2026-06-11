@@ -82,6 +82,133 @@
             color: var(--txt-0);
             font-weight: 600;
         }
+
+        /* ==========================================
+           PILLARS CSS (moved from pillars.html)
+           ========================================== */
+        .pillars-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: var(--sp-sm);
+            margin-top: var(--sp-lg);
+        }
+
+        @media (min-width: 600px) {
+            .pillars-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .pillars-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        .pillar-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--r-lg);
+            padding: var(--sp-lg);
+            display: flex;
+            flex-direction: column;
+            gap: var(--sp-sm);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.35s var(--ease-expo);
+        }
+
+        /* Faint glow fill */
+        .pillar-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: var(--acc-glow-lg);
+            opacity: 0;
+            transition: opacity 0.35s var(--ease-expo);
+        }
+
+        /* Gradient underline stripe */
+        .pillar-card::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--acc), var(--acc-br));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.45s var(--ease-expo);
+        }
+
+        .pillar-card:hover {
+            border-color: var(--border-acc);
+            transform: translateY(-6px);
+            box-shadow: var(--sh-lg);
+        }
+
+        .pillar-card:hover::before {
+            opacity: 1;
+        }
+
+        .pillar-card:hover::after {
+            transform: scaleX(1);
+        }
+
+        .pillar-inner {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            gap: var(--sp-sm);
+        }
+
+        .pillar-num {
+            font-family: var(--font-mono);
+            font-size: 0.65rem;
+            font-weight: 600;
+            color: var(--txt-2);
+            letter-spacing: 0.12em;
+        }
+
+        .pillar-icon {
+            width: 42px;
+            height: 42px;
+            background: var(--bg-1);
+            border-radius: var(--r-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--border);
+            transition: all 0.35s var(--ease-expo);
+        }
+
+        .pillar-card:hover .pillar-icon {
+            background: var(--acc-glow);
+            border-color: var(--border-acc);
+        }
+
+        .pillar-icon svg {
+            width: 20px;
+            height: 20px;
+            stroke: var(--acc);
+            fill: none;
+            stroke-width: 2;
+        }
+
+        .pillar-title {
+            font-size: 1.15rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+        }
+
+        .pillar-desc {
+            font-size: 0.875rem;
+            color: var(--txt-1);
+            line-height: 1.65;
+            text-align: justify;
+        }
     </style>
 </head>
 
@@ -97,7 +224,6 @@
             <nav class="nav-links" aria-label="Main Navigation">
                 <a href="index.html" class="nav-link">Home</a>
                 <a href="about.html" class="nav-link active">About</a>
-                <a href="pillars.html" class="nav-link">Pillars</a>
                 <a href="services.html" class="nav-link">Services</a>
                 <a href="work.html" class="nav-link">Work</a>
                 <a href="toolkit.html" class="nav-link">Toolkit</a>
@@ -138,7 +264,6 @@
     <div class="mobile-drawer" id="mobile-drawer">
         <a href="index.html" class="nav-link">Home</a>
         <a href="about.html" class="nav-link active">About</a>
-        <a href="pillars.html" class="nav-link">Pillars</a>
         <a href="services.html" class="nav-link">Services</a>
         <a href="work.html" class="nav-link">Work</a>
         <a href="toolkit.html" class="nav-link">Toolkit</a>
@@ -174,6 +299,79 @@
                         <p class="about-text">
                             Outside of government duties, I design systems to <strong>help businesses grow with out-of-the-box thinking</strong>. I translate analytical and structural discipline into digital products, planning strategies, and custom software architectures (using <strong>Flutter, Dart, Python, and SQL</strong>) to solve operational bottlenecks and drive growth.
                         </p>
+                    </div>
+                </div>
+            </div>
+        <section id="pillars">
+            <div class="container">
+                <div class="section-header reveal">
+                    <span class="section-eyebrow">Focus Areas</span>
+                    <h2 class="section-title">The pillars of my execution.</h2>
+                </div>
+
+                <div class="pillars-grid">
+                    <!-- 01 Build -->
+                    <div class="pillar-card reveal" style="transition-delay:0.08s;">
+                        <div class="pillar-inner">
+                            <span class="pillar-num">01</span>
+                            <div class="pillar-icon">
+                                <svg viewBox="0 0 24 24">
+                                    <polyline points="16 18 22 12 16 6" />
+                                    <polyline points="8 6 2 12 8 18" />
+                                </svg>
+                            </div>
+                            <h3 class="pillar-title">Build</h3>
+                            <p class="pillar-desc">Constructing high-performance, offline-first applications and script
+                                automations using Flutter, Python, and SQL databases.</p>
+                        </div>
+                    </div>
+
+                    <!-- 02 Optimize -->
+                    <div class="pillar-card reveal" style="transition-delay:0.16s;">
+                        <div class="pillar-inner">
+                            <span class="pillar-num">02</span>
+                            <div class="pillar-icon">
+                                <svg viewBox="0 0 24 24">
+                                    <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+                                </svg>
+                            </div>
+                            <h3 class="pillar-title">Optimize</h3>
+                            <p class="pillar-desc">Structuring athletic systems, monitoring progress load cycles,
+                                cardiovascular logs, and running metrics with strict consistency.</p>
+                        </div>
+                    </div>
+
+                    <!-- 03 Analyze -->
+                    <div class="pillar-card reveal" style="transition-delay:0.24s;">
+                        <div class="pillar-inner">
+                            <span class="pillar-num">03</span>
+                            <div class="pillar-icon">
+                                <svg viewBox="0 0 24 24">
+                                    <line x1="18" y1="20" x2="18" y2="10" />
+                                    <line x1="12" y1="20" x2="12" y2="4" />
+                                    <line x1="6" y1="20" x2="6" y2="14" />
+                                </svg>
+                            </div>
+                            <h3 class="pillar-title">Analyze</h3>
+                            <p class="pillar-desc">Parsing finance, ledger data, and portfolio allocation scripts to
+                                extract clean patterns for capital compounding.</p>
+                        </div>
+                    </div>
+
+                    <!-- 04 Share -->
+                    <div class="pillar-card reveal" style="transition-delay:0.32s;">
+                        <div class="pillar-inner">
+                            <span class="pillar-num">04</span>
+                            <div class="pillar-icon">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M12 20h9" />
+                                    <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
+                                </svg>
+                            </div>
+                            <h3 class="pillar-title">Share</h3>
+                            <p class="pillar-desc">Drafting educational content, sharing engineering logs, app build
+                                diaries, and productivity frameworks for future developers.</p>
+                        </div>
                     </div>
                 </div>
             </div>
