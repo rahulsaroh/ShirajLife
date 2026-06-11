@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Anti-FOUC: apply theme before paint -->
+    <script>
+        (function () {
+            var t = localStorage.getItem('theme') || 'dark'; // Default to dark for premium fitness look
+            document.documentElement.setAttribute('data-theme', t);
+        })();
+    </script>
+
+    <title>IronPulse Gym | Client Showcase</title>
+    <meta name="description" content="Professional athletic facility offering Strength & Conditioning, Elite Coaching, and HIIT. Designed by Shiraj Life.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="shared.css">
+    
+    <style>
+        /* ==========================================
+           ATHLETIC GYM THEME OVERRIDES
+           ========================================== */
+        :root {
+            --font-display: 'Oswald', sans-serif;
+            --font-sans: 'Montserrat', sans-serif;
+            
+            /* High-Contrast Athletic Red-Orange */
+            --acc: #ff4a1c;
+            --acc-hi: #ff653f;
+            --acc-glow: rgba(255, 74, 28, 0.08);
+            --border-acc: rgba(255, 74, 28, 0.25);
+            --dark-card: #121214;
+        }
+
+        [data-theme="dark"] {
+            --acc: #ff4a1c;
+            --acc-hi: #ff7450;
+            --acc-glow: rgba(255, 74, 28, 0.15);
+            --border-acc: rgba(255, 74, 28, 0.35);
+        }
+
+        body {
+            font-family: var(--font-sans);
+            letter-spacing: 0.01em;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: var(--font-display);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+
+        /* Gym Hero Styling */
+        .gym-hero {
+            position: relative;
+            min-height: 80vh;
+            display: flex;
+            align-items: center;
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0.5) 100%);
+            color: #ffffff;
+            border-bottom: 1px solid var(--border);
+            padding: var(--sp-2xl) 0;
+            overflow: hidden;
+        }
+
+        .gym-hero-bg {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: radial-gradient(circle at 80% 20%, rgba(255, 74, 28, 0.15) 0%, transparent 50%);
+            z-index: 1;
+        }
+
+        .gym-hero-content {
+            max-width: 720px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .gym-hero-tag {
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: var(--acc);
+            margin-bottom: var(--sp-sm);
+            display: block;
+        }
+
+        .gym-hero h1 {
+            font-size: clamp(3rem, 7vw, 5.5rem);
+            line-height: 0.95;
+            margin-bottom: var(--sp-sm);
+            font-weight: 800;
+            color: #ffffff;
+        }
+
+        .gym-hero p {
+            font-size: clamp(1rem, 2vw, 1.2rem);
+            margin-bottom: var(--sp-lg);
+            font-weight: 400;
+            color: rgba(255, 255, 255, 0.85);
+            line-height: 1.6;
+        }
+
+        /* Services Grid */
+        .services-grid-3 {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: var(--sp-lg);
+            margin-top: var(--sp-xl);
+        }
+
+        @media (min-width: 768px) {
+            .services-grid-3 {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .service-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--r-lg);
+            padding: var(--sp-xl);
+            display: flex;
+            flex-direction: column;
+            gap: var(--sp-sm);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            transform-style: preserve-3d;
+            transform: perspective(1000px) rotateX(var(--rotate-x, 0deg)) rotateY(var(--rotate-y, 0deg));
+            cursor: pointer;
+        }
+
+        .service-card:hover {
+            border-color: var(--acc);
+            box-shadow: 0 10px 30px var(--acc-glow);
+        }
+
+        .service-icon {
+            font-size: 2.2rem;
+            color: var(--acc);
+            margin-bottom: var(--sp-xs);
+            transform: translateZ(25px);
+        }
+
+        .service-title {
+            font-size: 1.5rem;
+            color: var(--txt-0);
+            transform: translateZ(30px);
+        }
+
+        .service-desc {
+            font-size: 0.92rem;
+            line-height: 1.6;
+            color: var(--txt-1);
+            transform: translateZ(20px);
+        }
+
+        /* Pricing Table */
+        .pricing-section-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: var(--sp-lg);
+            margin-top: var(--sp-xl);
+        }
+
+        @media (min-width: 768px) {
+            .pricing-section-container {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .price-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--r-lg);
+            padding: var(--sp-xl);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .price-card.popular {
+            border-color: var(--acc);
+            box-shadow: 0 5px 20px var(--acc-glow);
+        }
+
+        .price-card.popular::before {
+            content: "POPULAR CHOICE";
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: var(--acc);
+            color: #ffffff;
+            font-family: var(--font-mono);
+            font-size: 0.65rem;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: var(--r-full);
+            letter-spacing: 0.08em;
+        }
+
+        .price-header {
+            margin-bottom: var(--sp-md);
+        }
+
+        .price-name {
+            font-size: 1.25rem;
+            color: var(--txt-1);
+            margin-bottom: 4px;
+        }
+
+        .price-val {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--txt-0);
+            font-family: var(--font-display);
+        }
+
+        .price-val span {
+            font-size: 0.9rem;
+            font-family: var(--font-sans);
+            font-weight: 500;
+            color: var(--txt-2);
+        }
+
+        .price-features {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin: var(--sp-md) 0 var(--sp-lg) 0;
+            padding: 0;
+        }
+
+        .price-features li {
+            font-size: 0.9rem;
+            color: var(--txt-1);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .price-features li svg {
+            width: 16px;
+            height: 16px;
+            stroke: var(--acc);
+            stroke-width: 3;
+            fill: none;
+            flex-shrink: 0;
+        }
+
+        .gym-about-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: var(--sp-xl);
+            align-items: center;
+            margin-top: var(--sp-xl);
+        }
+
+        @media (min-width: 992px) {
+            .gym-about-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <header id="header">
+        <div class="container nav-container">
+            <a href="index.html" class="logo" aria-label="Shiraj Life Home">
+                Shiraj<span>Life</span>
+            </a>
+
+            <nav class="nav-links" aria-label="Main Navigation">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="about.html" class="nav-link">About</a>
+                <a href="services.html" class="nav-link">Services</a>
+                <a href="work.html" class="nav-link">Work</a>
+                <a href="toolkit.html" class="nav-link">Toolkit</a>
+                <a href="clients.html" class="nav-link active">Clients</a>
+                <a href="contact.html" class="nav-link">Contact</a>
+            </nav>
+
+            <div class="nav-actions">
+                <button class="theme-toggle" id="theme-toggle" aria-label="Toggle visual theme">
+                    <svg class="moon-icon" viewBox="0 0 24 24">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+                    </svg>
+                    <svg class="sun-icon" viewBox="0 0 24 24">
+                        <circle cx="12" cy="12" r="5" />
+                        <line x1="12" y1="1" x2="12" y2="3" />
+                        <line x1="12" y1="21" x2="12" y2="23" />
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                        <line x1="1" y1="12" x2="3" y2="12" />
+                        <line x1="21" y1="12" x2="23" y2="12" />
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+                    </svg>
+                </button>
+
+                <button class="mobile-nav-btn" id="mobile-menu-btn" aria-label="Toggle menu navigation drawer">
+                    <svg viewBox="0 0 24 24">
+                        <line x1="3" y1="12" x2="21" y2="12" />
+                        <line x1="3" y1="6" x2="21" y2="6" />
+                        <line x1="3" y1="18" x2="21" y2="18" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- MOBILE DRAWER -->
+    <div class="mobile-drawer" id="mobile-drawer">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="about.html" class="nav-link">About</a>
+        <a href="services.html" class="nav-link">Services</a>
+        <a href="work.html" class="nav-link">Work</a>
+        <a href="toolkit.html" class="nav-link">Toolkit</a>
+        <a href="clients.html" class="nav-link active">Clients</a>
+        <a href="contact.html" class="nav-link">Contact</a>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <main>
+        <!-- HERO -->
+        <section class="gym-hero">
+            <div class="gym-hero-bg"></div>
+            <div class="container">
+                <div class="gym-hero-content reveal">
+                    <span class="gym-hero-tag">Fitness Club Client Showcase</span>
+                    <h1>IronPulse<br>Gym.</h1>
+                    <p>
+                        A premier, high-performance strength facility built for absolute results. Engineered with top-tier powerlifting blocks, functional turf spaces, and certified coaching modules.
+                    </p>
+                    <a href="#plans" class="btn btn-primary" style="background: var(--acc); color: #fff;">View Memberships</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- INTRODUCTION -->
+        <section style="padding: var(--sp-3xl) 0; background: var(--bg-0);">
+            <div class="container">
+                <div class="gym-about-grid">
+                    <div class="reveal">
+                        <span class="section-eyebrow" style="color: var(--acc);">The Facility</span>
+                        <h2 class="section-title">Where Grit Meets Execution.</h2>
+                        <p style="font-size: 1.05rem; line-height: 1.75; color: var(--txt-1); margin-top: var(--sp-md);">
+                            IronPulse Gym caters to athletes, powerlifters, and serious fitness enthusiasts. The facility features heavy-duty power racks, specialized bar sleeves, Olympic platforms, and turf sled tracks, providing the ultimate atmosphere for athletic breakthroughs.
+                        </p>
+                        <p style="font-size: 0.95rem; line-height: 1.68; color: var(--txt-2); margin-top: var(--sp-sm);">
+                            Through a collaboration with Shiraj Life, IronPulse deployed customized progress logging trackers and class check-in endpoints to optimize member retention and simplify onboarding.
+                        </p>
+                    </div>
+
+                    <div class="reveal" style="transition-delay: 0.15s; background: var(--card); border: 1px solid var(--border); padding: var(--sp-xl); border-radius: var(--r-lg);">
+                        <h3 style="font-size: 1.3rem; color: var(--txt-0); margin-bottom: var(--sp-md); border-left: 3px solid var(--acc); padding-left: 12px;">Coaching Pillars</h3>
+                        <div style="display: flex; flex-direction: column; gap: var(--sp-md);">
+                            <div>
+                                <strong style="color: var(--txt-0); font-size: 0.95rem;">Audit-Grade Biometrics</strong>
+                                <p style="font-size: 0.88rem; color: var(--txt-1); margin-top: 4px;">Monthly composition reviews, progressive load analytics, and custom heart-rate training zones.</p>
+                            </div>
+                            <div style="border-top: 1px solid var(--border); padding-top: var(--sp-sm);">
+                                <strong style="color: var(--txt-0); font-size: 0.95rem;">Structured Progression</strong>
+                                <p style="font-size: 0.88rem; color: var(--txt-1); margin-top: 4px;">Standardized strength tracks (RPE-based logs) designed to bypass plateaus systematically.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SERVICES -->
+        <section id="services" style="padding: var(--sp-3xl) 0; background: var(--bg-1); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
+            <div class="container">
+                <div class="section-header reveal" style="text-align: center;">
+                    <span class="section-eyebrow" style="color: var(--acc);">What We Offer</span>
+                    <h2 class="section-title">Professional Services.</h2>
+                </div>
+
+                <div class="services-grid-3">
+                    <!-- Card 1: Strength -->
+                    <div class="service-card reveal" style="transition-delay: 0.08s;">
+                        <div class="service-icon">🏋️‍♂️</div>
+                        <h3 class="service-title">Strength &amp; Conditioning</h3>
+                        <p class="service-desc">
+                            Access to elite barbell platforms, competition-spec plates, heavy dumbbells, and solid power cages designed for heavy mechanical loading.
+                        </p>
+                    </div>
+
+                    <!-- Card 2: Coaching -->
+                    <div class="service-card reveal" style="transition-delay: 0.16s;">
+                        <div class="service-icon">📋</div>
+                        <h3 class="service-title">1-on-1 Elite Coaching</h3>
+                        <p class="service-desc">
+                            Custom programming matching athletic capability, biomechanics audit checks, daily dietary macronutrient logging, and weekly progress reviews.
+                        </p>
+                    </div>
+
+                    <!-- Card 3: HIIT -->
+                    <div class="service-card reveal" style="transition-delay: 0.24s;">
+                        <div class="service-icon">⚡</div>
+                        <h3 class="service-title">Metabolic Circuits</h3>
+                        <p class="service-desc">
+                            High-intensity interval training, kettlebell complexes, rowing ergometers, and turf sled pushes to skyrocket caloric burn and conditioning.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PRICING PLANS -->
+        <section id="plans" style="padding: var(--sp-3xl) 0; background: var(--bg-0);">
+            <div class="container">
+                <div class="section-header reveal" style="text-align: center; margin-bottom: var(--sp-xl);">
+                    <span class="section-eyebrow" style="color: var(--acc);">Memberships</span>
+                    <h2 class="section-title">Select Your Plan.</h2>
+                </div>
+
+                <div class="pricing-section-container">
+                    <!-- Basic Card -->
+                    <div class="price-card reveal" style="transition-delay: 0.08s;">
+                        <div class="price-header">
+                            <h3 class="price-name">Access Core</h3>
+                            <div class="price-val">₹1,999<span>/month</span></div>
+                        </div>
+                        <ul class="price-features">
+                            <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> Full access to standard gym floor</li>
+                            <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> Shower, locker, and steam room</li>
+                            <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> 1x General Trainer orientation</li>
+                        </ul>
+                        <a href="#inquiry" class="btn btn-secondary" style="width: 100%; text-align: center; margin-top: auto;" onclick="selectPlan('Access Core')">Enroll Now</a>
+                    </div>
+
+                    <!-- Popular Card -->
+                    <div class="price-card popular reveal" style="transition-delay: 0.16s;">
+                        <div class="price-header">
+                            <h3 class="price-name">Pulse Plus</h3>
+                            <div class="price-val">₹3,999<span>/month</span></div>
+                        </div>
+                        <ul class="price-features">
+                            <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> Full access to gym + Turf zones</li>
+                            <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> All Group HIIT &amp; Spin classes</li>
+                            <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> Custom digital nutrition guideline</li>
+                            <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> 2 Guest passes per month</li>
+                        </ul>
+                        <a href="#inquiry" class="btn btn-primary" style="width: 100%; text-align: center; background: var(--acc); color: #fff; margin-top: auto;" onclick="selectPlan('Pulse Plus')">Enroll Now</a>
+                    </div>
+
+                    <!-- Elite Card -->
+                    <div class="price-card reveal" style="transition-delay: 0.24s;">
+                        <div class="price-header">
+                            <h3 class="price-name">Elite Coach</h3>
+                            <div class="price-val">₹7,999<span>/month</span></div>
+                        </div>
+                        <ul class="price-features">
+                            <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> 1-on-1 Assigned Personal Coach</li>
+                            <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> Bi-weekly body composition scans</li>
+                            <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> Unlimited access to classes &amp; floor</li>
+                            <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> Dedicated workout logging portal</li>
+                        </ul>
+                        <a href="#inquiry" class="btn btn-secondary" style="width: 100%; text-align: center; margin-top: auto;" onclick="selectPlan('Elite Coach')">Enroll Now</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- BOOKING / INQUIRY -->
+        <section id="inquiry" style="padding: var(--sp-3xl) 0; background: var(--bg-1); border-top: 1px solid var(--border);">
+            <div class="container" style="max-width: 650px;">
+                <div class="section-header reveal" style="text-align: center; margin-bottom: var(--sp-lg);">
+                    <span class="section-eyebrow" style="color: var(--acc);">Membership Enquiry</span>
+                    <h2 class="section-title">Start Your Journey.</h2>
+                </div>
+
+                <div class="reveal" style="transition-delay: 0.1s;">
+                    <form id="gym-booking-form" class="contact-form" style="background: var(--card); border: 1px solid var(--border); padding: var(--sp-xl); border-radius: var(--r-lg); display: flex; flex-direction: column; gap: 16px;">
+                        <div class="form-group">
+                            <label for="gym-name" class="form-label">Full Name</label>
+                            <input type="text" id="gym-name" class="form-input" placeholder="e.g. Amit Patel" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="gym-contact" class="form-label">Phone / Email</label>
+                            <input type="text" id="gym-contact" class="form-input" placeholder="e.g. +91 98765 43210" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="gym-plan" class="form-label">Preferred Tier</label>
+                            <select id="gym-plan" class="form-input" style="background: var(--bg-0); cursor: pointer;">
+                                <option value="Access Core">Access Core — ₹1,999/mo</option>
+                                <option value="Pulse Plus" selected>Pulse Plus — ₹3,999/mo</option>
+                                <option value="Elite Coach">Elite Coach — ₹7,999/mo</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="gym-notes" class="form-label">Fitness Target / Medical Notes</label>
+                            <textarea id="gym-notes" class="form-input" placeholder="Specify muscle gain targets, weight loss goals, injuries, or lifting experience..." style="min-height: 100px;" required></textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary" style="background: var(--acc); color: #fff; align-self: flex-start; margin-top: 8px;">Submit Registration</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="container footer-content">
+            <span class="footer-logo">IronPulse<span>Gym</span></span>
+            <span class="footer-copy">&copy; 2026 IronPulse Gym. All rights reserved. Powered by @shiraj_life.</span>
+        </div>
+    </footer>
+
+    <!-- SCRIPTS -->
+    <script>
+        function selectPlan(planName) {
+            const selectEl = document.getElementById('gym-plan');
+            if (selectEl) {
+                selectEl.value = planName;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const header = document.getElementById('header');
+
+            /* Scrolled header state */
+            window.addEventListener('scroll', () => {
+                header.classList.toggle('scrolled', window.scrollY > 24);
+            }, { passive: true });
+
+            /* Theme toggle */
+            const themeBtn = document.getElementById('theme-toggle');
+            themeBtn.addEventListener('click', () => {
+                const current = document.documentElement.getAttribute('data-theme');
+                const next = current === 'dark' ? 'light' : 'dark';
+                document.documentElement.setAttribute('data-theme', next);
+                localStorage.setItem('theme', next);
+            });
+
+            /* Mobile menu */
+            const mobileBtn = document.getElementById('mobile-menu-btn');
+            const mobileDrawer = document.getElementById('mobile-drawer');
+            const hamburgerSVG = `<svg viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>`;
+            const closeSVG = `<svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`;
+
+            function closeDrawer() {
+                mobileDrawer.classList.remove('open');
+                mobileBtn.innerHTML = hamburgerSVG;
+            }
+
+            mobileBtn.addEventListener('click', e => {
+                e.stopPropagation();
+                const isOpen = mobileDrawer.classList.toggle('open');
+                mobileBtn.innerHTML = isOpen ? closeSVG : hamburgerSVG;
+            });
+
+            mobileDrawer.querySelectorAll('.nav-link').forEach(l => l.addEventListener('click', closeDrawer));
+            document.addEventListener('click', e => {
+                if (!mobileDrawer.contains(e.target) && !mobileBtn.contains(e.target)) closeDrawer();
+            });
+
+            /* Booking Form submit handler */
+            const gymForm = document.getElementById('gym-booking-form');
+            if (gymForm) {
+                gymForm.addEventListener('submit', e => {
+                    e.preventDefault();
+                    const name = document.getElementById('gym-name').value.trim();
+                    const contact = document.getElementById('gym-contact').value.trim();
+                    const plan = document.getElementById('gym-plan').value;
+                    const notes = document.getElementById('gym-notes').value.trim();
+
+                    if (!name || !contact || !notes) return;
+
+                    alert(`Thank you, ${name}!\nYour request for the "${plan}" tier has been sent to IronPulse Gym management. A membership advisor will call you shortly.`);
+                    gymForm.reset();
+                });
+            }
+
+            /* ─── 3D GLOWING CARDS TILT ─── */
+            const serviceCards = document.querySelectorAll('.service-card');
+            serviceCards.forEach(card => {
+                let frameId = null;
+
+                card.addEventListener('mousemove', e => {
+                    if (frameId) {
+                        cancelAnimationFrame(frameId);
+                    }
+
+                    frameId = requestAnimationFrame(() => {
+                        const rect = card.getBoundingClientRect();
+                        const x = e.clientX - rect.left;
+                        const y = e.clientY - rect.top;
+
+                        const centerX = rect.width / 2;
+                        const centerY = rect.height / 2;
+
+                        const rotateX = ((centerY - y) / centerY) * 10;
+                        const rotateY = ((x - centerX) / centerX) * 10;
+
+                        card.style.setProperty('--x', `${x}px`);
+                        card.style.setProperty('--y', `${y}px`);
+                        card.style.setProperty('--rotate-x', `${rotateX}deg`);
+                        card.style.setProperty('--rotate-y', `${rotateY}deg`);
+                    });
+                });
+
+                card.addEventListener('mouseleave', () => {
+                    if (frameId) {
+                        cancelAnimationFrame(frameId);
+                    }
+                    card.style.setProperty('--rotate-x', '0deg');
+                    card.style.setProperty('--rotate-y', '0deg');
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>
