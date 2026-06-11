@@ -2691,11 +2691,32 @@
                     formStatus.style.display = 'block';
                     formStatus.textContent = 'Sending…';
 
-                    setTimeout(() => {
-                        formStatus.className = 'form-status success';
-                        formStatus.textContent = `Thank you, ${name}! Your message has been sent successfully.`;
-                        contactForm.reset();
-                    }, 1500);
+                    fetch("https://formsubmit.co/ajax/rahulsaroh007@gmail.com", {
+                        method: "POST",
+                        headers: { 
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            name: name,
+                            email: email,
+                            subject: subject,
+                            message: message
+                        })
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            formStatus.className = 'form-status success';
+                            formStatus.textContent = `Thank you, ${name}! Your message has been sent successfully.`;
+                            contactForm.reset();
+                        } else {
+                            throw new Error("Submission failed");
+                        }
+                    })
+                    .catch(error => {
+                        formStatus.className = 'form-status error';
+                        formStatus.textContent = 'Oops! There was a problem submitting your form. Please try again or email directly.';
+                    });
                 });
             }
 
