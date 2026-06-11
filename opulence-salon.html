@@ -1,0 +1,1074 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Anti-FOUC: apply theme before paint -->
+    <script>
+        (function () {
+            var t = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', t);
+        })();
+    </script>
+
+    <title>Opulence Salon by Shilpi Toor | Shiraj Life</title>
+    <meta name="description" content="Premium beauty services, facials, skin care, hair, makeup, and bespoke packages at Opulence Salon by Shilpi Toor.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="shared.css">
+    
+    <style>
+        /* ==========================================
+           LUXURY SALON THEME OVERRIDES
+           ========================================== */
+        :root {
+            --font-display: 'Playfair Display', serif;
+            --font-sans: 'Montserrat', sans-serif;
+            
+            /* Gold & Warm Tones */
+            --acc: #d4af37; /* Luxury Gold */
+            --acc-hi: #e5c158;
+            --acc-glow: rgba(212, 175, 55, 0.1);
+            --border-acc: rgba(212, 175, 55, 0.3);
+            
+            --dark-brown: #3e2723;
+            --light-cream: #fffdf7;
+        }
+
+        [data-theme="dark"] {
+            --acc: #e5c158;
+            --acc-hi: #f7d673;
+            --acc-glow: rgba(229, 193, 88, 0.15);
+            --border-acc: rgba(229, 193, 88, 0.3);
+        }
+
+        body {
+            font-family: var(--font-sans);
+            letter-spacing: 0.02em;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: var(--font-display);
+            font-weight: 700;
+        }
+
+        /* Hero Section */
+        .salon-hero {
+            position: relative;
+            min-height: 85vh;
+            display: flex;
+            align-items: center;
+            color: #ffffff;
+            border-bottom: 1px solid var(--border);
+            padding: var(--sp-2xl) 0;
+            text-align: center;
+            overflow: hidden;
+            background: #000;
+        }
+
+        .hero-collage {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            z-index: 1;
+            display: flex;
+        }
+
+        .collage-item {
+            flex: 1;
+            height: 100%;
+            background-size: cover;
+            background-position: center 15%;
+            border-right: 1px solid rgba(212, 175, 55, 0.2);
+            transition: flex 0.6s cubic-bezier(0.25, 1, 0.5, 1), filter 0.6s ease;
+            filter: grayscale(60%) brightness(0.6) contrast(1.1);
+            position: relative;
+        }
+
+        .collage-item:last-child {
+            border-right: none;
+        }
+
+        /* Interactive accordion effect */
+        .hero-collage:hover .collage-item {
+            filter: grayscale(80%) brightness(0.4);
+        }
+        .hero-collage .collage-item:hover {
+            flex: 1.8;
+            filter: grayscale(0%) brightness(1.1) contrast(1.05);
+            z-index: 2;
+            box-shadow: 0 0 30px rgba(0,0,0,0.8);
+        }
+
+        .collage-overlay {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.3) 40%, rgba(0,0,0,0.9) 100%);
+            z-index: 3;
+            pointer-events: none;
+        }
+
+        .salon-hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 4;
+            pointer-events: none; /* Let hovers pass through to the collage */
+        }
+        .salon-hero-content * {
+            pointer-events: auto; /* Re-enable clicks on buttons/text inside */
+        }
+
+        .salon-hero-logo {
+            font-family: var(--font-sans);
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.3em;
+            color: var(--acc);
+            margin-bottom: var(--sp-sm);
+            display: block;
+        }
+
+        .salon-hero h1 {
+            font-size: clamp(2.8rem, 6vw, 5rem);
+            line-height: 1.1;
+            margin-bottom: var(--sp-md);
+            color: #ffffff;
+            text-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+
+        .salon-hero p {
+            font-size: clamp(1rem, 2vw, 1.25rem);
+            margin-bottom: var(--sp-xl);
+            font-weight: 300;
+            color: rgba(255, 255, 255, 0.9);
+            line-height: 1.6;
+        }
+
+        /* Services Layout */
+        .services-section {
+            padding: var(--sp-3xl) 0;
+            background: var(--bg-0);
+        }
+
+        .service-category {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--r-lg);
+            padding: var(--sp-xl);
+            margin-bottom: var(--sp-xl);
+            box-shadow: var(--sh-md);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .service-category::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 4px;
+            background: linear-gradient(90deg, var(--acc), transparent);
+        }
+
+        .service-category:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--sh-lg);
+            border-color: var(--border-acc);
+        }
+
+        .service-cat-title {
+            font-size: 1.75rem;
+            color: var(--acc);
+            margin-bottom: var(--sp-md);
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 10px;
+        }
+
+        .service-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .service-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px dashed var(--border);
+            font-size: 1rem;
+            color: var(--txt-0);
+        }
+
+        .service-item:last-child {
+            border-bottom: none;
+        }
+
+        .service-name {
+            font-weight: 500;
+        }
+        
+        .service-price {
+            font-family: var(--font-sans);
+            font-weight: 700;
+            color: var(--txt-1);
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: var(--sp-xl);
+        }
+
+        @media (min-width: 768px) {
+            .grid-2 { grid-template-columns: 1fr 1fr; }
+        }
+
+        /* Packages */
+        .packages-section {
+            padding: var(--sp-3xl) 0;
+            background: var(--bg-1);
+        }
+
+        .packages-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: var(--sp-lg);
+        }
+
+        @media (min-width: 768px) {
+            .packages-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (min-width: 1024px) {
+            .packages-grid { grid-template-columns: repeat(4, 1fr); }
+        }
+
+        .package-card {
+            background: linear-gradient(145deg, var(--card), var(--bg-0));
+            border: 1px solid var(--border);
+            border-radius: var(--r-md);
+            padding: var(--sp-lg);
+            text-align: center;
+            position: relative;
+            box-shadow: var(--sh-sm);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .package-card:hover {
+            border-color: var(--acc);
+            box-shadow: 0 10px 25px var(--acc-glow);
+            transform: translateY(-5px);
+        }
+
+        .pkg-badge {
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--acc);
+            color: #000;
+            font-weight: 800;
+            font-size: 0.8rem;
+            padding: 4px 16px;
+            border-radius: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .pkg-desc {
+            font-size: 0.95rem;
+            color: var(--txt-0);
+            line-height: 1.5;
+            margin: var(--sp-lg) 0;
+            font-weight: 500;
+        }
+
+        .pkg-price {
+            font-family: var(--font-display);
+            font-size: 2rem;
+            color: var(--acc);
+            font-weight: 700;
+        }
+
+        .pkg-price span {
+            font-size: 1rem;
+            color: var(--txt-2);
+            font-family: var(--font-sans);
+            vertical-align: middle;
+        }
+
+        /* Contact Section */
+        .contact-info-container {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--r-lg);
+            padding: var(--sp-xl);
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+            box-shadow: var(--sh-md);
+        }
+
+        .contact-detail {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 16px;
+            font-size: 1.05rem;
+            color: var(--txt-0);
+        }
+
+        .contact-detail svg {
+            width: 24px;
+            height: 24px;
+            stroke: var(--acc);
+            fill: none;
+            stroke-width: 2;
+        }
+
+        .contact-detail a {
+            color: var(--txt-0);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .contact-detail a:hover {
+            color: var(--acc);
+        }
+
+        /* --- CART UI --- */
+        .floating-cart {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--acc);
+            color: #000;
+            width: 65px;
+            height: 65px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            cursor: pointer;
+            z-index: 99;
+            transition: transform 0.3s;
+        }
+        .floating-cart:hover {
+            transform: scale(1.1);
+        }
+        .cart-badge {
+            position: absolute;
+            top: -2px;
+            right: -2px;
+            background: #ff4444;
+            color: #fff;
+            font-size: 0.85rem;
+            font-weight: 800;
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid var(--bg-0);
+        }
+
+        .cart-drawer {
+            position: fixed;
+            top: 0;
+            right: -450px;
+            width: 100%;
+            max-width: 400px;
+            height: 100vh;
+            background: var(--bg-0);
+            box-shadow: -5px 0 30px rgba(0,0,0,0.3);
+            z-index: 1000;
+            transition: right 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+            display: flex;
+            flex-direction: column;
+            border-left: 1px solid var(--border);
+        }
+        .cart-drawer.open {
+            right: 0;
+        }
+        .cart-header {
+            padding: var(--sp-lg) var(--sp-xl);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--card);
+        }
+        .cart-title {
+            font-family: var(--font-display);
+            font-size: 1.6rem;
+            color: var(--acc);
+            margin: 0;
+        }
+        .close-cart {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--txt-0);
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .close-cart:hover {
+            background: var(--border);
+        }
+        .cart-items {
+            flex: 1;
+            overflow-y: auto;
+            padding: var(--sp-xl);
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--r-md);
+        }
+        .cart-item-info h4 {
+            margin: 0 0 6px 0;
+            font-family: var(--font-sans);
+            font-size: 1rem;
+            color: var(--txt-0);
+        }
+        .cart-item-price {
+            color: var(--acc);
+            font-weight: 700;
+            font-size: 0.95rem;
+        }
+        .remove-item {
+            color: #ff5555;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            font-weight: 700;
+            padding: 8px;
+            border-radius: 4px;
+        }
+        .remove-item:hover {
+            background: rgba(255, 85, 85, 0.1);
+        }
+        .cart-footer {
+            padding: var(--sp-xl);
+            border-top: 1px solid var(--border);
+            background: var(--card);
+        }
+        .cart-total {
+            display: flex;
+            justify-content: space-between;
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: var(--txt-0);
+            margin-bottom: var(--sp-lg);
+        }
+        .btn-checkout {
+            width: 100%;
+            padding: 16px;
+            background: var(--acc);
+            color: #000;
+            border: none;
+            border-radius: 30px;
+            font-weight: 800;
+            font-size: 1.1rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            transition: all 0.3s;
+        }
+        .btn-checkout:hover {
+            background: var(--acc-hi);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px var(--acc-glow);
+        }
+        .empty-cart-msg {
+            text-align: center;
+            color: var(--txt-2);
+            margin-top: 40px;
+            font-style: italic;
+        }
+
+        /* Clickable Services Styles */
+        .service-item {
+            cursor: pointer;
+            position: relative;
+            padding: 12px 10px;
+            margin: 0 -10px;
+            border-radius: 6px;
+            transition: background 0.2s, padding 0.2s;
+        }
+        .service-item:hover {
+            background: var(--bg-1);
+        }
+        .service-item::after {
+            content: '+ Add';
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            font-weight: 800;
+            color: var(--acc);
+            background: var(--bg-0);
+            padding: 4px 10px;
+            border-radius: 12px;
+            border: 1px solid var(--border-acc);
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+        .service-item:hover::after {
+            opacity: 1;
+        }
+        .service-item:hover .service-price {
+            opacity: 0;
+        }
+
+        .package-card {
+            cursor: pointer;
+        }
+        .package-card::after {
+            content: 'Click to Add';
+            display: block;
+            margin-top: 16px;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            font-weight: 700;
+            color: var(--acc);
+            opacity: 0.5;
+            transition: opacity 0.3s;
+        }
+        .package-card:hover::after {
+            opacity: 1;
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <header id="header">
+        <div class="container nav-container">
+            <a href="index.html" class="logo" aria-label="Shiraj Life Home">
+                shiraj<span>life</span>
+            </a>
+
+            <nav class="nav-links" aria-label="Main Navigation">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="about.html" class="nav-link">About</a>
+                <a href="pillars.html" class="nav-link">Pillars</a>
+                <a href="work.html" class="nav-link">Work</a>
+                <a href="toolkit.html" class="nav-link">Toolkit</a>
+                <a href="clients.html" class="nav-link">Clients</a>
+                <a href="contact.html" class="nav-link">Contact</a>
+            </nav>
+
+            <div class="nav-actions">
+                <button class="theme-toggle" id="theme-toggle" aria-label="Toggle visual theme">
+                    <svg class="moon-icon" viewBox="0 0 24 24">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+                    </svg>
+                    <svg class="sun-icon" viewBox="0 0 24 24">
+                        <circle cx="12" cy="12" r="5" />
+                        <line x1="12" y1="1" x2="12" y2="3" />
+                        <line x1="12" y1="21" x2="12" y2="23" />
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                        <line x1="1" y1="12" x2="3" y2="12" />
+                        <line x1="21" y1="12" x2="23" y2="12" />
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+                    </svg>
+                </button>
+
+                <button class="mobile-nav-btn" id="mobile-menu-btn" aria-label="Toggle menu navigation drawer">
+                    <svg viewBox="0 0 24 24">
+                        <line x1="3" y1="12" x2="21" y2="12" />
+                        <line x1="3" y1="6" x2="21" y2="6" />
+                        <line x1="3" y1="18" x2="21" y2="18" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- MOBILE DRAWER -->
+    <div class="mobile-drawer" id="mobile-drawer">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="about.html" class="nav-link">About</a>
+        <a href="pillars.html" class="nav-link">Pillars</a>
+        <a href="work.html" class="nav-link">Work</a>
+        <a href="toolkit.html" class="nav-link">Toolkit</a>
+        <a href="clients.html" class="nav-link">Clients</a>
+        <a href="contact.html" class="nav-link">Contact</a>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <main>
+
+        <!-- LUXURY HERO -->
+        <section class="salon-hero">
+            <!-- Dynamic Image Collage Background -->
+            <div class="hero-collage">
+                <div class="collage-item" style="background-image: url('salon_hero1.png');"></div>
+                <div class="collage-item" style="background-image: url('salon_hero2.png');"></div>
+                <div class="collage-item" style="background-image: url('salon_hero3.png');"></div>
+                <div class="collage-item" style="background-image: url('salon_hero4.png'); background-position: center 10%;"></div>
+                <div class="collage-item" style="background-image: url('salon_hero5.png');"></div>
+                <div class="collage-overlay"></div>
+            </div>
+
+            <div class="container">
+                <div class="salon-hero-content">
+                    <span class="salon-hero-logo">Premium Beauty Services</span>
+                    <h1>Opulence Salon</h1>
+                    <p>
+                        By Shilpi Toor. Indulge in bespoke facials, exquisite makeups, and rejuvenating care tailored to make you feel extraordinary.
+                    </p>
+                    <a href="#services" class="btn btn-primary" style="background: var(--acc); color: #000; border: none; font-weight: 800; letter-spacing: 0.05em; box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);">View Our Services</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- SERVICES GRID -->
+        <section id="services" class="services-section">
+            <div class="container">
+                <div class="section-header" style="text-align: center; margin-bottom: var(--sp-2xl);">
+                    <span class="section-eyebrow" style="color: var(--acc);">Treatments</span>
+                    <h2 class="section-title">Our Services.</h2>
+                </div>
+
+                <div class="grid-2">
+                    
+                    <!-- Facial -->
+                    <div class="service-category">
+                        <h3 class="service-cat-title">Facial</h3>
+                        <ul class="service-list">
+                            <li class="service-item"><span class="service-name">Gold Facial</span><span class="service-price">Rs. 800</span></li>
+                            <li class="service-item"><span class="service-name">Diamond Facial</span><span class="service-price">Rs. 800</span></li>
+                            <li class="service-item"><span class="service-name">Pearl Facial</span><span class="service-price">Rs. 750</span></li>
+                            <li class="service-item"><span class="service-name">VLCC Facial</span><span class="service-price">Rs. 1000</span></li>
+                            <li class="service-item"><span class="service-name">Gold Facial Premium</span><span class="service-price">Rs. 1000</span></li>
+                            <li class="service-item"><span class="service-name">Cleanup</span><span class="service-price">Rs. 500</span></li>
+                        </ul>
+                    </div>
+
+                    <!-- Skin & Body Care -->
+                    <div class="service-category">
+                        <h3 class="service-cat-title">Skin & Body Care</h3>
+                        <ul class="service-list">
+                            <li class="service-item"><span class="service-name">Body Polishing</span><span class="service-price">Rs. 1200 - 2000</span></li>
+                            <li class="service-item"><span class="service-name">Head Massage</span><span class="service-price">Rs. 150</span></li>
+                            <li class="service-item"><span class="service-name">Hair Spa</span><span class="service-price">Rs. 500</span></li>
+                            <li class="service-item"><span class="service-name">Head Wash</span><span class="service-price">Rs. 200</span></li>
+                            <li class="service-item"><span class="service-name">Body Massage</span><span class="service-price">Rs. 1000</span></li>
+                            <li class="service-item"><span class="service-name">Back Massage</span><span class="service-price">Rs. 150</span></li>
+                        </ul>
+                    </div>
+
+                    <!-- Hair Services -->
+                    <div class="service-category">
+                        <h3 class="service-cat-title">Hair Services</h3>
+                        <ul class="service-list">
+                            <li class="service-item"><span class="service-name">Root Touch Up</span><span class="service-price">Rs. 150 (AC)</span></li>
+                            <li class="service-item"><span class="service-name">Hair Color Application</span><span class="service-price">Rs. 500 + (CC)</span></li>
+                            <li class="service-item"><span class="service-name">Hair Pressing</span><span class="service-price">Rs. 300 - 400</span></li>
+                            <li class="service-item"><span class="service-name">Hair Curls</span><span class="service-price">Rs. 500</span></li>
+                            <li class="service-item"><span class="service-name">Juda Hairstyle</span><span class="service-price">Rs. 500</span></li>
+                            <li class="service-item"><span class="service-name">Parandi Setting</span><span class="service-price">Rs. 200</span></li>
+                            <li class="service-item"><span class="service-name">Hairstyle</span><span class="service-price">Rs. 300/500/800</span></li>
+                            <li class="service-item"><span class="service-name">Braids</span><span class="service-price">Rs. 500</span></li>
+                        </ul>
+                    </div>
+
+                    <!-- Makeup Services -->
+                    <div class="service-category">
+                        <h3 class="service-cat-title">Makeup Services</h3>
+                        <ul class="service-list">
+                            <li class="service-item"><span class="service-name">Simple Makeup</span><span class="service-price">Rs. 1000</span></li>
+                            <li class="service-item"><span class="service-name">Party Makeup</span><span class="service-price">Rs. 1500</span></li>
+                            <li class="service-item"><span class="service-name">HD Makeup</span><span class="service-price">Rs. 2500</span></li>
+                            <li class="service-item"><span class="service-name">Engagement Makeup</span><span class="service-price">Rs. 5000</span></li>
+                            <li class="service-item"><span class="service-name">Bridal Makeup</span><span class="service-price">Rs. 10000</span></li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Draping & Heena Services -->
+                    <div class="grid-2" style="grid-column: 1 / -1; gap: var(--sp-xl);">
+                        <div class="service-category">
+                            <h3 class="service-cat-title">Draping Services</h3>
+                            <ul class="service-list">
+                                <li class="service-item"><span class="service-name">Saree Draping</span><span class="service-price">Rs. 200</span></li>
+                                <li class="service-item"><span class="service-name">Dupatta Draping</span><span class="service-price">Rs. 50</span></li>
+                            </ul>
+                        </div>
+                        <div class="service-category">
+                            <h3 class="service-cat-title">Heena Services</h3>
+                            <ul class="service-list">
+                                <li class="service-item"><span class="service-name">Heena Application</span><span class="service-price">Rs. 200</span></li>
+                                <li class="service-item"><span class="service-name">Heena Wash</span><span class="service-price">Rs. 200</span></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- PACKAGES SECTION -->
+        <section class="packages-section">
+            <div class="container">
+                <div class="section-header" style="text-align: center; margin-bottom: var(--sp-2xl);">
+                    <span class="section-eyebrow" style="color: var(--acc);">Special Deals</span>
+                    <h2 class="section-title">Opulence Packages.</h2>
+                </div>
+
+                <div class="packages-grid">
+                    
+                    <div class="package-card">
+                        <div class="pkg-badge">Package 1</div>
+                        <p class="pkg-desc">Threading + Full Arms Waxing + Cleanup + Head Massage</p>
+                        <div class="pkg-price"><span>Rs.</span> 800</div>
+                    </div>
+
+                    <div class="package-card">
+                        <div class="pkg-badge">Package 2</div>
+                        <p class="pkg-desc">Full Legs + Full Arms + Threading + Pedicure</p>
+                        <div class="pkg-price"><span>Rs.</span> 900</div>
+                    </div>
+
+                    <div class="package-card">
+                        <div class="pkg-badge">Package 3</div>
+                        <p class="pkg-desc">Half Legs + Diamond Facial + Root Touch Up + Threading</p>
+                        <div class="pkg-price"><span>Rs.</span> 1500</div>
+                    </div>
+
+                    <div class="package-card">
+                        <div class="pkg-badge">Package 4</div>
+                        <p class="pkg-desc">Threading + Cleanup + Pedicure</p>
+                        <div class="pkg-price"><span>Rs.</span> 700</div>
+                    </div>
+
+                    <div class="package-card">
+                        <div class="pkg-badge">Package 5</div>
+                        <p class="pkg-desc">Threading + Bleach + Gold Facial + Full Arms Waxing + Half Legs Waxing + Manicure</p>
+                        <div class="pkg-price"><span>Rs.</span> 1700</div>
+                    </div>
+
+                    <div class="package-card">
+                        <div class="pkg-badge">Package 6</div>
+                        <p class="pkg-desc">VLCC Cleanup + Threading + Hair Spa + Full Arms Waxing</p>
+                        <div class="pkg-price"><span>Rs.</span> 1200</div>
+                    </div>
+
+                    <div class="package-card">
+                        <div class="pkg-badge">Package 7</div>
+                        <p class="pkg-desc">Pedicure + Manicure + Hair Spa + Head Wash + Full Arms Waxing + Threading + Gold/Diamond Facial</p>
+                        <div class="pkg-price"><span>Rs.</span> 2100</div>
+                    </div>
+
+                    <div class="package-card">
+                        <div class="pkg-badge">Package 8</div>
+                        <p class="pkg-desc">Threading + Full Arms Waxing + Cleanup</p>
+                        <div class="pkg-price"><span>Rs.</span> 500</div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- MEET THE ARTIST SECTION -->
+        <section id="about-shilpi" style="padding: var(--sp-3xl) 0; background: var(--bg-1);">
+            <div class="container">
+                <div class="section-header" style="text-align: center; margin-bottom: var(--sp-2xl);">
+                    <span class="section-eyebrow" style="color: var(--acc);">The Artist Behind the Magic</span>
+                    <h2 class="section-title">Meet Shilpi Toor.</h2>
+                </div>
+
+                <div style="max-width: 860px; margin: 0 auto; background: var(--card); border: 1px solid var(--border); border-radius: var(--r-lg); overflow: hidden; box-shadow: var(--sh-md); display: grid; grid-template-columns: 1fr; gap: 0;">
+                    
+                    <!-- Bio Content -->
+                    <div style="padding: var(--sp-xl); display: flex; flex-direction: column; justify-content: center; gap: var(--sp-md);">
+                        <div>
+                            <h3 style="font-family: 'Playfair Display', serif; font-size: 1.8rem; color: var(--acc); margin-bottom: 8px;">Shilpi Toor</h3>
+                            <p style="font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; color: var(--txt-2); margin-bottom: var(--sp-md);">Fashion Designer 👗 · Makeup Artist 🎨 · Hairstylist 💇‍♀️</p>
+                            <p style="font-size: 1rem; line-height: 1.7; color: var(--txt-1);">
+                                Shilpi Toor is a multi-talented beauty professional based in Dwarka, New Delhi. With expertise spanning fashion design, professional makeup artistry, and creative hairstyling, she brings a holistic approach to every client's transformation. At Opulence Salon, Shilpi curates experiences that blend artistry, technique, and elegance — making every visit a luxurious, confidence-boosting journey.
+                            </p>
+                        </div>
+
+                        <!-- Instagram Stats -->
+                        <div style="display: flex; gap: var(--sp-lg); flex-wrap: wrap; border-top: 1px solid var(--border); padding-top: var(--sp-md);">
+                            <div style="text-align: center;">
+                                <div style="font-size: 1.5rem; font-weight: 800; color: var(--acc); font-family: 'Playfair Display', serif;">145</div>
+                                <div style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--txt-2); font-weight: 600;">Posts</div>
+                            </div>
+                            <div style="text-align: center;">
+                                <div style="font-size: 1.5rem; font-weight: 800; color: var(--acc); font-family: 'Playfair Display', serif;">513</div>
+                                <div style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--txt-2); font-weight: 600;">Followers</div>
+                            </div>
+                            <div style="text-align: center;">
+                                <div style="font-size: 1.5rem; font-weight: 800; color: var(--acc); font-family: 'Playfair Display', serif;">5,337</div>
+                                <div style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--txt-2); font-weight: 600;">Following</div>
+                            </div>
+                            <div style="margin-left: auto; display: flex; align-items: center;">
+                                <a href="https://www.instagram.com/shilpi_makeoverss?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" rel="noopener noreferrer"
+                                   style="display: inline-flex; align-items: center; gap: 8px; background: linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); color: #fff; text-decoration: none; padding: 10px 18px; border-radius: 24px; font-size: 0.85rem; font-weight: 700; transition: opacity 0.2s;">
+                                    <svg viewBox="0 0 24 24" style="width: 18px; height: 18px; fill: none; stroke: #fff; stroke-width: 2;"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+                                    @shilpi_makeoverss
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CONTACT SECTION -->
+        <section id="contact" style="padding: var(--sp-3xl) 0; background: var(--bg-0);">
+            <div class="container">
+                <div class="contact-info-container">
+                    <h2 class="section-title" style="margin-bottom: var(--sp-md); color: var(--acc);">Visit Us</h2>
+                    <p style="margin-bottom: var(--sp-xl); color: var(--txt-1);">Book your appointment today and experience luxury beauty care.</p>
+                    
+                    <div class="contact-detail">
+                        <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                        <span><a href="https://maps.app.goo.gl/YXstFeRP4wYRTfzK6" target="_blank" rel="noopener noreferrer">Flat No. 834, Om Apartment, DDA LIG Flats, Sector-14, Pocket-II, Dwarka, New Delhi-110078</a></span>
+                    </div>
+
+                    <div class="contact-detail">
+                        <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                        <span><a href="tel:8368207672">8368207672</a>, <a href="tel:8448704688">8448704688</a></span>
+                    </div>
+
+                    <div class="contact-detail">
+                        <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                        <span><a href="mailto:shilpi.toor@gmail.com">shilpi.toor@gmail.com</a>, <a href="mailto:shilpitoor10@gmail.com">shilpitoor10@gmail.com</a></span>
+                    </div>
+
+                    <div class="contact-detail">
+                        <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+                        <span><a href="https://www.instagram.com/shilpi_makeoverss?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" rel="noopener noreferrer">@shilpi_makeoverss</a></span>
+                    </div>
+
+                    <!-- Payment Option -->
+                    <div class="contact-detail" style="margin-top: 24px; padding-top: 24px; border-top: 1px dashed var(--border);">
+                        <svg viewBox="0 0 24 24"><path d="M12 1v22"></path><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                        <span style="text-align: left;">
+                            <strong>Digital Payments Accepted</strong><br>
+                            <span style="font-size: 0.9rem; color: var(--txt-1);">GPay / PhonePe / Paytm:</span> 
+                            <a href="upi://pay?pa=demo@upi&pn=Opulence%20Salon" style="font-weight: 700; color: var(--acc);">9876543210</a> <span style="font-size: 0.8rem; color: var(--txt-2);">(Demo)</span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="container footer-content">
+            <span class="footer-logo">Opulence<span>Salon</span></span>
+            <span class="footer-copy">&copy; 2026 Opulence Salon by Shilpi Toor. All rights reserved. Followed by @shiraj_life.</span>
+        </div>
+    </footer>
+
+    <!-- CART UI -->
+    <div class="floating-cart" id="floating-cart" style="display: none;" title="View Cart">
+        <svg viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+        <div class="cart-badge" id="cart-badge">0</div>
+    </div>
+
+    <div class="cart-drawer" id="cart-drawer">
+        <div class="cart-header">
+            <h2 class="cart-title">Your Cart</h2>
+            <button class="close-cart" id="close-cart">
+                <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+        </div>
+        <div class="cart-items" id="cart-items">
+            <div class="empty-cart-msg">Your cart is empty.</div>
+        </div>
+        <div class="cart-footer">
+            <div class="cart-total">
+                <span>Total:</span>
+                <span id="cart-total-price">Rs. 0</span>
+            </div>
+            <button class="btn-checkout" id="btn-checkout">Book Appointment</button>
+        </div>
+    </div>
+
+    <!-- SCRIPTS -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const header = document.getElementById('header');
+
+            /* Scrolled header state */
+            window.addEventListener('scroll', () => {
+                header.classList.toggle('scrolled', window.scrollY > 24);
+            }, { passive: true });
+
+            /* Theme toggle */
+            const themeBtn = document.getElementById('theme-toggle');
+            themeBtn.addEventListener('click', () => {
+                const current = document.documentElement.getAttribute('data-theme');
+                const next = current === 'dark' ? 'light' : 'dark';
+                document.documentElement.setAttribute('data-theme', next);
+                localStorage.setItem('theme', next);
+            });
+
+            /* Mobile menu */
+            const mobileBtn = document.getElementById('mobile-menu-btn');
+            const mobileDrawer = document.getElementById('mobile-drawer');
+            const hamburgerSVG = `<svg viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>`;
+            const closeSVG = `<svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`;
+
+            function closeDrawer() {
+                mobileDrawer.classList.remove('open');
+                mobileBtn.innerHTML = hamburgerSVG;
+            }
+
+            mobileBtn.addEventListener('click', e => {
+                e.stopPropagation();
+                const isOpen = mobileDrawer.classList.toggle('open');
+                mobileBtn.innerHTML = isOpen ? closeSVG : hamburgerSVG;
+            });
+
+            mobileDrawer.querySelectorAll('.nav-link').forEach(l => l.addEventListener('click', closeDrawer));
+            document.addEventListener('click', e => {
+                if (!mobileDrawer.contains(e.target) && !mobileBtn.contains(e.target)) closeDrawer();
+            });
+
+            /* --- CART LOGIC --- */
+            const cart = [];
+            const floatingCart = document.getElementById('floating-cart');
+            const cartDrawer = document.getElementById('cart-drawer');
+            const closeCartBtn = document.getElementById('close-cart');
+            const cartItemsContainer = document.getElementById('cart-items');
+            const cartBadge = document.getElementById('cart-badge');
+            const cartTotalPrice = document.getElementById('cart-total-price');
+
+            function parsePrice(priceStr) {
+                const match = priceStr.match(/\d+/);
+                return match ? parseInt(match[0], 10) : 0;
+            }
+
+            function updateCartUI() {
+                cartBadge.textContent = cart.length;
+                if (cart.length > 0) {
+                    floatingCart.style.display = 'flex';
+                } else {
+                    floatingCart.style.display = 'none';
+                    cartDrawer.classList.remove('open');
+                }
+
+                cartItemsContainer.innerHTML = '';
+                let total = 0;
+
+                if (cart.length === 0) {
+                    cartItemsContainer.innerHTML = '<div class="empty-cart-msg">Your cart is empty.</div>';
+                }
+
+                cart.forEach((item, index) => {
+                    total += item.basePrice;
+                    const el = document.createElement('div');
+                    el.className = 'cart-item';
+                    el.innerHTML = `
+                        <div class="cart-item-info">
+                            <h4>${item.name}</h4>
+                            <div class="cart-item-price">${item.priceStr}</div>
+                        </div>
+                        <button class="remove-item" data-index="${index}">Remove</button>
+                    `;
+                    cartItemsContainer.appendChild(el);
+                });
+
+                cartTotalPrice.textContent = `Rs. ${total}`;
+
+                document.querySelectorAll('.remove-item').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const idx = e.target.getAttribute('data-index');
+                        cart.splice(idx, 1);
+                        updateCartUI();
+                    });
+                });
+            }
+
+            floatingCart.addEventListener('click', () => {
+                cartDrawer.classList.add('open');
+            });
+            closeCartBtn.addEventListener('click', () => {
+                cartDrawer.classList.remove('open');
+            });
+
+            // Add Service to Cart
+            document.querySelectorAll('.service-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    const name = item.querySelector('.service-name').textContent;
+                    const priceStr = item.querySelector('.service-price').textContent;
+                    const basePrice = parsePrice(priceStr);
+                    cart.push({ name, priceStr, basePrice });
+                    updateCartUI();
+                    
+                    // Feedback animation
+                    floatingCart.style.transform = 'scale(1.2)';
+                    setTimeout(() => floatingCart.style.transform = '', 200);
+                });
+            });
+
+            // Add Package to Cart
+            document.querySelectorAll('.package-card').forEach(pkg => {
+                pkg.addEventListener('click', () => {
+                    const badge = pkg.querySelector('.pkg-badge').textContent;
+                    const desc = pkg.querySelector('.pkg-desc').textContent;
+                    const name = badge + " - " + desc.split('+')[0].trim() + "...";
+                    const priceNode = pkg.querySelector('.pkg-price');
+                    const priceStr = "Rs. " + priceNode.textContent.replace('Rs.', '').trim();
+                    const basePrice = parsePrice(priceStr);
+                    
+                    cart.push({ name, priceStr, basePrice });
+                    updateCartUI();
+                    
+                    floatingCart.style.transform = 'scale(1.2)';
+                    setTimeout(() => floatingCart.style.transform = '', 200);
+                });
+            });
+
+            // Checkout
+            document.getElementById('btn-checkout').addEventListener('click', () => {
+                cartDrawer.classList.remove('open');
+                document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });
+                
+                const serviceList = cart.map(i => i.name).join(', ');
+                alert(`Booking Request:\n${serviceList}\nTotal: Rs. ${cartTotalPrice.textContent.replace('Rs. ', '')}\n\nPlease contact us using the details below to finalize your appointment!`);
+            });
+        });
+    </script>
+</body>
+
+</html>
