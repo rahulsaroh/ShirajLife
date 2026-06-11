@@ -1,107 +1,125 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Anti-FOUC: apply theme before paint -->
+    <script>
+        (function () {
+            var t = localStorage.getItem('theme') ||
+                (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            document.documentElement.setAttribute('data-theme', t);
+        })();
+    </script>
+
     <title>Shiraj Life | Personal Brand Hub & Portfolio</title>
-    <meta name="description" content="Personal brand hub of Shiraj, a multidisciplinary builder based in Mumbai. Combining government audit discipline with software engineering, fitness coaching, and financial analysis.">
-    <meta name="keywords" content="Flutter, Dart, SQL, Python, Audit, Government India, Fitness Coach, Finance Tracker, Personal Brand, Mumbai">
-    
-    <!-- Open Graph / Facebook -->
+    <meta name="description"
+        content="Personal brand hub of Shiraj, a multidisciplinary builder based in Mumbai. Combining government audit discipline with software engineering, fitness coaching, and financial analysis.">
+    <meta name="keywords"
+        content="Flutter, Dart, SQL, Python, Audit, Government India, Fitness Coach, Finance Tracker, Personal Brand, Mumbai">
+
     <meta property="og:type" content="website">
     <meta property="og:title" content="Shiraj Life | Personal Brand Hub & Portfolio">
-    <meta property="og:description" content="Combining government audit discipline with software engineering, fitness coaching, and financial analysis.">
+    <meta property="og:description"
+        content="Combining government audit discipline with software engineering, fitness coaching, and financial analysis.">
     <meta property="og:image" content="https://shiraj.life/og-image.png">
-
-    <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:title" content="Shiraj Life | Personal Brand Hub & Portfolio">
-    <meta property="twitter:description" content="Combining government audit discipline with software engineering, fitness coaching, and financial analysis.">
+    <meta property="twitter:description"
+        content="Combining government audit discipline with software engineering, fitness coaching, and financial analysis.">
 
-    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500;600&display=swap"
+        rel="stylesheet">
 
     <style>
         /* ==========================================
-           DESIGN TOKENS & SYSTEM VARIABLES
+           DESIGN TOKENS
            ========================================== */
         :root {
-            /* Fonts */
-            --font-heading: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            --font-body: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            --font-display: 'Outfit', system-ui, sans-serif;
+            --font-body: 'Plus Jakarta Sans', system-ui, sans-serif;
+            --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
 
-            /* Transitions */
-            --transition-smooth: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            --transition-fast: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-            
-            /* Border Radius */
-            --radius-sm: 4px;
-            --radius-md: 8px;
-            --radius-lg: 16px;
-            --radius-full: 9999px;
+            --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
+            --ease-in-out: cubic-bezier(0.45, 0, 0.55, 1);
 
-            /* Spacing Scale */
-            --space-2xs: 0.5rem;
-            --space-xs: 0.75rem;
-            --space-sm: 1rem;
-            --space-md: 1.5rem;
-            --space-lg: 2rem;
-            --space-xl: 3rem;
-            --space-2xl: 4.5rem;
-            --space-3xl: 6rem;
-            
-            /* Shadows */
-            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
-            --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.06);
-            --shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.08);
+            --r-xs: 3px;
+            --r-sm: 6px;
+            --r-md: 10px;
+            --r-lg: 18px;
+            --r-xl: 24px;
+            --r-full: 9999px;
 
-            /* Theme Constants (Light Mode by default) */
-            --bg-primary: #faf9f6;
-            --bg-secondary: #f3f1eb;
-            --bg-tertiary: #ebe8e0;
-            --text-primary: #1c1d1f;
-            --text-secondary: #56595e;
-            --text-muted: #82868c;
-            --accent: #0b5c54;
-            --accent-hover: #08433d;
-            --accent-muted: rgba(11, 92, 84, 0.08);
-            --border-color: rgba(28, 29, 31, 0.08);
-            --border-color-hover: rgba(28, 29, 31, 0.16);
-            --input-bg: #ffffff;
-            --card-bg: #ffffff;
-            --scrollbar-bg: #f3f1eb;
-            --scrollbar-thumb: #82868c;
-            --selection-bg: #0b5c54;
-            --selection-text: #faf9f6;
+            --sp-2xs: 0.375rem;
+            --sp-xs: 0.625rem;
+            --sp-sm: 1rem;
+            --sp-md: 1.5rem;
+            --sp-lg: 2.25rem;
+            --sp-xl: 3.5rem;
+            --sp-2xl: 5rem;
+            --sp-3xl: 7rem;
+
+            /* Light mode palette */
+            --bg-0: #f7f5f0;
+            --bg-1: #edeae2;
+            --bg-2: #e2ded4;
+            --card: #ffffff;
+            --txt-0: #131416;
+            --txt-1: #52565d;
+            --txt-2: #8d929a;
+            --acc: #0a5750;
+            --acc-hi: #0d6b63;
+            --acc-br: #11a898;
+            --acc-glow: rgba(10, 87, 80, 0.10);
+            --acc-glow-lg: rgba(10, 87, 80, 0.05);
+            --border: rgba(19, 20, 22, 0.08);
+            --border-hi: rgba(19, 20, 22, 0.16);
+            --border-acc: rgba(10, 87, 80, 0.22);
+            --dot: rgba(10, 87, 80, 0.065);
+            --sh-sm: 0 1px 4px rgba(0, 0, 0, 0.04), 0 0 0 1px rgba(0, 0, 0, 0.03);
+            --sh-md: 0 6px 20px rgba(0, 0, 0, 0.07), 0 1px 4px rgba(0, 0, 0, 0.04);
+            --sh-lg: 0 18px 48px rgba(0, 0, 0, 0.09), 0 4px 14px rgba(0, 0, 0, 0.05);
+            --sh-acc: 0 8px 28px rgba(10, 87, 80, 0.22);
+            --sel-bg: #0a5750;
+            --sel-txt: #ffffff;
         }
 
         [data-theme="dark"] {
-            /* Theme Constants (Dark Mode) */
-            --bg-primary: #121416;
-            --bg-secondary: #1a1d20;
-            --bg-tertiary: #22262a;
-            --text-primary: #f3f4f6;
-            --text-secondary: #a1a6af;
-            --text-muted: #6b7280;
-            --accent: #14b8a6;
-            --accent-hover: #2dd4bf;
-            --accent-muted: rgba(20, 184, 166, 0.08);
-            --border-color: rgba(243, 244, 246, 0.08);
-            --border-color-hover: rgba(243, 244, 246, 0.16);
-            --input-bg: #1a1d20;
-            --card-bg: #1a1d20;
-            --scrollbar-bg: #1a1d20;
-            --scrollbar-thumb: #4b5563;
-            --selection-bg: #14b8a6;
-            --selection-text: #121416;
+            --bg-0: #0d1012;
+            --bg-1: #151a1e;
+            --bg-2: #1d2228;
+            --card: #151a1e;
+            --txt-0: #edf0f5;
+            --txt-1: #9aa1ac;
+            --txt-2: #5e6571;
+            --acc: #13b8a6;
+            --acc-hi: #18d1be;
+            --acc-br: #1ee8d4;
+            --acc-glow: rgba(19, 184, 166, 0.10);
+            --acc-glow-lg: rgba(19, 184, 166, 0.045);
+            --border: rgba(237, 240, 245, 0.07);
+            --border-hi: rgba(237, 240, 245, 0.14);
+            --border-acc: rgba(19, 184, 166, 0.22);
+            --dot: rgba(19, 184, 166, 0.045);
+            --sh-sm: 0 2px 8px rgba(0, 0, 0, 0.22);
+            --sh-md: 0 6px 20px rgba(0, 0, 0, 0.28);
+            --sh-lg: 0 18px 48px rgba(0, 0, 0, 0.38);
+            --sh-acc: 0 8px 28px rgba(19, 184, 166, 0.20);
+            --sel-bg: #13b8a6;
+            --sel-txt: #0d1012;
         }
 
         /* ==========================================
-           RESET & CORE STYLES
+           RESET & BASE
            ========================================== */
-        *, *::before, *::after {
+        *,
+        *::before,
+        *::after {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
@@ -114,91 +132,109 @@
         }
 
         body {
-            background-color: var(--bg-primary);
-            color: var(--text-primary);
+            background: var(--bg-0);
+            color: var(--txt-0);
             font-family: var(--font-body);
-            line-height: 1.6;
-            transition: background-color 0.4s ease, color 0.4s ease;
-            text-rendering: optimizeLegibility;
+            line-height: 1.65;
+            transition: background-color 0.45s ease, color 0.45s ease;
             -webkit-font-smoothing: antialiased;
+            text-rendering: optimizeLegibility;
             overflow-x: hidden;
         }
 
         ::selection {
-            background-color: var(--selection-bg);
-            color: var(--selection-text);
+            background: var(--sel-bg);
+            color: var(--sel-txt);
         }
 
-        /* Scrollbar styling */
         ::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: var(--scrollbar-bg);
-        }
-        ::-webkit-scrollbar-thumb {
-            background: var(--scrollbar-thumb);
-            border-radius: var(--radius-sm);
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--text-muted);
+            width: 6px;
         }
 
-        /* Typography Elements */
-        h1, h2, h3, h4, h5, h6 {
-            font-family: var(--font-heading);
-            font-weight: 700;
-            line-height: 1.15;
-            letter-spacing: -0.02em;
-            color: var(--text-primary);
+        ::-webkit-scrollbar-track {
+            background: var(--bg-1);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--txt-2);
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--acc);
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-family: var(--font-display);
+            font-weight: 800;
+            line-height: 1.1;
+            letter-spacing: -0.025em;
+            color: var(--txt-0);
         }
 
         p {
-            color: var(--text-secondary);
-            font-size: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
-            font-weight: 400;
+            color: var(--txt-1);
         }
 
         a {
             color: inherit;
             text-decoration: none;
-            transition: var(--transition-fast);
         }
 
-        img, svg {
+        img,
+        svg {
             max-width: 100%;
             height: auto;
             display: block;
         }
 
+        button {
+            font-family: var(--font-body);
+            cursor: pointer;
+        }
+
         /* ==========================================
-           LAYOUT & CONTAINER
+           SCROLL PROGRESS BAR
+           ========================================== */
+        #scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 2.5px;
+            width: 0%;
+            background: linear-gradient(90deg, var(--acc), var(--acc-br));
+            z-index: 9999;
+            transition: width 0.08s linear;
+        }
+
+        /* ==========================================
+           LAYOUT
            ========================================== */
         .container {
             width: 100%;
             max-width: 1200px;
-            margin-right: auto;
-            margin-left: auto;
-            padding-right: var(--space-md);
-            padding-left: var(--space-md);
+            margin: 0 auto;
+            padding: 0 var(--sp-md);
         }
 
         section {
-            padding-top: var(--space-2xl);
-            padding-bottom: var(--space-2xl);
-            border-bottom: 1px solid var(--border-color);
+            padding: var(--sp-2xl) 0;
+            border-bottom: 1px solid var(--border);
         }
 
         @media (min-width: 768px) {
             section {
-                padding-top: var(--space-3xl);
-                padding-bottom: var(--space-3xl);
+                padding: var(--sp-3xl) 0;
             }
         }
 
         /* ==========================================
-           HEADER / NAVIGATION
+           HEADER / NAV
            ========================================== */
         header {
             position: fixed;
@@ -206,68 +242,78 @@
             left: 0;
             width: 100%;
             z-index: 1000;
-            background-color: rgba(250, 249, 246, 0.8);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border-bottom: 1px solid var(--border-color);
-            transition: background-color 0.4s ease, border-color 0.4s ease;
+            background: rgba(247, 245, 240, 0.72);
+            backdrop-filter: blur(18px) saturate(180%);
+            -webkit-backdrop-filter: blur(18px) saturate(180%);
+            border-bottom: 1px solid var(--border);
+            transition: background 0.45s ease, box-shadow 0.3s ease, border-color 0.45s ease;
+        }
+
+        header.scrolled {
+            background: rgba(247, 245, 240, 0.92);
+            box-shadow: 0 1px 0 var(--border), 0 4px 20px rgba(0, 0, 0, 0.05);
         }
 
         [data-theme="dark"] header {
-            background-color: rgba(18, 20, 22, 0.8);
+            background: rgba(13, 16, 18, 0.72);
+        }
+
+        [data-theme="dark"] header.scrolled {
+            background: rgba(13, 16, 18, 0.92);
         }
 
         .nav-container {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            height: 70px;
+            height: 68px;
         }
 
         .logo {
-            font-family: var(--font-heading);
-            font-size: 1.35rem;
-            font-weight: 800;
-            letter-spacing: -0.03em;
-            display: flex;
-            align-items: center;
-            gap: var(--space-2xs);
-            color: var(--text-primary);
+            font-family: var(--font-display);
+            font-size: 1.2rem;
+            font-weight: 900;
+            letter-spacing: -0.04em;
+            color: var(--txt-0);
         }
 
         .logo span {
-            color: var(--accent);
+            color: var(--acc);
         }
 
         .nav-links {
             display: none;
             align-items: center;
-            gap: var(--space-lg);
+            gap: var(--sp-lg);
         }
 
         .nav-link {
-            font-size: 0.9rem;
+            font-size: 0.855rem;
             font-weight: 500;
-            color: var(--text-secondary);
+            color: var(--txt-1);
             position: relative;
-            padding: var(--space-2xs) 0;
+            padding: 4px 0;
+            transition: color 0.2s ease;
         }
 
         .nav-link::after {
             content: '';
             position: absolute;
-            bottom: 0;
+            bottom: -1px;
             left: 0;
             width: 0;
             height: 1.5px;
-            background-color: var(--accent);
-            transition: var(--transition-fast);
+            background: var(--acc);
+            border-radius: 1px;
+            transition: width 0.25s var(--ease-expo);
         }
 
-        .nav-link:hover {
-            color: var(--text-primary);
+        .nav-link:hover,
+        .nav-link.active {
+            color: var(--txt-0);
         }
 
+        .nav-link.active::after,
         .nav-link:hover::after {
             width: 100%;
         }
@@ -275,35 +321,34 @@
         .nav-actions {
             display: flex;
             align-items: center;
-            gap: var(--space-md);
+            gap: 10px;
         }
 
         .theme-toggle {
             background: none;
-            border: 1px solid var(--border-color);
-            color: var(--text-primary);
-            padding: var(--space-2xs);
-            border-radius: var(--radius-md);
-            cursor: pointer;
+            border: 1px solid var(--border);
+            color: var(--txt-0);
+            padding: 8px;
+            border-radius: var(--r-md);
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: var(--transition-smooth);
+            transition: all 0.2s ease;
             width: 38px;
             height: 38px;
         }
 
         .theme-toggle:hover {
-            background-color: var(--bg-secondary);
-            border-color: var(--border-color-hover);
+            background: var(--bg-1);
+            border-color: var(--border-hi);
         }
 
         .theme-toggle svg {
-            width: 18px;
-            height: 18px;
-            fill: none;
+            width: 16px;
+            height: 16px;
             stroke: currentColor;
             stroke-width: 2;
+            fill: none;
         }
 
         .theme-toggle .sun-icon {
@@ -319,38 +364,37 @@
         }
 
         .mobile-menu-btn {
-            display: flex;
             background: none;
             border: none;
-            color: var(--text-primary);
-            cursor: pointer;
-            padding: var(--space-2xs);
+            color: var(--txt-0);
+            padding: 6px;
+            display: flex;
+            align-items: center;
         }
 
         .mobile-menu-btn svg {
-            width: 24px;
-            height: 24px;
-            fill: none;
+            width: 22px;
+            height: 22px;
             stroke: currentColor;
             stroke-width: 2;
+            fill: none;
         }
 
-        /* Mobile Menu Navigation Drawer */
         .mobile-drawer {
             position: fixed;
-            top: 70px;
+            top: 68px;
             left: 0;
             width: 100%;
-            height: calc(100vh - 70px);
-            background-color: var(--bg-primary);
+            height: calc(100dvh - 68px);
+            background: var(--bg-0);
             z-index: 999;
             transform: translateX(100%);
-            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            padding: var(--space-xl) var(--space-md);
+            transition: transform 0.4s var(--ease-expo);
+            padding: var(--sp-lg) var(--sp-md);
             display: flex;
             flex-direction: column;
-            gap: var(--space-md);
-            border-top: 1px solid var(--border-color);
+            gap: 2px;
+            border-top: 1px solid var(--border);
         }
 
         .mobile-drawer.open {
@@ -358,98 +402,104 @@
         }
 
         .mobile-drawer .nav-link {
-            font-size: 1.5rem;
-            font-weight: 600;
-            padding: var(--space-xs) 0;
-            border-bottom: 1px solid var(--border-color);
+            font-size: 1.75rem;
+            font-weight: 800;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border);
+            font-family: var(--font-display);
+            letter-spacing: -0.025em;
         }
 
         @media (min-width: 768px) {
             .nav-links {
                 display: flex;
             }
+
             .mobile-menu-btn {
                 display: none;
             }
+
             .mobile-drawer {
                 display: none;
             }
         }
 
         /* ==========================================
-           BUTTONS & ACTIONS
+           BUTTONS
            ========================================== */
         .btn {
             display: inline-flex;
             align-items: center;
-            justify-content: center;
-            font-family: var(--font-heading);
+            gap: 8px;
+            font-family: var(--font-display);
             font-weight: 600;
-            font-size: 0.95rem;
-            padding: 0.75rem 1.5rem;
-            border-radius: var(--radius-md);
-            cursor: pointer;
-            transition: var(--transition-smooth);
-            gap: var(--space-2xs);
+            font-size: 0.88rem;
+            padding: 0.68rem 1.4rem;
+            border-radius: var(--r-md);
+            border: none;
+            transition: all 0.3s var(--ease-expo);
+            position: relative;
+            overflow: hidden;
+            letter-spacing: -0.01em;
         }
 
         .btn-primary {
-            background-color: var(--accent);
-            color: var(--selection-text);
-            border: none;
+            background: var(--acc);
+            color: #fff;
         }
 
         .btn-primary:hover {
-            background-color: var(--accent-hover);
+            background: var(--acc-hi);
             transform: translateY(-2px);
+            box-shadow: var(--sh-acc);
         }
 
         .btn-secondary {
-            background-color: transparent;
-            color: var(--text-primary);
-            border: 1px solid var(--border-color);
+            background: transparent;
+            color: var(--txt-0);
+            border: 1.5px solid var(--border);
         }
 
         .btn-secondary:hover {
-            background-color: var(--bg-secondary);
-            border-color: var(--border-color-hover);
+            background: var(--bg-1);
+            border-color: var(--border-hi);
             transform: translateY(-2px);
         }
 
         .btn-text {
             display: inline-flex;
             align-items: center;
+            gap: 6px;
             font-weight: 600;
-            color: var(--accent);
-            gap: var(--space-2xs);
-            transition: var(--transition-fast);
+            font-size: 0.855rem;
+            color: var(--acc);
+            transition: color 0.2s ease;
+        }
+
+        .btn-text svg {
+            width: 14px;
+            height: 14px;
+            stroke: currentColor;
+            stroke-width: 2.5;
+            fill: none;
+            transition: transform 0.2s var(--ease-expo);
         }
 
         .btn-text:hover {
-            color: var(--accent-hover);
+            color: var(--acc-hi);
         }
 
         .btn-text:hover svg {
             transform: translateX(4px);
         }
 
-        .btn-text svg {
-            width: 16px;
-            height: 16px;
-            stroke: currentColor;
-            stroke-width: 2.5;
-            fill: none;
-            transition: var(--transition-fast);
-        }
-
         /* ==========================================
-           REVEAL EFFECTS & ANIMATIONS
+           REVEAL ANIMATIONS
            ========================================== */
         .reveal {
             opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
-                        transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            transform: translateY(26px);
+            transition: opacity 0.75s var(--ease-expo), transform 0.75s var(--ease-expo);
         }
 
         .reveal.visible {
@@ -463,8 +513,9 @@
                 opacity: 1;
                 transform: none;
             }
+
             .btn:hover {
-                transform: none;
+                transform: none !important;
             }
         }
 
@@ -472,253 +523,345 @@
            HERO SECTION
            ========================================== */
         .hero-section {
-            padding-top: calc(70px + var(--space-2xl));
+            padding-top: calc(68px + var(--sp-xl));
+            padding-bottom: var(--sp-2xl);
             position: relative;
             overflow: hidden;
+            min-height: 88vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
 
+        /* Dot grid */
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: radial-gradient(circle, var(--dot) 1.5px, transparent 1.5px);
+            background-size: 28px 28px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Radial mask so edges fade out cleanly */
+        .hero-section::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse 90% 80% at 40% 50%,
+                    transparent 0%, var(--bg-0) 72%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .hero-section .container {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Availability badge */
+        .hero-avail {
+            display: inline-flex;
+            align-items: center;
+            gap: 9px;
+            font-family: var(--font-mono);
+            font-size: 0.72rem;
+            font-weight: 500;
+            color: var(--acc);
+            background: var(--acc-glow);
+            border: 1px solid var(--border-acc);
+            padding: 5px 14px;
+            border-radius: var(--r-full);
+            margin-bottom: var(--sp-md);
+            letter-spacing: 0.03em;
+            width: fit-content;
+        }
+
+        .avail-dot {
+            width: 7px;
+            height: 7px;
+            background: var(--acc-br);
+            border-radius: 50%;
+            flex-shrink: 0;
+            animation: pulse-dot 2.4s ease infinite;
+        }
+
+        @keyframes pulse-dot {
+
+            0%,
+            100% {
+                opacity: 1;
+                box-shadow: 0 0 0 0 var(--acc-glow);
+            }
+
+            50% {
+                opacity: 0.75;
+                box-shadow: 0 0 0 5px transparent;
+            }
+        }
+
+        /* Trust badges */
         .trust-badge-row {
             display: flex;
             flex-wrap: wrap;
-            gap: var(--space-sm);
-            margin-bottom: var(--space-md);
+            gap: 8px;
+            margin-bottom: var(--sp-lg);
         }
 
         .trust-badge {
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            background-color: var(--bg-secondary);
-            padding: 6px 12px;
-            border-radius: var(--radius-full);
-            font-size: 0.8rem;
+            background: var(--card);
+            padding: 5px 13px;
+            border-radius: var(--r-full);
+            font-size: 0.735rem;
             font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            color: var(--text-secondary);
-            border: 1px solid var(--border-color);
+            color: var(--txt-1);
+            border: 1px solid var(--border);
+            box-shadow: var(--sh-sm);
+            letter-spacing: 0.02em;
+            transition: all 0.2s ease;
+        }
+
+        .trust-badge:hover {
+            border-color: var(--border-acc);
+            color: var(--acc);
+            transform: translateY(-2px);
+            box-shadow: var(--sh-md);
         }
 
         .trust-badge svg {
-            width: 14px;
-            height: 14px;
-            stroke: var(--accent);
+            width: 12px;
+            height: 12px;
+            stroke: var(--acc);
             fill: none;
             stroke-width: 2.5;
         }
 
+        /* Hero headline */
         .hero-title {
-            font-size: clamp(2.25rem, 1.5rem + 3.75vw, 4.5rem);
-            font-weight: 800;
-            line-height: 1.05;
-            letter-spacing: -0.03em;
-            margin-bottom: var(--space-md);
-            max-width: 900px;
+            font-size: clamp(2.6rem, 5.5vw + 0.5rem, 5.75rem);
+            font-weight: 900;
+            line-height: 1.02;
+            letter-spacing: -0.038em;
+            margin-bottom: var(--sp-md);
+            max-width: 940px;
+        }
+
+        /* Gradient accent on "systems." */
+        .hero-title .gt {
+            background: linear-gradient(118deg, var(--acc) 0%, var(--acc-br) 65%, var(--acc-hi) 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: inline;
+        }
+
+        /* Secondary line, lighter weight */
+        .hero-title .sub-line {
+            display: block;
+            font-weight: 300;
+            letter-spacing: -0.022em;
+            -webkit-text-fill-color: var(--txt-1);
+            color: var(--txt-1);
+            margin-top: 4px;
         }
 
         .hero-description {
-            font-size: clamp(1.1rem, 1rem + 0.5vw, 1.35rem);
-            color: var(--text-secondary);
-            margin-bottom: var(--space-xl);
-            max-width: 700px;
-            line-height: 1.5;
+            font-size: clamp(1rem, 1.5vw + 0.4rem, 1.175rem);
+            color: var(--txt-1);
+            max-width: 600px;
+            margin-bottom: var(--sp-xl);
+            line-height: 1.75;
         }
 
         .hero-ctas {
             display: flex;
             flex-wrap: wrap;
-            gap: var(--space-md);
+            gap: var(--sp-sm);
             align-items: center;
         }
 
-        /* "Currently Building" Marquee Strip */
-        .currently-building-strip {
-            background-color: var(--bg-secondary);
-            border-top: 1px solid var(--border-color);
-            border-bottom: 1px solid var(--border-color);
-            padding: 12px 0;
+        /* ==========================================
+           TICKER / MARQUEE STRIP
+           ========================================== */
+        .ticker-strip {
+            background: var(--bg-1);
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            padding: 13px 0;
             overflow: hidden;
             display: flex;
-            white-space: nowrap;
-            user-select: none;
-            font-size: 0.85rem;
-            font-family: var(--font-heading);
-            font-weight: 600;
-            letter-spacing: 0.02em;
-            color: var(--text-secondary);
+            position: relative;
+        }
+
+        /* Edge fade masks */
+        .ticker-strip::before,
+        .ticker-strip::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 90px;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .ticker-strip::before {
+            left: 0;
+            background: linear-gradient(to right, var(--bg-1), transparent);
+        }
+
+        .ticker-strip::after {
+            right: 0;
+            background: linear-gradient(to left, var(--bg-1), transparent);
         }
 
         .ticker-wrapper {
             display: flex;
-            animation: ticker 25s linear infinite;
+            animation: ticker 32s linear infinite;
+            white-space: nowrap;
         }
 
         .ticker-item {
-            display: flex;
+            display: inline-flex;
             align-items: center;
-            padding-right: var(--space-2xl);
-            gap: var(--space-2xs);
+            gap: 9px;
+            padding-right: var(--sp-xl);
+            font-family: var(--font-mono);
+            font-size: 0.74rem;
+            font-weight: 500;
+            color: var(--txt-1);
+            letter-spacing: 0.01em;
         }
 
         .ticker-dot {
-            width: 6px;
-            height: 6px;
+            width: 5px;
+            height: 5px;
             border-radius: 50%;
-            background-color: var(--accent);
-            display: inline-block;
+            background: var(--acc);
+            opacity: 0.55;
+            flex-shrink: 0;
         }
 
         @keyframes ticker {
-            0% { transform: translate3d(0, 0, 0); }
-            100% { transform: translate3d(-50%, 0, 0); }
+            0% {
+                transform: translateX(0);
+            }
+
+            100% {
+                transform: translateX(-50%);
+            }
         }
 
         /* ==========================================
-           SECTION HEADINGS
+           SECTION HEADERS
            ========================================== */
         .section-header {
-            margin-bottom: var(--space-xl);
+            margin-bottom: var(--sp-xl);
         }
 
-        .section-num {
-            font-family: var(--font-heading);
-            font-size: 0.9rem;
-            font-weight: 700;
-            color: var(--accent);
-            letter-spacing: 0.1em;
+        .section-eyebrow {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            font-weight: 500;
+            color: var(--acc);
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 14px;
+        }
+
+        .section-eyebrow::before {
+            content: '';
             display: block;
-            margin-bottom: var(--space-2xs);
+            width: 22px;
+            height: 1.5px;
+            background: var(--acc);
+            border-radius: 1px;
         }
 
         .section-title {
-            font-size: clamp(1.75rem, 1.25rem + 2.5vw, 3rem);
-            font-weight: 800;
-            letter-spacing: -0.03em;
+            font-size: clamp(1.9rem, 3vw + 0.4rem, 3.25rem);
+            font-weight: 900;
+            letter-spacing: -0.032em;
         }
 
         /* ==========================================
-           ABOUT & IDENTITY SECTION
+           ABOUT SECTION
            ========================================== */
         .about-grid {
             display: grid;
             grid-template-columns: 1fr;
-            gap: var(--space-lg);
-        }
-
-        .about-quote {
-            font-family: var(--font-heading);
-            font-size: clamp(1.35rem, 1.15rem + 1vw, 2.25rem);
-            font-weight: 700;
-            line-height: 1.2;
-            color: var(--text-primary);
-            border-left: 3px solid var(--accent);
-            padding-left: var(--space-md);
-            height: fit-content;
-        }
-
-        .about-content {
-            display: flex;
-            flex-direction: column;
-            gap: var(--space-md);
-        }
-
-        .about-text strong {
-            color: var(--text-primary);
-            font-weight: 600;
+            gap: var(--sp-lg);
         }
 
         @media (min-width: 768px) {
             .about-grid {
                 grid-template-columns: 5fr 7fr;
-                gap: var(--space-2xl);
+                gap: var(--sp-2xl);
             }
         }
 
+        .about-quote-wrap {
+            position: relative;
+        }
+
+        .quote-mark {
+            font-family: var(--font-display);
+            font-size: 6rem;
+            line-height: 1;
+            font-weight: 900;
+            color: var(--acc);
+            opacity: 0.12;
+            position: absolute;
+            top: -28px;
+            left: -10px;
+            pointer-events: none;
+            user-select: none;
+        }
+
+        .about-quote {
+            font-family: var(--font-display);
+            font-size: clamp(1.25rem, 1.6vw + 0.6rem, 1.95rem);
+            font-weight: 700;
+            line-height: 1.28;
+            color: var(--txt-0);
+            padding-top: 18px;
+        }
+
+        .about-quote em {
+            font-style: normal;
+            color: var(--acc);
+        }
+
+        .about-content {
+            display: flex;
+            flex-direction: column;
+            gap: var(--sp-md);
+        }
+
+        .about-text {
+            font-size: 1rem;
+            line-height: 1.78;
+        }
+
+        .about-text strong {
+            color: var(--txt-0);
+            font-weight: 600;
+        }
+
         /* ==========================================
-           WHAT I DO PILLARS
+           PILLARS / CARDS
            ========================================== */
         .pillars-grid {
             display: grid;
             grid-template-columns: 1fr;
-            gap: var(--space-md);
-        }
-
-        .pillar-card {
-            background-color: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius-lg);
-            padding: var(--space-lg);
-            transition: var(--transition-smooth);
-            position: relative;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            gap: var(--space-sm);
-        }
-
-        .pillar-card:hover {
-            transform: translateY(-4px);
-            border-color: var(--border-color-hover);
-            box-shadow: var(--shadow-md);
-        }
-
-        .pillar-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 4px;
-            height: 100%;
-            background-color: var(--accent);
-            transform: scaleY(0);
-            transform-origin: bottom;
-            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .pillar-card:hover::before {
-            transform: scaleY(1);
-        }
-
-        .pillar-num {
-            font-family: var(--font-heading);
-            font-size: 2.5rem;
-            font-weight: 800;
-            line-height: 1;
-            color: var(--bg-tertiary);
-            transition: var(--transition-smooth);
-        }
-
-        .pillar-card:hover .pillar-num {
-            color: var(--accent-muted);
-        }
-
-        .pillar-icon {
-            width: 44px;
-            height: 44px;
-            background-color: var(--bg-secondary);
-            border-radius: var(--radius-md);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: var(--space-2xs);
-        }
-
-        .pillar-icon svg {
-            width: 22px;
-            height: 22px;
-            stroke: var(--accent);
-            stroke-width: 2;
-            fill: none;
-        }
-
-        .pillar-title {
-            font-size: 1.35rem;
-            font-weight: 700;
-        }
-
-        .pillar-desc {
-            font-size: 0.95rem;
-            color: var(--text-secondary);
+            gap: var(--sp-sm);
         }
 
         @media (min-width: 600px) {
@@ -733,235 +876,392 @@
             }
         }
 
+        .pillar-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--r-lg);
+            padding: var(--sp-lg);
+            display: flex;
+            flex-direction: column;
+            gap: var(--sp-sm);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.35s var(--ease-expo);
+        }
+
+        /* Faint glow fill */
+        .pillar-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: var(--acc-glow-lg);
+            opacity: 0;
+            transition: opacity 0.35s var(--ease-expo);
+        }
+
+        /* Gradient underline stripe */
+        .pillar-card::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--acc), var(--acc-br));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.45s var(--ease-expo);
+        }
+
+        .pillar-card:hover {
+            border-color: var(--border-acc);
+            transform: translateY(-6px);
+            box-shadow: var(--sh-lg);
+        }
+
+        .pillar-card:hover::before {
+            opacity: 1;
+        }
+
+        .pillar-card:hover::after {
+            transform: scaleX(1);
+        }
+
+        .pillar-inner {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            gap: var(--sp-sm);
+        }
+
+        .pillar-num {
+            font-family: var(--font-mono);
+            font-size: 0.65rem;
+            font-weight: 600;
+            color: var(--txt-2);
+            letter-spacing: 0.12em;
+        }
+
+        .pillar-icon {
+            width: 42px;
+            height: 42px;
+            background: var(--bg-1);
+            border-radius: var(--r-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--border);
+            transition: all 0.35s var(--ease-expo);
+        }
+
+        .pillar-card:hover .pillar-icon {
+            background: var(--acc-glow);
+            border-color: var(--border-acc);
+        }
+
+        .pillar-icon svg {
+            width: 20px;
+            height: 20px;
+            stroke: var(--acc);
+            fill: none;
+            stroke-width: 2;
+        }
+
+        .pillar-title {
+            font-size: 1.15rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+        }
+
+        .pillar-desc {
+            font-size: 0.875rem;
+            color: var(--txt-1);
+            line-height: 1.65;
+        }
+
         /* ==========================================
-           PROJECTS CASE STUDIES
+           PROJECT CARDS
            ========================================== */
         .projects-wrapper {
             display: flex;
             flex-direction: column;
-            gap: var(--space-xl);
+            gap: var(--sp-lg);
         }
 
         .project-card {
-            background-color: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius-lg);
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--r-xl);
             overflow: hidden;
             display: grid;
             grid-template-columns: 1fr;
-            box-shadow: var(--shadow-sm);
-            transition: var(--transition-smooth);
+            box-shadow: var(--sh-sm);
+            transition: all 0.38s var(--ease-expo);
         }
 
         .project-card:hover {
-            border-color: var(--border-color-hover);
-            box-shadow: var(--shadow-lg);
-        }
-
-        .project-visual {
-            background: linear-gradient(135deg, var(--bg-secondary), var(--bg-tertiary));
-            padding: var(--space-xl);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-bottom: 1px solid var(--border-color);
-            min-height: 260px;
-            position: relative;
-        }
-
-        .project-visual-mock {
-            width: 100%;
-            max-width: 320px;
-            background-color: var(--card-bg);
-            border-radius: var(--radius-md);
-            box-shadow: var(--shadow-md);
-            padding: var(--space-md);
-            font-family: var(--font-heading);
-            border: 1px solid var(--border-color);
-        }
-
-        .mock-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: var(--space-2xs);
-            margin-bottom: var(--space-sm);
-        }
-
-        .mock-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background-color: var(--text-muted);
-            display: inline-block;
-        }
-
-        .mock-body {
-            display: flex;
-            flex-direction: column;
-            gap: var(--space-2xs);
-        }
-
-        .mock-bar {
-            height: 10px;
-            background-color: var(--bg-secondary);
-            border-radius: var(--radius-sm);
-            width: 100%;
-        }
-
-        .mock-bar.half { width: 50%; }
-        .mock-bar.accent { background-color: var(--accent); opacity: 0.3; }
-
-        .project-info {
-            padding: var(--space-lg);
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            gap: var(--space-md);
-        }
-
-        .project-meta {
-            display: flex;
-            flex-wrap: wrap;
-            gap: var(--space-2xs);
-            margin-bottom: var(--space-2xs);
-        }
-
-        .project-tag {
-            font-size: 0.75rem;
-            font-weight: 700;
-            padding: 3px 10px;
-            border-radius: var(--radius-full);
-            background-color: var(--bg-secondary);
-            color: var(--text-secondary);
-            border: 1px solid var(--border-color);
-        }
-
-        .project-title {
-            font-size: 1.5rem;
-            font-weight: 800;
-            margin-bottom: var(--space-2xs);
-        }
-
-        .project-desc {
-            font-size: 0.95rem;
-            color: var(--text-secondary);
-            margin-bottom: var(--space-md);
-        }
-
-        /* Tabs System in Project Cards */
-        .project-tabs {
-            display: flex;
-            border-bottom: 1px solid var(--border-color);
-            margin-bottom: var(--space-sm);
-        }
-
-        .tab-btn {
-            background: none;
-            border: none;
-            padding: var(--space-2xs) var(--space-sm);
-            font-family: var(--font-heading);
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: var(--text-secondary);
-            cursor: pointer;
-            border-bottom: 2px solid transparent;
-            transition: var(--transition-fast);
-        }
-
-        .tab-btn:hover {
-            color: var(--text-primary);
-        }
-
-        .tab-btn.active {
-            color: var(--accent);
-            border-bottom-color: var(--accent);
-        }
-
-        .tab-pane {
-            display: none;
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-            min-height: 80px;
-        }
-
-        .tab-pane.active {
-            display: block;
-            animation: fadeIn 0.4s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(4px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .project-link {
-            align-self: flex-start;
-            margin-top: var(--space-2xs);
+            border-color: var(--border-hi);
+            box-shadow: var(--sh-lg);
+            transform: translateY(-4px);
         }
 
         @media (min-width: 768px) {
             .project-card {
                 grid-template-columns: 5fr 7fr;
             }
+        }
+
+        .project-visual {
+            background: linear-gradient(148deg, var(--bg-1) 0%, var(--bg-2) 100%);
+            padding: var(--sp-xl);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 280px;
+            border-bottom: 1px solid var(--border);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Mini dot grid in visual */
+        .project-visual::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: radial-gradient(circle, var(--dot) 1px, transparent 1px);
+            background-size: 18px 18px;
+        }
+
+        @media (min-width: 768px) {
             .project-visual {
                 border-bottom: none;
-                border-right: 1px solid var(--border-color);
+                border-right: 1px solid var(--border);
             }
+        }
+
+        .proj-mock {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 288px;
+            background: var(--card);
+            border-radius: var(--r-lg);
+            box-shadow: var(--sh-lg);
+            padding: var(--sp-md);
+            border: 1px solid var(--border);
+        }
+
+        .mock-hdr {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 10px;
+            margin-bottom: 12px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .mock-traffic {
+            display: flex;
+            gap: 5px;
+            align-items: center;
+        }
+
+        .md {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        .md.r {
+            background: #FF5F57;
+        }
+
+        .md.y {
+            background: #FEBC2E;
+        }
+
+        .md.g {
+            background: #28C840;
+        }
+
+        .mock-win-title {
+            font-family: var(--font-mono);
+            font-size: 0.62rem;
+            color: var(--txt-2);
+            font-weight: 500;
+        }
+
+        .mock-bdy {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .mock-lbl {
+            font-family: var(--font-mono);
+            font-size: 0.6rem;
+            font-weight: 600;
+            color: var(--txt-2);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .mock-bar {
+            height: 7px;
+            background: var(--bg-1);
+            border-radius: var(--r-xs);
+        }
+
+        .mock-bar.w100 {
+            width: 100%;
+        }
+
+        .mock-bar.w75 {
+            width: 75%;
+        }
+
+        .mock-bar.w55 {
+            width: 55%;
+        }
+
+        .mock-bar.acc {
+            background: linear-gradient(90deg, var(--acc), var(--acc-br));
+            opacity: 0.55;
+        }
+
+        .mock-stat-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 4px;
+        }
+
+        .mock-stat-row span {
+            font-family: var(--font-mono);
+            font-size: 0.6rem;
+            color: var(--txt-2);
+        }
+
+        .mock-stat-row .pos {
+            color: var(--acc);
+            font-weight: 600;
+        }
+
+        .project-info {
+            padding: var(--sp-lg);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            gap: var(--sp-md);
+        }
+
+        @media (min-width: 768px) {
             .project-info {
-                padding: var(--space-xl);
+                padding: var(--sp-xl);
+            }
+        }
+
+        .project-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 8px;
+        }
+
+        .project-tag {
+            font-family: var(--font-mono);
+            font-size: 0.65rem;
+            font-weight: 500;
+            padding: 3px 9px;
+            border-radius: var(--r-full);
+            background: var(--acc-glow);
+            color: var(--acc);
+            border: 1px solid var(--border-acc);
+            letter-spacing: 0.02em;
+        }
+
+        .project-title {
+            font-size: 1.375rem;
+            font-weight: 800;
+            letter-spacing: -0.025em;
+            margin-bottom: 6px;
+        }
+
+        .project-desc {
+            font-size: 0.88rem;
+            color: var(--txt-1);
+            margin-bottom: var(--sp-md);
+            line-height: 1.7;
+        }
+
+        /* Tab system — pill style */
+        .project-tabs {
+            display: flex;
+            gap: 2px;
+            background: var(--bg-1);
+            border-radius: var(--r-md);
+            padding: 3px;
+            width: fit-content;
+            margin-bottom: var(--sp-sm);
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            padding: 5px 13px;
+            font-family: var(--font-mono);
+            font-size: 0.68rem;
+            font-weight: 500;
+            color: var(--txt-2);
+            border-radius: var(--r-sm);
+            transition: all 0.2s ease;
+            letter-spacing: 0.02em;
+        }
+
+        .tab-btn:hover {
+            color: var(--txt-0);
+            background: var(--bg-2);
+        }
+
+        .tab-btn.active {
+            background: var(--card);
+            color: var(--acc);
+            box-shadow: var(--sh-sm);
+        }
+
+        .tab-pane {
+            display: none;
+            font-size: 0.875rem;
+            color: var(--txt-1);
+            line-height: 1.72;
+            min-height: 68px;
+        }
+
+        .tab-pane.active {
+            display: block;
+            animation: fade-slide 0.3s var(--ease-expo);
+        }
+
+        @keyframes fade-slide {
+            from {
+                opacity: 0;
+                transform: translateY(5px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
             }
         }
 
         /* ==========================================
-           SKILLS / TOOLKIT SECTION
+           SKILLS / TOOLKIT
            ========================================== */
         .skills-grid {
             display: grid;
             grid-template-columns: 1fr;
-            gap: var(--space-md);
-        }
-
-        .skills-category {
-            background-color: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius-lg);
-            padding: var(--space-lg);
-        }
-
-        .skills-category-title {
-            font-size: 1.15rem;
-            font-weight: 700;
-            margin-bottom: var(--space-md);
-            padding-bottom: var(--space-2xs);
-            border-bottom: 1px solid var(--border-color);
-            display: flex;
-            align-items: center;
-            gap: var(--space-2xs);
-        }
-
-        .skills-category-title svg {
-            width: 18px;
-            height: 18px;
-            stroke: var(--accent);
-            fill: none;
-        }
-
-        .skills-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: var(--space-2xs);
-        }
-
-        .skill-item {
-            font-size: 0.85rem;
-            font-weight: 500;
-            padding: 6px 12px;
-            background-color: var(--bg-secondary);
-            border-radius: var(--radius-md);
-            border: 1px solid var(--border-color);
-            color: var(--text-primary);
+            gap: var(--sp-sm);
         }
 
         @media (min-width: 600px) {
@@ -976,122 +1276,174 @@
             }
         }
 
+        .skills-category {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--r-lg);
+            padding: var(--sp-lg);
+            transition: all 0.25s ease;
+        }
+
+        .skills-category:hover {
+            border-color: var(--border-hi);
+            box-shadow: var(--sh-md);
+        }
+
+        .skills-cat-header {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            margin-bottom: var(--sp-md);
+            padding-bottom: var(--sp-xs);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .skills-cat-icon {
+            width: 30px;
+            height: 30px;
+            background: var(--acc-glow);
+            border-radius: var(--r-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .skills-cat-icon svg {
+            width: 14px;
+            height: 14px;
+            stroke: var(--acc);
+            fill: none;
+            stroke-width: 2;
+        }
+
+        .skills-cat-title {
+            font-size: 0.95rem;
+            font-weight: 700;
+            letter-spacing: -0.01em;
+        }
+
+        .skills-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .skill-item {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            font-weight: 500;
+            padding: 5px 10px;
+            background: var(--bg-1);
+            border-radius: var(--r-sm);
+            border: 1px solid var(--border);
+            color: var(--txt-1);
+            transition: all 0.18s ease;
+            letter-spacing: 0.01em;
+        }
+
+        .skill-item:hover {
+            background: var(--acc-glow);
+            border-color: var(--border-acc);
+            color: var(--acc);
+            transform: translateY(-2px);
+        }
+
         /* ==========================================
-           PHILOSOPHY & METRICS SECTION
+           PHILOSOPHY / METRICS
            ========================================== */
         .philosophy-grid {
             display: grid;
             grid-template-columns: 1fr;
-            gap: var(--space-lg);
-            margin-bottom: var(--space-2xl);
-        }
-
-        .philosophy-card {
-            display: flex;
-            flex-direction: column;
-            gap: var(--space-2xs);
-            padding: var(--space-md);
-            border-left: 2px solid var(--border-color);
-        }
-
-        .philosophy-title {
-            font-size: 1.25rem;
-            font-weight: 700;
-        }
-
-        .philosophy-desc {
-            font-size: 0.95rem;
-            color: var(--text-secondary);
-        }
-
-        .metrics-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: var(--space-md);
-            background-color: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius-lg);
-            padding: var(--space-lg);
-        }
-
-        .metric-card {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
-
-        .metric-number {
-            font-family: var(--font-heading);
-            font-size: clamp(1.75rem, 1.25rem + 2vw, 3rem);
-            font-weight: 800;
-            color: var(--accent);
-            line-height: 1;
-        }
-
-        .metric-label {
-            font-size: 0.8rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            color: var(--text-secondary);
+            gap: var(--sp-md);
+            margin-bottom: var(--sp-xl);
         }
 
         @media (min-width: 768px) {
             .philosophy-grid {
                 grid-template-columns: repeat(3, 1fr);
             }
+        }
+
+        .philosophy-card {
+            padding: var(--sp-md) var(--sp-md) var(--sp-md) calc(var(--sp-md) - 2px);
+            border-left: 2px solid var(--border-acc);
+            background: var(--acc-glow-lg);
+            border-radius: 0 var(--r-md) var(--r-md) 0;
+            transition: border-color 0.2s ease;
+        }
+
+        .philosophy-card:hover {
+            border-left-color: var(--acc);
+        }
+
+        .philosophy-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin-bottom: 6px;
+        }
+
+        .philosophy-desc {
+            font-size: 0.875rem;
+            line-height: 1.72;
+        }
+
+        /* Metrics */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1px;
+            background: var(--border);
+            border-radius: var(--r-lg);
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+
+        @media (min-width: 768px) {
             .metrics-grid {
                 grid-template-columns: repeat(4, 1fr);
             }
         }
 
+        .metric-card {
+            background: var(--card);
+            padding: var(--sp-lg);
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            transition: background 0.2s ease;
+        }
+
+        .metric-card:hover {
+            background: var(--bg-1);
+        }
+
+        .metric-number {
+            font-family: var(--font-mono);
+            font-size: clamp(2rem, 3.5vw + 0.3rem, 3.25rem);
+            font-weight: 600;
+            color: var(--acc);
+            line-height: 1;
+            letter-spacing: -0.02em;
+        }
+
+        .metric-label {
+            font-family: var(--font-mono);
+            font-size: 0.65rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--txt-2);
+        }
+
         /* ==========================================
-           CONTENT / WRITING SECTION
+           CONTENT / WRITING
            ========================================== */
         .posts-grid {
             display: grid;
             grid-template-columns: 1fr;
-            gap: var(--space-md);
-        }
-
-        .post-card {
-            background-color: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius-lg);
-            padding: var(--space-lg);
-            transition: var(--transition-smooth);
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            min-height: 220px;
-        }
-
-        .post-card:hover {
-            border-color: var(--border-color-hover);
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-md);
-        }
-
-        .post-meta {
-            font-size: 0.75rem;
-            font-weight: 600;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            margin-bottom: var(--space-2xs);
-        }
-
-        .post-title {
-            font-size: 1.2rem;
-            font-weight: 700;
-            margin-bottom: var(--space-2xs);
-            line-height: 1.3;
-        }
-
-        .post-desc {
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-            margin-bottom: var(--space-md);
+            gap: var(--sp-sm);
         }
 
         @media (min-width: 768px) {
@@ -1100,64 +1452,138 @@
             }
         }
 
+        .post-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--r-lg);
+            padding: var(--sp-lg);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 228px;
+            transition: all 0.35s var(--ease-expo);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .post-card::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--acc), var(--acc-br));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s var(--ease-expo);
+        }
+
+        .post-card:hover {
+            border-color: var(--border-hi);
+            transform: translateY(-4px);
+            box-shadow: var(--sh-md);
+        }
+
+        .post-card:hover::after {
+            transform: scaleX(1);
+        }
+
+        .post-meta {
+            font-family: var(--font-mono);
+            font-size: 0.65rem;
+            font-weight: 500;
+            color: var(--txt-2);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 8px;
+        }
+
+        .post-title {
+            font-size: 1.02rem;
+            font-weight: 700;
+            line-height: 1.35;
+            margin-bottom: 8px;
+            letter-spacing: -0.015em;
+        }
+
+        .post-desc {
+            font-size: 0.84rem;
+            color: var(--txt-1);
+            line-height: 1.65;
+        }
+
         /* ==========================================
-           CONTACT & FOOTER
+           CONTACT
            ========================================== */
         .contact-grid {
             display: grid;
             grid-template-columns: 1fr;
-            gap: var(--space-xl);
+            gap: var(--sp-xl);
+        }
+
+        @media (min-width: 768px) {
+            .contact-grid {
+                grid-template-columns: 5fr 7fr;
+            }
         }
 
         .contact-info {
             display: flex;
             flex-direction: column;
-            justify-content: center;
-            gap: var(--space-md);
+            gap: var(--sp-md);
         }
 
         .contact-sub {
-            font-size: 1.15rem;
-            color: var(--text-secondary);
+            font-size: 1.05rem;
+            color: var(--txt-1);
+            line-height: 1.78;
         }
 
         .contact-methods {
             display: flex;
             flex-direction: column;
-            gap: var(--space-xs);
-            margin-top: var(--space-2xs);
+            gap: 10px;
         }
 
         .contact-method {
             display: inline-flex;
             align-items: center;
-            gap: var(--space-2xs);
-            font-size: 0.95rem;
-            color: var(--text-secondary);
+            gap: 10px;
+            font-size: 0.88rem;
+            color: var(--txt-1);
             font-weight: 500;
-        }
-
-        .contact-method svg {
-            width: 18px;
-            height: 18px;
-            stroke: var(--accent);
-            fill: none;
-            stroke-width: 2;
+            transition: color 0.2s ease;
         }
 
         .contact-method:hover {
-            color: var(--text-primary);
+            color: var(--acc);
+        }
+
+        .contact-method svg {
+            width: 16px;
+            height: 16px;
+            stroke: var(--acc);
+            fill: none;
+            stroke-width: 2;
+            flex-shrink: 0;
         }
 
         .contact-form {
-            background-color: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius-lg);
-            padding: var(--space-lg);
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--r-xl);
+            padding: var(--sp-lg);
             display: flex;
             flex-direction: column;
-            gap: var(--space-md);
-            box-shadow: var(--shadow-sm);
+            gap: var(--sp-md);
+            box-shadow: var(--sh-sm);
+        }
+
+        @media (min-width: 768px) {
+            .contact-form {
+                padding: var(--sp-xl);
+            }
         }
 
         .form-group {
@@ -1167,26 +1593,33 @@
         }
 
         .form-label {
-            font-size: 0.85rem;
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
             font-weight: 600;
-            color: var(--text-secondary);
+            color: var(--txt-1);
+            letter-spacing: 0.04em;
         }
 
         .form-input {
-            background-color: var(--input-bg);
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius-md);
-            padding: 0.75rem var(--space-sm);
-            color: var(--text-primary);
+            background: var(--bg-0);
+            border: 1.5px solid var(--border);
+            border-radius: var(--r-md);
+            padding: 0.68rem var(--sp-sm);
+            color: var(--txt-0);
             font-family: var(--font-body);
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             outline: none;
-            transition: var(--transition-fast);
+            transition: all 0.2s ease;
+        }
+
+        .form-input::placeholder {
+            color: var(--txt-2);
         }
 
         .form-input:focus {
-            border-color: var(--accent);
-            box-shadow: 0 0 0 2px var(--accent-muted);
+            border-color: var(--acc);
+            background: var(--card);
+            box-shadow: 0 0 0 3px var(--acc-glow);
         }
 
         textarea.form-input {
@@ -1195,13 +1628,13 @@
         }
 
         .form-status {
-            font-size: 0.9rem;
+            font-size: 0.875rem;
             font-weight: 600;
             display: none;
         }
 
         .form-status.success {
-            color: var(--accent);
+            color: var(--acc);
             display: block;
         }
 
@@ -1210,77 +1643,86 @@
             display: block;
         }
 
-        @media (min-width: 768px) {
-            .contact-grid {
-                grid-template-columns: 5fr 7fr;
-            }
-            .contact-form {
-                padding: var(--space-xl);
-            }
-        }
-
+        /* ==========================================
+           FOOTER
+           ========================================== */
         footer {
-            padding: var(--space-xl) 0;
-            background-color: var(--bg-secondary);
-            border-top: 1px solid var(--border-color);
+            padding: var(--sp-xl) 0;
+            background: var(--bg-1);
+            border-top: 1px solid var(--border);
             text-align: center;
         }
 
         .footer-logo {
-            font-family: var(--font-heading);
-            font-size: 1.15rem;
-            font-weight: 800;
-            margin-bottom: var(--space-xs);
+            font-family: var(--font-display);
+            font-size: 1.2rem;
+            font-weight: 900;
+            letter-spacing: -0.04em;
+            margin-bottom: var(--sp-xs);
         }
 
         .footer-logo span {
-            color: var(--accent);
+            color: var(--acc);
         }
 
         .footer-socials {
             display: flex;
             justify-content: center;
-            gap: var(--space-md);
-            margin-bottom: var(--space-md);
+            gap: 10px;
+            margin-bottom: var(--sp-md);
         }
 
         .footer-social-link {
-            color: var(--text-secondary);
-            padding: var(--space-2xs);
+            color: var(--txt-1);
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
-            transition: var(--transition-fast);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--border);
+            transition: all 0.22s ease;
         }
 
         .footer-social-link:hover {
-            color: var(--accent);
-            background-color: var(--bg-tertiary);
+            color: var(--acc);
+            border-color: var(--border-acc);
+            background: var(--acc-glow);
+            transform: translateY(-3px);
+            box-shadow: var(--sh-md);
         }
 
         .footer-social-link svg {
-            width: 20px;
-            height: 20px;
+            width: 17px;
+            height: 17px;
             stroke: currentColor;
             stroke-width: 2;
             fill: none;
         }
 
         .footer-copy {
-            font-size: 0.8rem;
-            color: var(--text-muted);
+            font-family: var(--font-mono);
+            font-size: 0.68rem;
+            color: var(--txt-2);
+            letter-spacing: 0.03em;
         }
     </style>
 </head>
+
 <body>
 
+    <!-- Scroll progress bar -->
+    <div id="scroll-progress"></div>
+
     <!-- ==========================================
-       HEADER & NAVIGATION
-       ========================================== -->
+   HEADER & NAVIGATION
+   ========================================== -->
     <header id="header">
         <div class="container nav-container">
             <a href="#" class="logo" aria-label="Shiraj Life Home">
                 shiraj<span>life</span>
             </a>
-            
+
             <nav class="nav-links" aria-label="Main Navigation">
                 <a href="#about" class="nav-link">About</a>
                 <a href="#pillars" class="nav-link">Pillars</a>
@@ -1292,36 +1734,32 @@
 
             <div class="nav-actions">
                 <button class="theme-toggle" id="theme-toggle" aria-label="Toggle visual theme">
-                    <!-- Moon Icon (Light Mode visual target) -->
                     <svg class="moon-icon" viewBox="0 0 24 24">
-                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
                     </svg>
-                    <!-- Sun Icon (Dark Mode visual target) -->
                     <svg class="sun-icon" viewBox="0 0 24 24">
-                        <circle cx="12" cy="12" r="5"></circle>
-                        <line x1="12" y1="1" x2="12" y2="3"></line>
-                        <line x1="12" y1="21" x2="12" y2="23"></line>
-                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-                        <line x1="1" y1="12" x2="3" y2="12"></line>
-                        <line x1="21" y1="12" x2="23" y2="12"></line>
-                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                        <circle cx="12" cy="12" r="5" />
+                        <line x1="12" y1="1" x2="12" y2="3" />
+                        <line x1="12" y1="21" x2="12" y2="23" />
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                        <line x1="1" y1="12" x2="3" y2="12" />
+                        <line x1="21" y1="12" x2="23" y2="12" />
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
                     </svg>
                 </button>
-
                 <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Open navigation menu">
                     <svg viewBox="0 0 24 24">
-                        <line x1="3" y1="12" x2="21" y2="12"></line>
-                        <line x1="3" y1="6" x2="21" y2="6"></line>
-                        <line x1="3" y1="18" x2="21" y2="18"></line>
+                        <line x1="3" y1="12" x2="21" y2="12" />
+                        <line x1="3" y1="6" x2="21" y2="6" />
+                        <line x1="3" y1="18" x2="21" y2="18" />
                     </svg>
                 </button>
             </div>
         </div>
     </header>
 
-    <!-- Mobile Navigation Drawer -->
     <div class="mobile-drawer" id="mobile-drawer">
         <a href="#about" class="nav-link">About</a>
         <a href="#pillars" class="nav-link">Pillars</a>
@@ -1332,743 +1770,946 @@
     </div>
 
     <!-- ==========================================
-       MAIN CONTENT
-       ========================================== -->
+   MAIN CONTENT
+   ========================================== -->
     <main>
 
-        <!-- HERO SECTION -->
+        <!-- HERO -->
         <section class="hero-section">
             <div class="container">
-                <div class="trust-badge-row reveal">
+
+                <div class="hero-avail reveal">
+                    <span class="avail-dot"></span>
+                    GoI Audit &amp; Accounting &nbsp;·&nbsp; Mumbai, IN
+                </div>
+
+                <div class="trust-badge-row reveal" style="transition-delay:0.08s;">
                     <span class="trust-badge">
-                        <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path></svg>
+                        <svg viewBox="0 0 24 24">
+                            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+                        </svg>
                         GoI Audit & Accounting
                     </span>
                     <span class="trust-badge">
-                        <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                        <svg viewBox="0 0 24 24">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                            <circle cx="12" cy="10" r="3" />
+                        </svg>
                         Mumbai, IN
                     </span>
                     <span class="trust-badge">
-                        <svg viewBox="0 0 24 24"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+                        <svg viewBox="0 0 24 24">
+                            <polygon points="12 2 2 7 12 12 22 7 12 2" />
+                            <polyline points="2 17 12 22 22 17" />
+                            <polyline points="2 12 12 17 22 12" />
+                        </svg>
                         Builder Mindset
                     </span>
                 </div>
-                
-                <h1 class="hero-title reveal" style="transition-delay: 0.1s;">
-                    Building systems.<br>Code, capital, and physical self-mastery.
+
+                <h1 class="hero-title reveal" style="transition-delay:0.16s;">
+                    Building <span class="gt">systems.</span>
+                    <span class="sub-line">Code, capital, and physical self-mastery.</span>
                 </h1>
-                
-                <p class="hero-description reveal" style="transition-delay: 0.2s;">
-                    Applying the rigorous audit discipline of public finance to software creation, data analysis, fitness tracking, and digital tools. I build private, utility-first products.
+
+                <p class="hero-description reveal" style="transition-delay:0.24s;">
+                    Applying the rigorous audit discipline of public finance to software creation, data analysis,
+                    fitness tracking, and digital tools. I build private, utility-first products.
                 </p>
-                
-                <div class="hero-ctas reveal" style="transition-delay: 0.3s;">
+
+                <div class="hero-ctas reveal" style="transition-delay:0.32s;">
                     <a href="#work" class="btn btn-primary">Explore Case Studies</a>
                     <a href="#contact" class="btn btn-secondary">Get in Touch</a>
                 </div>
             </div>
         </section>
 
-        <!-- "Currently Building" Marquee Strip -->
-        <div class="currently-building-strip">
+        <!-- TICKER STRIP -->
+        <div class="ticker-strip" aria-hidden="true">
             <div class="ticker-wrapper">
-                <!-- Set 1 -->
-                <div class="ticker-item"><span class="ticker-dot"></span>Currently shipping local SQLite Flutter logger</div>
-                <div class="ticker-item"><span class="ticker-dot"></span>Optimizing personal progressive overload models</div>
-                <div class="ticker-item"><span class="ticker-dot"></span>Developing automated ledger anomaly parser</div>
-                <div class="ticker-item"><span class="ticker-dot"></span>Tracking 15km weekly runs & lifting performance</div>
-                <div class="ticker-item"><span class="ticker-dot"></span>Reviewing tax-efficient fintech rebalancing scripts</div>
-                <!-- Set 2 (for seamless loop) -->
-                <div class="ticker-item"><span class="ticker-dot"></span>Currently shipping local SQLite Flutter logger</div>
-                <div class="ticker-item"><span class="ticker-dot"></span>Optimizing personal progressive overload models</div>
-                <div class="ticker-item"><span class="ticker-dot"></span>Developing automated ledger anomaly parser</div>
-                <div class="ticker-item"><span class="ticker-dot"></span>Tracking 15km weekly runs & lifting performance</div>
-                <div class="ticker-item"><span class="ticker-dot"></span>Reviewing tax-efficient fintech rebalancing scripts</div>
+                <div class="ticker-item"><span class="ticker-dot"></span>Currently shipping local SQLite Flutter logger
+                </div>
+                <div class="ticker-item"><span class="ticker-dot"></span>Optimizing personal progressive overload models
+                </div>
+                <div class="ticker-item"><span class="ticker-dot"></span>Developing automated ledger anomaly parser
+                </div>
+                <div class="ticker-item"><span class="ticker-dot"></span>Tracking 15km weekly runs &amp; lifting
+                    performance</div>
+                <div class="ticker-item"><span class="ticker-dot"></span>Reviewing tax-efficient fintech rebalancing
+                    scripts</div>
+                <!-- duplicate for loop -->
+                <div class="ticker-item"><span class="ticker-dot"></span>Currently shipping local SQLite Flutter logger
+                </div>
+                <div class="ticker-item"><span class="ticker-dot"></span>Optimizing personal progressive overload models
+                </div>
+                <div class="ticker-item"><span class="ticker-dot"></span>Developing automated ledger anomaly parser
+                </div>
+                <div class="ticker-item"><span class="ticker-dot"></span>Tracking 15km weekly runs &amp; lifting
+                    performance</div>
+                <div class="ticker-item"><span class="ticker-dot"></span>Reviewing tax-efficient fintech rebalancing
+                    scripts</div>
             </div>
         </div>
 
-        <!-- ABOUT / IDENTITY SECTION -->
-        <section id="about" class="container">
-            <div class="section-header reveal">
-                <span class="section-num">01 / IDENTITY</span>
-                <h2 class="section-title">Stable discipline meets raw execution.</h2>
-            </div>
-            
-            <div class="about-grid">
-                <div class="about-quote reveal" style="transition-delay: 0.1s;">
-                    "I believe in compounding feedback loops and rigorous daily routines over fleeting motivation."
+        <!-- ABOUT / IDENTITY -->
+        <section id="about">
+            <div class="container">
+                <div class="section-header reveal">
+                    <span class="section-eyebrow">01 / Identity</span>
+                    <h2 class="section-title">Stable discipline meets raw execution.</h2>
                 </div>
-                
-                <div class="about-content reveal" style="transition-delay: 0.2s;">
-                    <p class="about-text">
-                        By day, I work in a <strong>Government of India audit and accounting role</strong> in Maharashtra. Analyzing public ledgers, compiling files, and managing high-stakes financial data demands extreme attention to detail, systemic alignment, and structural integrity.
-                    </p>
-                    <p class="about-text">
-                        By night, I translate that analytical discipline into product development. I stack skills in <strong>Flutter, Dart, Python, and SQL</strong> to construct local-first utilities that solve tracking, finance, and productivity bottlenecks. 
-                    </p>
-                    <p class="about-text">
-                        My philosophy is simple: whether building software, tracking portfolio metrics, training in the weight room, or creating educational guides, the same principles of consistency, feedback loops, and logical architecture apply.
-                    </p>
+
+                <div class="about-grid">
+                    <div class="about-quote-wrap reveal" style="transition-delay:0.1s;">
+                        <span class="quote-mark">"</span>
+                        <p class="about-quote">
+                            "I believe in <em>compounding feedback loops</em> and rigorous daily routines over fleeting
+                            motivation."
+                        </p>
+                    </div>
+
+                    <div class="about-content reveal" style="transition-delay:0.2s;">
+                        <p class="about-text">
+                            By day, I work in a <strong>Government of India audit and accounting role</strong> in
+                            Maharashtra. Analyzing public ledgers, compiling files, and managing high-stakes financial
+                            data demands extreme attention to detail, systemic alignment, and structural integrity.
+                        </p>
+                        <p class="about-text">
+                            By night, I translate that analytical discipline into product development. I stack skills in
+                            <strong>Flutter, Dart, Python, and SQL</strong> to construct local-first utilities that
+                            solve tracking, finance, and productivity bottlenecks.
+                        </p>
+                        <p class="about-text">
+                            My philosophy is simple: whether building software, tracking portfolio metrics, training in
+                            the weight room, or creating educational guides, the same principles of consistency,
+                            feedback loops, and logical architecture apply.
+                        </p>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- WHAT I DO (PILLARS) SECTION -->
-        <section id="pillars" class="container">
-            <div class="section-header reveal">
-                <span class="section-num">02 / FOCUS AREAS</span>
-                <h2 class="section-title">The pillars of my execution.</h2>
-            </div>
-
-            <div class="pillars-grid">
-                <!-- Pillar 1: Build -->
-                <div class="pillar-card reveal" style="transition-delay: 0.1s;">
-                    <div class="pillar-num">01</div>
-                    <div class="pillar-icon">
-                        <svg viewBox="0 0 24 24">
-                            <polyline points="16 18 22 12 16 6"></polyline>
-                            <polyline points="8 6 2 12 8 18"></polyline>
-                        </svg>
-                    </div>
-                    <h3 class="pillar-title">Build</h3>
-                    <p class="pillar-desc">Constructing high-performance, offline-first applications and script automations using Flutter, Python, and SQL databases.</p>
+        <!-- PILLARS -->
+        <section id="pillars">
+            <div class="container">
+                <div class="section-header reveal">
+                    <span class="section-eyebrow">02 / Focus Areas</span>
+                    <h2 class="section-title">The pillars of my execution.</h2>
                 </div>
 
-                <!-- Pillar 2: Optimize -->
-                <div class="pillar-card reveal" style="transition-delay: 0.2s;">
-                    <div class="pillar-num">02</div>
-                    <div class="pillar-icon">
-                        <svg viewBox="0 0 24 24">
-                            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
-                        </svg>
-                    </div>
-                    <h3 class="pillar-title">Optimize</h3>
-                    <p class="pillar-desc">Structuring athletic systems, monitoring progress load cycles, cardiovascular logs, and running metrics with strict consistency.</p>
-                </div>
-
-                <!-- Pillar 3: Analyze -->
-                <div class="pillar-card reveal" style="transition-delay: 0.3s;">
-                    <div class="pillar-num">03</div>
-                    <div class="pillar-icon">
-                        <svg viewBox="0 0 24 24">
-                            <line x1="18" y1="20" x2="18" y2="10"></line>
-                            <line x1="12" y1="20" x2="12" y2="4"></line>
-                            <line x1="6" y1="20" x2="6" y2="14"></line>
-                        </svg>
-                    </div>
-                    <h3 class="pillar-title">Analyze</h3>
-                    <p class="pillar-desc">Parsing finance, ledger data, and portfolio allocation scripts to extract clean patterns for capital compounding.</p>
-                </div>
-
-                <!-- Pillar 4: Share -->
-                <div class="pillar-card reveal" style="transition-delay: 0.4s;">
-                    <div class="pillar-num">04</div>
-                    <div class="pillar-icon">
-                        <svg viewBox="0 0 24 24">
-                            <path d="M12 20h9"></path>
-                            <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
-                        </svg>
-                    </div>
-                    <h3 class="pillar-title">Share</h3>
-                    <p class="pillar-desc">Drafting educational content, sharing engineering logs, app build diaries, and productivity frameworks for future developers.</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- PROJECTS / WORK SECTION -->
-        <section id="work" class="container">
-            <div class="section-header reveal">
-                <span class="section-num">03 / CASE STUDIES</span>
-                <h2 class="section-title">Selected case study logs.</h2>
-            </div>
-
-            <div class="projects-wrapper">
-                
-                <!-- Project 1: AI Gym Mentor -->
-                <div class="project-card reveal">
-                    <div class="project-visual">
-                        <div class="project-visual-mock">
-                            <div class="mock-header">
-                                <span class="mock-dot"></span>
-                                <span style="font-size: 0.75rem; font-weight:600; color: var(--text-secondary);">Gym Mentor</span>
-                                <span class="mock-dot"></span>
+                <div class="pillars-grid">
+                    <!-- 01 Build -->
+                    <div class="pillar-card reveal" style="transition-delay:0.08s;">
+                        <div class="pillar-inner">
+                            <span class="pillar-num">01</span>
+                            <div class="pillar-icon">
+                                <svg viewBox="0 0 24 24">
+                                    <polyline points="16 18 22 12 16 6" />
+                                    <polyline points="8 6 2 12 8 18" />
+                                </svg>
                             </div>
-                            <div class="mock-body">
-                                <span style="font-size: 0.8rem; font-weight:700;">Squat Max Projection</span>
-                                <div class="mock-bar accent"></div>
-                                <div class="mock-bar"></div>
-                                <div class="mock-bar half"></div>
-                                <div style="display:flex; justify-content:space-between; margin-top:10px;">
-                                    <span style="font-size:0.7rem; color:var(--text-muted);">Week 12</span>
-                                    <span style="font-size:0.7rem; color:var(--accent); font-weight:700;">+8.5% Load</span>
+                            <h3 class="pillar-title">Build</h3>
+                            <p class="pillar-desc">Constructing high-performance, offline-first applications and script
+                                automations using Flutter, Python, and SQL databases.</p>
+                        </div>
+                    </div>
+
+                    <!-- 02 Optimize -->
+                    <div class="pillar-card reveal" style="transition-delay:0.16s;">
+                        <div class="pillar-inner">
+                            <span class="pillar-num">02</span>
+                            <div class="pillar-icon">
+                                <svg viewBox="0 0 24 24">
+                                    <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+                                </svg>
+                            </div>
+                            <h3 class="pillar-title">Optimize</h3>
+                            <p class="pillar-desc">Structuring athletic systems, monitoring progress load cycles,
+                                cardiovascular logs, and running metrics with strict consistency.</p>
+                        </div>
+                    </div>
+
+                    <!-- 03 Analyze -->
+                    <div class="pillar-card reveal" style="transition-delay:0.24s;">
+                        <div class="pillar-inner">
+                            <span class="pillar-num">03</span>
+                            <div class="pillar-icon">
+                                <svg viewBox="0 0 24 24">
+                                    <line x1="18" y1="20" x2="18" y2="10" />
+                                    <line x1="12" y1="20" x2="12" y2="4" />
+                                    <line x1="6" y1="20" x2="6" y2="14" />
+                                </svg>
+                            </div>
+                            <h3 class="pillar-title">Analyze</h3>
+                            <p class="pillar-desc">Parsing finance, ledger data, and portfolio allocation scripts to
+                                extract clean patterns for capital compounding.</p>
+                        </div>
+                    </div>
+
+                    <!-- 04 Share -->
+                    <div class="pillar-card reveal" style="transition-delay:0.32s;">
+                        <div class="pillar-inner">
+                            <span class="pillar-num">04</span>
+                            <div class="pillar-icon">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M12 20h9" />
+                                    <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
+                                </svg>
+                            </div>
+                            <h3 class="pillar-title">Share</h3>
+                            <p class="pillar-desc">Drafting educational content, sharing engineering logs, app build
+                                diaries, and productivity frameworks for future developers.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PROJECTS / WORK -->
+        <section id="work">
+            <div class="container">
+                <div class="section-header reveal">
+                    <span class="section-eyebrow">03 / Case Studies</span>
+                    <h2 class="section-title">Selected case study logs.</h2>
+                </div>
+
+                <div class="projects-wrapper">
+
+                    <!-- Project 1: AI Gym Mentor -->
+                    <div class="project-card reveal">
+                        <div class="project-visual">
+                            <div class="proj-mock">
+                                <div class="mock-hdr">
+                                    <div class="mock-traffic">
+                                        <span class="md r"></span>
+                                        <span class="md y"></span>
+                                        <span class="md g"></span>
+                                    </div>
+                                    <span class="mock-win-title">gym_mentor.dart</span>
+                                </div>
+                                <div class="mock-bdy">
+                                    <span class="mock-lbl">Squat Max Projection</span>
+                                    <div class="mock-bar acc w75"></div>
+                                    <div class="mock-bar w100"></div>
+                                    <div class="mock-bar w55"></div>
+                                    <div class="mock-stat-row">
+                                        <span>Week 12</span>
+                                        <span class="pos">+8.5% Load</span>
+                                    </div>
+                                    <div
+                                        style="border-top: 1px solid var(--border); padding-top: 8px; margin-top: 4px;">
+                                        <span class="mock-lbl">Progressive Overload</span>
+                                        <div class="mock-bar acc w100" style="margin-top:6px;height:5px;opacity:0.3">
+                                        </div>
+                                        <div class="mock-bar w75" style="margin-top:4px;height:5px;"></div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
+
+                        <div class="project-info">
+                            <div>
+                                <div class="project-meta">
+                                    <span class="project-tag">Flutter</span>
+                                    <span class="project-tag">SQLite</span>
+                                    <span class="project-tag">Gemini API</span>
+                                </div>
+                                <h3 class="project-title">AI Gym Mentor & Fitness Logger</h3>
+                                <p class="project-desc">A localized workout logger and progress analyzer designed to
+                                    bypass bloated, cloud-dependent subscription apps.</p>
+
+                                <div class="project-tabs" data-project="gym-mentor">
+                                    <button class="tab-btn active" data-tab="problem">Problem</button>
+                                    <button class="tab-btn" data-tab="approach">Approach</button>
+                                    <button class="tab-btn" data-tab="impact">Impact</button>
+                                </div>
+
+                                <div class="project-tab-contents" data-project="gym-mentor">
+                                    <div class="tab-pane active" data-content="problem">
+                                        Traditional lifting logs require constant internet connection, sell tracking
+                                        logs to third parties, or lack personalized insights on progressive overload
+                                        intervals.
+                                    </div>
+                                    <div class="tab-pane" data-content="approach">
+                                        Built an offline-first Flutter application structured around local SQLite
+                                        schemas. Added a local, offline cache module utilizing the Gemini API to analyze
+                                        monthly workouts, mapping hypertrophy curves and providing structured gym
+                                        recommendations.
+                                    </div>
+                                    <div class="tab-pane" data-content="impact">
+                                        Successfully tested with a local group of 15 gym enthusiasts, resulting in a 30%
+                                        speedup in workout logging overhead and consistent progression tracking.
+                                    </div>
+                                </div>
+                            </div>
+                            <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="btn-text">
+                                View GitHub Code
+                                <svg viewBox="0 0 24 24">
+                                    <line x1="5" y1="12" x2="19" y2="12" />
+                                    <polyline points="12 5 19 12 12 19" />
+                                </svg>
+                            </a>
+                        </div>
                     </div>
-                    
-                    <div class="project-info">
+
+                    <!-- Project 2: FinTrack -->
+                    <div class="project-card reveal">
+                        <div class="project-visual">
+                            <div class="proj-mock">
+                                <div class="mock-hdr">
+                                    <div class="mock-traffic">
+                                        <span class="md r"></span>
+                                        <span class="md y"></span>
+                                        <span class="md g"></span>
+                                    </div>
+                                    <span class="mock-win-title">portfolio.py</span>
+                                </div>
+                                <div class="mock-bdy">
+                                    <span class="mock-lbl">Asset Allocation Metrics</span>
+                                    <div class="mock-bar w100"></div>
+                                    <div class="mock-bar acc w75"></div>
+                                    <div class="mock-bar w55"></div>
+                                    <div class="mock-stat-row">
+                                        <span>FD / Equities</span>
+                                        <span class="pos">Balanced</span>
+                                    </div>
+                                    <div
+                                        style="border-top: 1px solid var(--border); padding-top: 8px; margin-top: 4px;">
+                                        <span class="mock-lbl">Tax Efficiency</span>
+                                        <div class="mock-bar acc w100" style="margin-top:6px;height:5px;opacity:0.4">
+                                        </div>
+                                        <div class="mock-bar w75" style="margin-top:4px;height:5px;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="project-info">
+                            <div>
+                                <div class="project-meta">
+                                    <span class="project-tag">Python</span>
+                                    <span class="project-tag">SQL</span>
+                                    <span class="project-tag">Pandas</span>
+                                </div>
+                                <h3 class="project-title">Private Portfolio & Wealth Tracker</h3>
+                                <p class="project-desc">A local parser and analytical rebalancer that visualizes
+                                    financial assets and tax efficiency without cloud integrations.</p>
+
+                                <div class="project-tabs" data-project="fintrack">
+                                    <button class="tab-btn active" data-tab="problem">Problem</button>
+                                    <button class="tab-btn" data-tab="approach">Approach</button>
+                                    <button class="tab-btn" data-tab="impact">Impact</button>
+                                </div>
+
+                                <div class="project-tab-contents" data-project="fintrack">
+                                    <div class="tab-pane active" data-content="problem">
+                                        Indian retail investors must log accounts across multiple stock brokers, mutual
+                                        fund platforms, and banking portals, exposing delicate transactional files to
+                                        third-party sync apps.
+                                    </div>
+                                    <div class="tab-pane" data-content="approach">
+                                        Developed a Python validation pipeline utilizing PDF parsing scripts to extract
+                                        CAS files. This loads statements into SQLite databases, building local
+                                        rebalancing recommendations based on tax brackets and risk levels.
+                                    </div>
+                                    <div class="tab-pane" data-content="impact">
+                                        Consolidates total family wealth calculations in under 2 minutes with absolute
+                                        data isolation, streamlining tax planning before the fiscal year-end.
+                                    </div>
+                                </div>
+                            </div>
+                            <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="btn-text">
+                                View Script Archive
+                                <svg viewBox="0 0 24 24">
+                                    <line x1="5" y1="12" x2="19" y2="12" />
+                                    <polyline points="12 5 19 12 12 19" />
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Project 3: LedgerAudit -->
+                    <div class="project-card reveal">
+                        <div class="project-visual">
+                            <div class="proj-mock">
+                                <div class="mock-hdr">
+                                    <div class="mock-traffic">
+                                        <span class="md r"></span>
+                                        <span class="md y"></span>
+                                        <span class="md g"></span>
+                                    </div>
+                                    <span class="mock-win-title">ledger_audit.sql</span>
+                                </div>
+                                <div class="mock-bdy">
+                                    <span class="mock-lbl">Query Validation Log</span>
+                                    <div class="mock-bar acc w100"></div>
+                                    <div class="mock-bar w55"></div>
+                                    <div class="mock-bar w75"></div>
+                                    <div class="mock-stat-row">
+                                        <span>Status</span>
+                                        <span class="pos">0 Discrepancies</span>
+                                    </div>
+                                    <div
+                                        style="border-top: 1px solid var(--border); padding-top: 8px; margin-top: 4px;">
+                                        <span class="mock-lbl">Temporal Scan</span>
+                                        <div class="mock-bar acc w75" style="margin-top:6px;height:5px;opacity:0.35">
+                                        </div>
+                                        <div class="mock-bar w100" style="margin-top:4px;height:5px;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="project-info">
+                            <div>
+                                <div class="project-meta">
+                                    <span class="project-tag">Python</span>
+                                    <span class="project-tag">SQL</span>
+                                    <span class="project-tag">Streamlit</span>
+                                </div>
+                                <h3 class="project-title">LedgerAudit: Transaction Anomaly Engine</h3>
+                                <p class="project-desc">An automated testing setup parsing public accounting registers
+                                    to flag transactional errors during public sector audits.</p>
+
+                                <div class="project-tabs" data-project="ledger-audit">
+                                    <button class="tab-btn active" data-tab="problem">Problem</button>
+                                    <button class="tab-btn" data-tab="approach">Approach</button>
+                                    <button class="tab-btn" data-tab="impact">Impact</button>
+                                </div>
+
+                                <div class="project-tab-contents" data-project="ledger-audit">
+                                    <div class="tab-pane active" data-content="problem">
+                                        Auditing government transactions involves auditing extensive rows across
+                                        scattered ledger formats. Spotting timing mismatches or authorization anomalies
+                                        manually is inefficient and slow.
+                                    </div>
+                                    <div class="tab-pane" data-content="approach">
+                                        Created structured Python scripts with a clean Streamlit interface. It builds
+                                        automated SQL search profiles that validate records against double-entry rules
+                                        and highlights temporal outliers.
+                                    </div>
+                                    <div class="tab-pane" data-content="impact">
+                                        Slashed the ledger screening window from multiple days to under an hour,
+                                        allowing auditors to focus on high-priority discrepancies.
+                                    </div>
+                                </div>
+                            </div>
+                            <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="btn-text">
+                                Explore SQL Schemas
+                                <svg viewBox="0 0 24 24">
+                                    <line x1="5" y1="12" x2="19" y2="12" />
+                                    <polyline points="12 5 19 12 12 19" />
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- TOOLKIT -->
+        <section id="toolkit">
+            <div class="container">
+                <div class="section-header reveal">
+                    <span class="section-eyebrow">04 / The System</span>
+                    <h2 class="section-title">My stacked toolkit.</h2>
+                </div>
+
+                <div class="skills-grid">
+                    <!-- Development -->
+                    <div class="skills-category reveal" style="transition-delay:0.08s;">
+                        <div class="skills-cat-header">
+                            <div class="skills-cat-icon">
+                                <svg viewBox="0 0 24 24">
+                                    <polyline points="16 18 22 12 16 6" />
+                                    <polyline points="8 6 2 12 8 18" />
+                                </svg>
+                            </div>
+                            <h3 class="skills-cat-title">Development</h3>
+                        </div>
+                        <div class="skills-list">
+                            <span class="skill-item">Flutter</span>
+                            <span class="skill-item">Dart</span>
+                            <span class="skill-item">Python</span>
+                            <span class="skill-item">Kotlin</span>
+                            <span class="skill-item">HTML/CSS/JS</span>
+                            <span class="skill-item">Firebase</span>
+                            <span class="skill-item">Git/GitHub</span>
+                        </div>
+                    </div>
+
+                    <!-- AI & Automation -->
+                    <div class="skills-category reveal" style="transition-delay:0.16s;">
+                        <div class="skills-cat-header">
+                            <div class="skills-cat-icon">
+                                <svg viewBox="0 0 24 24">
+                                    <circle cx="12" cy="12" r="10" />
+                                    <path
+                                        d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+                                    <path d="M2 12h20" />
+                                </svg>
+                            </div>
+                            <h3 class="skills-cat-title">AI & Automation</h3>
+                        </div>
+                        <div class="skills-list">
+                            <span class="skill-item">Gemini API</span>
+                            <span class="skill-item">Prompt Engineering</span>
+                            <span class="skill-item">LLM Orchestration</span>
+                            <span class="skill-item">Script Automations</span>
+                            <span class="skill-item">VS Code Tools</span>
+                        </div>
+                    </div>
+
+                    <!-- Data & Databases -->
+                    <div class="skills-category reveal" style="transition-delay:0.24s;">
+                        <div class="skills-cat-header">
+                            <div class="skills-cat-icon">
+                                <svg viewBox="0 0 24 24">
+                                    <ellipse cx="12" cy="5" rx="9" ry="3" />
+                                    <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5" />
+                                    <path d="M3 12c0 1.66 4 3 9 3s9-1.34 9-3" />
+                                </svg>
+                            </div>
+                            <h3 class="skills-cat-title">Data & Databases</h3>
+                        </div>
+                        <div class="skills-list">
+                            <span class="skill-item">SQL (PostgreSQL)</span>
+                            <span class="skill-item">SQLite</span>
+                            <span class="skill-item">Database Design</span>
+                            <span class="skill-item">Pandas / NumPy</span>
+                            <span class="skill-item">Data Cleansing</span>
+                        </div>
+                    </div>
+
+                    <!-- Finance & Analysis -->
+                    <div class="skills-category reveal" style="transition-delay:0.32s;">
+                        <div class="skills-cat-header">
+                            <div class="skills-cat-icon">
+                                <svg viewBox="0 0 24 24">
+                                    <line x1="18" y1="20" x2="18" y2="10" />
+                                    <line x1="12" y1="20" x2="12" y2="4" />
+                                    <line x1="6" y1="20" x2="6" y2="14" />
+                                </svg>
+                            </div>
+                            <h3 class="skills-cat-title">Finance & Analysis</h3>
+                        </div>
+                        <div class="skills-list">
+                            <span class="skill-item">Public Accounting</span>
+                            <span class="skill-item">Audit Verification</span>
+                            <span class="skill-item">Asset Modeling</span>
+                            <span class="skill-item">Taxation (India)</span>
+                            <span class="skill-item">Risk Assessment</span>
+                        </div>
+                    </div>
+
+                    <!-- Content & Digital -->
+                    <div class="skills-category reveal" style="transition-delay:0.40s;">
+                        <div class="skills-cat-header">
+                            <div class="skills-cat-icon">
+                                <svg viewBox="0 0 24 24">
+                                    <rect x="2" y="2" width="20" height="20" rx="2.18" />
+                                    <line x1="7" y1="2" x2="7" y2="22" />
+                                    <line x1="17" y1="2" x2="17" y2="22" />
+                                    <line x1="2" y1="12" x2="22" y2="12" />
+                                    <line x1="2" y1="7" x2="7" y2="7" />
+                                    <line x1="2" y1="17" x2="7" y2="17" />
+                                    <line x1="17" y1="17" x2="22" y2="17" />
+                                    <line x1="17" y1="7" x2="22" y2="7" />
+                                </svg>
+                            </div>
+                            <h3 class="skills-cat-title">Content & Digital</h3>
+                        </div>
+                        <div class="skills-list">
+                            <span class="skill-item">YouTube Scripting</span>
+                            <span class="skill-item">Video Post-Production</span>
+                            <span class="skill-item">Technical Documentation</span>
+                            <span class="skill-item">Educational Architecture</span>
+                        </div>
+                    </div>
+
+                    <!-- Health & Fitness -->
+                    <div class="skills-category reveal" style="transition-delay:0.48s;">
+                        <div class="skills-cat-header">
+                            <div class="skills-cat-icon">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
+                                </svg>
+                            </div>
+                            <h3 class="skills-cat-title">Health & Fitness</h3>
+                        </div>
+                        <div class="skills-list">
+                            <span class="skill-item">Hypertrophy Coaching</span>
+                            <span class="skill-item">RPE/RIR Progression</span>
+                            <span class="skill-item">Cardio Tracking</span>
+                            <span class="skill-item">Biomechanics</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PHILOSOPHY & METRICS -->
+        <section>
+            <div class="container">
+                <div class="section-header reveal">
+                    <span class="section-eyebrow">05 / Principles</span>
+                    <h2 class="section-title">The Operating Manifesto.</h2>
+                </div>
+
+                <div class="philosophy-grid">
+                    <div class="philosophy-card reveal" style="transition-delay:0.08s;">
+                        <h3 class="philosophy-title">Systems over Motivation</h3>
+                        <p class="philosophy-desc">Motivation is spikes and troughs. A protocol—like code execution or
+                            structural audit loops—produces predictable, recurring results over long time windows.</p>
+                    </div>
+
+                    <div class="philosophy-card reveal" style="transition-delay:0.16s;">
+                        <h3 class="philosophy-title">Skill Stacking</h3>
+                        <p class="philosophy-desc">A software engineer who understands public finance and kinetic
+                            training is more resilient and adaptable than a developer focusing on standard coding
+                            frameworks alone.</p>
+                    </div>
+
+                    <div class="philosophy-card reveal" style="transition-delay:0.24s;">
+                        <h3 class="philosophy-title">Compounding Returns</h3>
+                        <p class="philosophy-desc">Every line of SQL written, every lifting workout tracked, and every
+                            asset added to a balanced portfolio compounds over decade-long horizons.</p>
+                    </div>
+                </div>
+
+                <!-- Animated Metrics -->
+                <div class="metrics-grid reveal" style="transition-delay:0.32s;">
+                    <div class="metric-card">
+                        <span class="metric-number counter" data-target="5" data-suffix="+">5+</span>
+                        <span class="metric-label">Apps Built & Logged</span>
+                    </div>
+                    <div class="metric-card">
+                        <span class="metric-number counter" data-target="250" data-suffix="+">250+</span>
+                        <span class="metric-label">Lifting Sessions / Yr</span>
+                    </div>
+                    <div class="metric-card">
+                        <span class="metric-number counter" data-target="10" data-suffix="M+">10M+</span>
+                        <span class="metric-label">Lines Audited / Yr</span>
+                    </div>
+                    <div class="metric-card">
+                        <span class="metric-number counter" data-target="95" data-suffix="%">95%</span>
+                        <span class="metric-label">Local-First Privacy</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CONTENT / IDEAS -->
+        <section id="ideas">
+            <div class="container">
+                <div class="section-header reveal">
+                    <span class="section-eyebrow">06 / Creative Archive</span>
+                    <h2 class="section-title">Logs, writing, and ideas.</h2>
+                </div>
+
+                <div class="posts-grid">
+                    <article class="post-card reveal" style="transition-delay:0.08s;">
                         <div>
-                            <div class="project-meta">
-                                <span class="project-tag">Flutter</span>
-                                <span class="project-tag">SQLite</span>
-                                <span class="project-tag">Gemini API</span>
-                            </div>
-                            <h3 class="project-title">AI Gym Mentor & Fitness Logger</h3>
-                            <p class="project-desc">A localized workout logger and progress analyzer designed to bypass bloated, cloud-dependent subscription apps.</p>
-                            
-                            <div class="project-tabs" data-project="gym-mentor">
-                                <button class="tab-btn active" data-tab="problem">Problem</button>
-                                <button class="tab-btn" data-tab="approach">Approach</button>
-                                <button class="tab-btn" data-tab="impact">Impact</button>
-                            </div>
-                            
-                            <div class="project-tab-contents" data-project="gym-mentor">
-                                <div class="tab-pane active" data-content="problem">
-                                    Traditional lifting logs require constant internet connection, sell tracking logs to third parties, or lack personalized insights on progressive overload intervals.
-                                </div>
-                                <div class="tab-pane" data-content="approach">
-                                    Built an offline-first Flutter application structured around local SQLite schemas. Added a local, offline cache module utilizing the Gemini API to analyze monthly workouts, mapping hypertrophy curves and providing structured gym recommendations.
-                                </div>
-                                <div class="tab-pane" data-content="impact">
-                                    Successfully tested with a local group of 15 gym enthusiasts, resulting in a 30% speedup in workout logging overhead and consistent progression tracking.
-                                </div>
-                            </div>
+                            <div class="post-meta">Tech Note &nbsp;·&nbsp; 8 Min Read</div>
+                            <h3 class="post-title">SQLite + Flutter: The blueprint for absolute privacy in personal
+                                tracking apps</h3>
+                            <p class="post-desc">An in-depth log on avoiding cloud dependencies, structuring database
+                                migration logs, and caching data locally for sub-50ms query loads.</p>
                         </div>
-                        <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="btn-text project-link">
-                            View GitHub Code 
-                            <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                        <a href="#" class="btn-text" style="margin-top:14px;">
+                            Read Note
+                            <svg viewBox="0 0 24 24">
+                                <line x1="5" y1="12" x2="19" y2="12" />
+                                <polyline points="12 5 19 12 12 19" />
+                            </svg>
                         </a>
-                    </div>
-                </div>
+                    </article>
 
-                <!-- Project 2: FinTrack SQLite -->
-                <div class="project-card reveal">
-                    <div class="project-visual">
-                        <div class="project-visual-mock">
-                            <div class="mock-header">
-                                <span class="mock-dot"></span>
-                                <span style="font-size: 0.75rem; font-weight:600; color: var(--text-secondary);">FinTrack</span>
-                                <span class="mock-dot"></span>
-                            </div>
-                            <div class="mock-body">
-                                <span style="font-size: 0.8rem; font-weight:700;">Asset Allocation Metrics</span>
-                                <div class="mock-bar"></div>
-                                <div class="mock-bar accent"></div>
-                                <div class="mock-bar half"></div>
-                                <div style="display:flex; justify-content:space-between; margin-top:10px;">
-                                    <span style="font-size:0.7rem; color:var(--text-muted);">FD / Equities</span>
-                                    <span style="font-size:0.7rem; color:var(--accent); font-weight:700;">Balanced</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="project-info">
+                    <article class="post-card reveal" style="transition-delay:0.16s;">
                         <div>
-                            <div class="project-meta">
-                                <span class="project-tag">Python</span>
-                                <span class="project-tag">SQL</span>
-                                <span class="project-tag">Pandas</span>
-                            </div>
-                            <h3 class="project-title">Private Portfolio & Wealth Tracker</h3>
-                            <p class="project-desc">A local parser and analytical rebalancer that visualizes financial assets and tax efficiency without cloud integrations.</p>
-                            
-                            <div class="project-tabs" data-project="fintrack">
-                                <button class="tab-btn active" data-tab="problem">Problem</button>
-                                <button class="tab-btn" data-tab="approach">Approach</button>
-                                <button class="tab-btn" data-tab="impact">Impact</button>
-                            </div>
-                            
-                            <div class="project-tab-contents" data-project="fintrack">
-                                <div class="tab-pane active" data-content="problem">
-                                    Indian retail investors must log accounts across multiple stock brokers, mutual fund platforms, and banking portals, exposing delicate transactional files to third-party sync apps.
-                                </div>
-                                <div class="tab-pane" data-content="approach">
-                                    Developed a Python validation pipeline utilizing PDF parsing scripts to extract CAS files. This loads statements into SQLite databases, building local rebalancing recommendations based on tax brackets and risk levels.
-                                </div>
-                                <div class="tab-pane" data-content="impact">
-                                    Consolidates total family wealth calculations in under 2 minutes with absolute data isolation, streamlining tax planning before the fiscal year-end.
-                                </div>
-                            </div>
+                            <div class="post-meta">Audit / SQL &nbsp;·&nbsp; 12 Min Read</div>
+                            <h3 class="post-title">Scaling SQL audits: Lessons from querying 10M rows in government
+                                databases</h3>
+                            <p class="post-desc">Understanding indexes, avoiding nested subqueries, and writing robust
+                                assertions to verify transactional double-entry systems.</p>
                         </div>
-                        <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="btn-text project-link">
-                            View Script Archive 
-                            <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                        <a href="#" class="btn-text" style="margin-top:14px;">
+                            Read Log
+                            <svg viewBox="0 0 24 24">
+                                <line x1="5" y1="12" x2="19" y2="12" />
+                                <polyline points="12 5 19 12 12 19" />
+                            </svg>
                         </a>
-                    </div>
-                </div>
+                    </article>
 
-                <!-- Project 3: Audit Automation Tooling -->
-                <div class="project-card reveal">
-                    <div class="project-visual">
-                        <div class="project-visual-mock">
-                            <div class="mock-header">
-                                <span class="mock-dot"></span>
-                                <span style="font-size: 0.75rem; font-weight:600; color: var(--text-secondary);">LedgerParser</span>
-                                <span class="mock-dot"></span>
-                            </div>
-                            <div class="mock-body">
-                                <span style="font-size: 0.8rem; font-weight:700;">Query Validation Log</span>
-                                <div class="mock-bar accent"></div>
-                                <div class="mock-bar half"></div>
-                                <div class="mock-bar"></div>
-                                <div style="display:flex; justify-content:space-between; margin-top:10px;">
-                                    <span style="font-size:0.7rem; color:var(--text-muted);">Status</span>
-                                    <span style="font-size:0.7rem; color:var(--accent); font-weight:700;">0 Discrepancies</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="project-info">
+                    <article class="post-card reveal" style="transition-delay:0.24s;">
                         <div>
-                            <div class="project-meta">
-                                <span class="project-tag">Python</span>
-                                <span class="project-tag">SQL</span>
-                                <span class="project-tag">Streamlit</span>
-                            </div>
-                            <h3 class="project-title">LedgerAudit: Transaction Anomaly Engine</h3>
-                            <p class="project-desc">An automated testing setup parsing public accounting registers to flag transactional errors during public sector audits.</p>
-                            
-                            <div class="project-tabs" data-project="ledger-audit">
-                                <button class="tab-btn active" data-tab="problem">Problem</button>
-                                <button class="tab-btn" data-tab="approach">Approach</button>
-                                <button class="tab-btn" data-tab="impact">Impact</button>
-                            </div>
-                            
-                            <div class="project-tab-contents" data-project="ledger-audit">
-                                <div class="tab-pane active" data-content="problem">
-                                    Auditing government transactions involves auditing extensive rows across scattered ledger formats. Spotting timing mismatches or authorization anomalies manually is inefficient and slow.
-                                </div>
-                                <div class="tab-pane" data-content="approach">
-                                    Created structured Python scripts with a clean Streamlit interface. It builds automated SQL search profiles that validate records against double-entry rules and highlights temporal outliers.
-                                </div>
-                                <div class="tab-pane" data-content="impact">
-                                    Slashed the ledger screening window from multiple days to under an hour, allowing auditors to focus on high-priority discrepancies.
-                                </div>
-                            </div>
+                            <div class="post-meta">Fitness &nbsp;·&nbsp; 6 Min Read</div>
+                            <h3 class="post-title">Hypertrophy in code: Applying progressive overload systems to
+                                engineering</h3>
+                            <p class="post-desc">How consistent small stimulus bumps beat sudden high-intensity burnout
+                                in athletic development and complex software projects.</p>
                         </div>
-                        <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="btn-text project-link">
-                            Explore SQL Schemas 
-                            <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                        <a href="#" class="btn-text" style="margin-top:14px;">
+                            Read Note
+                            <svg viewBox="0 0 24 24">
+                                <line x1="5" y1="12" x2="19" y2="12" />
+                                <polyline points="12 5 19 12 12 19" />
+                            </svg>
                         </a>
-                    </div>
-                </div>
-
-            </div>
-        </section>
-
-        <!-- SKILLS / TOOLKIT SECTION -->
-        <section id="toolkit" class="container">
-            <div class="section-header reveal">
-                <span class="section-num">04 / THE SYSTEM</span>
-                <h2 class="section-title">My stacked toolkit.</h2>
-            </div>
-
-            <div class="skills-grid">
-                <!-- Development -->
-                <div class="skills-category reveal" style="transition-delay: 0.1s;">
-                    <h3 class="skills-category-title">
-                        <svg viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
-                        Development
-                    </h3>
-                    <div class="skills-list">
-                        <span class="skill-item">Flutter</span>
-                        <span class="skill-item">Dart</span>
-                        <span class="skill-item">Python</span>
-                        <span class="skill-item">Kotlin</span>
-                        <span class="skill-item">HTML/CSS/JS</span>
-                        <span class="skill-item">Firebase</span>
-                        <span class="skill-item">Git/GitHub</span>
-                    </div>
-                </div>
-
-                <!-- AI & Automation -->
-                <div class="skills-category reveal" style="transition-delay: 0.2s;">
-                    <h3 class="skills-category-title">
-                        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path><path d="M2 12h20"></path></svg>
-                        AI & Automation
-                    </h3>
-                    <div class="skills-list">
-                        <span class="skill-item">Gemini API</span>
-                        <span class="skill-item">Prompt Engineering</span>
-                        <span class="skill-item">LLM Orchestration</span>
-                        <span class="skill-item">Script Automations</span>
-                        <span class="skill-item">VS Code Tools</span>
-                    </div>
-                </div>
-
-                <!-- Data & Databases -->
-                <div class="skills-category reveal" style="transition-delay: 0.3s;">
-                    <h3 class="skills-category-title">
-                        <svg viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"></ellipse><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path><path d="M3 12c0 1.66 4 3 9 3s9-1.34 9-3"></path></svg>
-                        Data & Databases
-                    </h3>
-                    <div class="skills-list">
-                        <span class="skill-item">SQL (PostgreSQL)</span>
-                        <span class="skill-item">SQLite</span>
-                        <span class="skill-item">Database Design</span>
-                        <span class="skill-item">Pandas / NumPy</span>
-                        <span class="skill-item">Data Cleansing</span>
-                    </div>
-                </div>
-
-                <!-- Finance & Analysis -->
-                <div class="skills-category reveal" style="transition-delay: 0.4s;">
-                    <h3 class="skills-category-title">
-                        <svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
-                        Finance & Analysis
-                    </h3>
-                    <div class="skills-list">
-                        <span class="skill-item">Public Accounting</span>
-                        <span class="skill-item">Audit Verification</span>
-                        <span class="skill-item">Asset Modeling</span>
-                        <span class="skill-item">Taxation (India)</span>
-                        <span class="skill-item">Risk Assessment</span>
-                    </div>
-                </div>
-
-                <!-- Content & Creation -->
-                <div class="skills-category reveal" style="transition-delay: 0.5s;">
-                    <h3 class="skills-category-title">
-                        <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"></rect><line x1="7" y1="2" x2="7" y2="22"></line><line x1="17" y1="2" x2="17" y2="22"></line><line x1="2" y1="12" x2="22" y2="12"></line><line x1="2" y1="7" x2="7" y2="7"></line><line x1="2" y1="17" x2="7" y2="17"></line><line x1="17" y1="17" x2="22" y2="17"></line><line x1="17" y1="7" x2="22" y2="7"></line></svg>
-                        Content & Digital
-                    </h3>
-                    <div class="skills-list">
-                        <span class="skill-item">YouTube Scripting</span>
-                        <span class="skill-item">Video Post-Production</span>
-                        <span class="skill-item">Technical Documentation</span>
-                        <span class="skill-item">Educational Architecture</span>
-                    </div>
-                </div>
-
-                <!-- Health & Fitness -->
-                <div class="skills-category reveal" style="transition-delay: 0.6s;">
-                    <h3 class="skills-category-title">
-                        <svg viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"></path></svg>
-                        Health & Fitness
-                    </h3>
-                    <div class="skills-list">
-                        <span class="skill-item">Hypertrophy Coaching</span>
-                        <span class="skill-item">RPE/RIR Progression</span>
-                        <span class="skill-item">Cardio Tracking</span>
-                        <span class="skill-item">Biomechanics</span>
-                    </div>
+                    </article>
                 </div>
             </div>
         </section>
 
-        <!-- PHILOSOPHY / OPERATING PRINCIPLES SECTION -->
-        <section class="container">
-            <div class="section-header reveal">
-                <span class="section-num">05 / PRINCIPLES</span>
-                <h2 class="section-title">The Operating Manifesto.</h2>
-            </div>
-
-            <div class="philosophy-grid">
-                <div class="philosophy-card reveal" style="transition-delay: 0.1s;">
-                    <h3 class="philosophy-title">Systems over Motivation</h3>
-                    <p class="philosophy-desc">Motivation is spikes and troughs. A protocol—like code execution or structural audit loops—produces predictable, recurring results over long time windows.</p>
-                </div>
-                
-                <div class="philosophy-card reveal" style="transition-delay: 0.2s;">
-                    <h3 class="philosophy-title">Skill Stacking</h3>
-                    <p class="philosophy-desc">A software engineer who understands public finance and kinetic training is more resilient and adaptable than a developer focusing on standard coding frameworks alone.</p>
+        <!-- CONTACT -->
+        <section id="contact">
+            <div class="container">
+                <div class="section-header reveal">
+                    <span class="section-eyebrow">07 / Connect</span>
+                    <h2 class="section-title">Initiate a dialogue.</h2>
                 </div>
 
-                <div class="philosophy-card reveal" style="transition-delay: 0.3s;">
-                    <h3 class="philosophy-title">Compounding Returns</h3>
-                    <p class="philosophy-desc">Every line of SQL written, every lifting workout tracked, and every asset added to a balanced portfolio compounds over decade-long horizons.</p>
-                </div>
-            </div>
-
-            <!-- Metrics Block -->
-            <div class="metrics-grid reveal" style="transition-delay: 0.4s;">
-                <div class="metric-card">
-                    <span class="metric-number">5+</span>
-                    <span class="metric-label">Apps Built & Logged</span>
-                </div>
-                <div class="metric-card">
-                    <span class="metric-number">250+</span>
-                    <span class="metric-label">Lifting Sessions / Yr</span>
-                </div>
-                <div class="metric-card">
-                    <span class="metric-number">10M+</span>
-                    <span class="metric-label">Lines Audited / Yr</span>
-                </div>
-                <div class="metric-card">
-                    <span class="metric-number">95%</span>
-                    <span class="metric-label">Local-First Privacy</span>
-                </div>
-            </div>
-        </section>
-
-        <!-- CONTENT / WRITING SECTION -->
-        <section id="ideas" class="container">
-            <div class="section-header reveal">
-                <span class="section-num">06 / CREATIVE ARCHIVE</span>
-                <h2 class="section-title">Logs, writing, and ideas.</h2>
-            </div>
-
-            <div class="posts-grid">
-                <!-- Post 1 -->
-                <article class="post-card reveal" style="transition-delay: 0.1s;">
-                    <div>
-                        <div class="post-meta">Tech Note • 8 Min Read</div>
-                        <h3 class="post-title">SQLite + Flutter: The blueprint for absolute privacy in personal tracking apps</h3>
-                        <p class="post-desc">An in-depth log on avoiding cloud dependencies, structuring database migration logs, and caching data locally for sub-50ms query loads.</p>
-                    </div>
-                    <a href="#" class="btn-text" style="margin-top: 15px;">
-                        Read Note 
-                        <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-                    </a>
-                </article>
-
-                <!-- Post 2 -->
-                <article class="post-card reveal" style="transition-delay: 0.2s;">
-                    <div>
-                        <div class="post-meta">Audit / SQL • 12 Min Read</div>
-                        <h3 class="post-title">Scaling SQL audits: Lessons from querying 10M rows in government databases</h3>
-                        <p class="post-desc">Understanding indexes, avoiding nested subqueries, and writing robust assertions to verify transactional double-entry systems.</p>
-                    </div>
-                    <a href="#" class="btn-text" style="margin-top: 15px;">
-                        Read Log 
-                        <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-                    </a>
-                </article>
-
-                <!-- Post 3 -->
-                <article class="post-card reveal" style="transition-delay: 0.3s;">
-                    <div>
-                        <div class="post-meta">Fitness • 6 Min Read</div>
-                        <h3 class="post-title">Hypertrophy in code: Applying progressive overload systems to engineering</h3>
-                        <p class="post-desc">How consistent small stimulus bumps beat sudden high-intensity burnout in athletic development and complex software projects.</p>
-                    </div>
-                    <a href="#" class="btn-text" style="margin-top: 15px;">
-                        Read Note 
-                        <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-                    </a>
-                </article>
-            </div>
-        </section>
-
-        <!-- CONTACT SECTION -->
-        <section id="contact" class="container">
-            <div class="section-header reveal">
-                <span class="section-num">07 / CONNECT</span>
-                <h2 class="section-title">Initiate a dialogue.</h2>
-            </div>
-
-            <div class="contact-grid">
-                <div class="contact-info reveal" style="transition-delay: 0.1s;">
-                    <p class="contact-sub">
-                        I am open to discussions regarding database automation, Flutter development projects, local-first architectures, or structured athletic programming.
-                    </p>
-                    
-                    <div class="contact-methods">
-                        <div class="contact-method">
-                            <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
-                            <span>shirajlife@gmail.com</span>
-                        </div>
-                        <div class="contact-method">
-                            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
-                            <span>Mumbai, Maharashtra, India</span>
+                <div class="contact-grid">
+                    <div class="contact-info reveal" style="transition-delay:0.08s;">
+                        <p class="contact-sub">
+                            I am open to discussions regarding database automation, Flutter development projects,
+                            local-first architectures, or structured athletic programming.
+                        </p>
+                        <div class="contact-methods">
+                            <a href="mailto:shirajlife@gmail.com" class="contact-method">
+                                <svg viewBox="0 0 24 24">
+                                    <path
+                                        d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                                    <polyline points="22,6 12,13 2,6" />
+                                </svg>
+                                shirajlife@gmail.com
+                            </a>
+                            <div class="contact-method">
+                                <svg viewBox="0 0 24 24">
+                                    <circle cx="12" cy="12" r="10" />
+                                    <line x1="2" y1="12" x2="22" y2="12" />
+                                    <path
+                                        d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+                                </svg>
+                                Mumbai, Maharashtra, India
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="reveal" style="transition-delay: 0.2s;">
-                    <form class="contact-form" id="contact-form" action="#" method="POST">
-                        <div class="form-group">
-                            <label for="name" class="form-label">Full Name</label>
-                            <input type="text" id="name" name="name" class="form-input" placeholder="e.g. Rahul Sharma" required autocomplete="name">
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="email" class="form-label">Email Address</label>
-                            <input type="email" id="email" name="email" class="form-input" placeholder="e.g. rahul@example.com" required autocomplete="email">
-                        </div>
+                    <div class="reveal" style="transition-delay:0.18s;">
+                        <form class="contact-form" id="contact-form">
+                            <div class="form-group">
+                                <label for="name" class="form-label">full_name</label>
+                                <input type="text" id="name" name="name" class="form-input"
+                                    placeholder="e.g. Rahul Sharma" required autocomplete="name">
+                            </div>
 
-                        <div class="form-group">
-                            <label for="subject" class="form-label">Subject Focus</label>
-                            <input type="text" id="subject" name="subject" class="form-input" placeholder="e.g. App Dev Project / Collaboration" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="message" class="form-label">Detailed Message</label>
-                            <textarea id="message" name="message" class="form-input" placeholder="Describe project parameters, timelines, or topics..." required></textarea>
-                        </div>
+                            <div class="form-group">
+                                <label for="email" class="form-label">email_address</label>
+                                <input type="email" id="email" name="email" class="form-input"
+                                    placeholder="e.g. rahul@example.com" required autocomplete="email">
+                            </div>
 
-                        <span id="form-status" class="form-status"></span>
-                        
-                        <button type="submit" class="btn btn-primary" style="align-self: flex-start;">
-                            Send Message
-                        </button>
-                    </form>
+                            <div class="form-group">
+                                <label for="subject" class="form-label">subject_focus</label>
+                                <input type="text" id="subject" name="subject" class="form-input"
+                                    placeholder="e.g. App Dev Project / Collaboration" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="message" class="form-label">detailed_message</label>
+                                <textarea id="message" name="message" class="form-input"
+                                    placeholder="Describe project parameters, timelines, or topics..."
+                                    required></textarea>
+                            </div>
+
+                            <span id="form-status" class="form-status"></span>
+
+                            <button type="submit" class="btn btn-primary" style="align-self:flex-start;">
+                                Send Message
+                            </button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </section>
 
     </main>
 
-    <!-- ==========================================
-       FOOTER
-       ========================================== -->
+    <!-- FOOTER -->
     <footer>
         <div class="container">
-            <div class="footer-logo">
-                shiraj<span>life</span>
-            </div>
-            
+            <div class="footer-logo">shiraj<span>life</span></div>
+
             <div class="footer-socials">
-                <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="footer-social-link" aria-label="GitHub Profile">
-                    <svg viewBox="0 0 24 24"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+                <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="footer-social-link"
+                    aria-label="GitHub Profile">
+                    <svg viewBox="0 0 24 24">
+                        <path
+                            d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
+                    </svg>
                 </a>
-                <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" class="footer-social-link" aria-label="LinkedIn Profile">
-                    <svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+                <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" class="footer-social-link"
+                    aria-label="LinkedIn Profile">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
+                        <rect x="2" y="9" width="4" height="12" />
+                        <circle cx="4" cy="4" r="2" />
+                    </svg>
                 </a>
-                <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" class="footer-social-link" aria-label="YouTube Channel">
-                    <svg viewBox="0 0 24 24"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"></path><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon></svg>
+                <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" class="footer-social-link"
+                    aria-label="YouTube Channel">
+                    <svg viewBox="0 0 24 24">
+                        <path
+                            d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z" />
+                        <polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02" />
+                    </svg>
                 </a>
             </div>
 
-            <p class="footer-copy">
-                &copy; 2026 Shiraj. Stacked & Compiled in Mumbai. All Rights Reserved.
-            </p>
+            <p class="footer-copy">&copy; 2026 Shiraj. Stacked &amp; Compiled in Mumbai. All Rights Reserved.</p>
         </div>
     </footer>
 
     <!-- ==========================================
-       JAVASCRIPT FOR THEME & INTERACTIONS
-       ========================================== */ -->
+   JAVASCRIPT
+   ========================================== -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            
-            // 1. LIGHT / DARK THEME TOGGLE
-            const themeToggleBtn = document.getElementById('theme-toggle');
-            const savedTheme = localStorage.getItem('theme');
-            
-            // Set initial theme based on local storage or system preference
-            if (savedTheme) {
-                document.documentElement.setAttribute('data-theme', savedTheme);
-            } else {
-                const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-                const initialTheme = systemPrefersDark ? 'dark' : 'light';
-                document.documentElement.setAttribute('data-theme', initialTheme);
+
+            /* ─── 1. SCROLL PROGRESS BAR ─── */
+            const progressBar = document.getElementById('scroll-progress');
+            function updateProgress() {
+                const scrolled = window.scrollY;
+                const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+                progressBar.style.width = ((scrolled / docHeight) * 100).toFixed(2) + '%';
+            }
+            window.addEventListener('scroll', updateProgress, { passive: true });
+
+            /* ─── 2. HEADER SCROLL CLASS ─── */
+            const header = document.getElementById('header');
+            window.addEventListener('scroll', () => {
+                header.classList.toggle('scrolled', window.scrollY > 24);
+            }, { passive: true });
+
+            /* ─── 3. THEME TOGGLE ─── */
+            const themeBtn = document.getElementById('theme-toggle');
+            const savedTheme = localStorage.getItem('theme') ||
+                (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            document.documentElement.setAttribute('data-theme', savedTheme);
+
+            themeBtn.addEventListener('click', () => {
+                const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+                document.documentElement.setAttribute('data-theme', next);
+                localStorage.setItem('theme', next);
+            });
+
+            /* ─── 4. MOBILE DRAWER ─── */
+            const mobileBtn = document.getElementById('mobile-menu-btn');
+            const mobileDrawer = document.getElementById('mobile-drawer');
+
+            const hamburgerSVG = `<svg viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>`;
+            const closeSVG = `<svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`;
+
+            function closeDrawer() {
+                mobileDrawer.classList.remove('open');
+                mobileBtn.innerHTML = hamburgerSVG;
             }
 
-            themeToggleBtn.addEventListener('click', () => {
-                const currentTheme = document.documentElement.getAttribute('data-theme');
-                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-                
-                document.documentElement.setAttribute('data-theme', newTheme);
-                localStorage.setItem('theme', newTheme);
-            });
-
-            // 2. MOBILE NAVIGATION DRAWER
-            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-            const mobileDrawer = document.getElementById('mobile-drawer');
-            
-            mobileMenuBtn.addEventListener('click', (e) => {
+            mobileBtn.addEventListener('click', e => {
                 e.stopPropagation();
-                mobileDrawer.classList.toggle('open');
-                
-                // Toggle between Hamburger and Close icon
-                if (mobileDrawer.classList.contains('open')) {
-                    mobileMenuBtn.innerHTML = `
-                        <svg viewBox="0 0 24 24">
-                            <line x1="18" y1="6" x2="6" y2="18"></line>
-                            <line x1="6" y1="6" x2="18" y2="18"></line>
-                        </svg>
-                    `;
-                } else {
-                    mobileMenuBtn.innerHTML = `
-                        <svg viewBox="0 0 24 24">
-                            <line x1="3" y1="12" x2="21" y2="12"></line>
-                            <line x1="3" y1="6" x2="21" y2="6"></line>
-                            <line x1="3" y1="18" x2="21" y2="18"></line>
-                        </svg>
-                    `;
-                }
+                const isOpen = mobileDrawer.classList.toggle('open');
+                mobileBtn.innerHTML = isOpen ? closeSVG : hamburgerSVG;
             });
 
-            // Close mobile drawer when clicking a link
-            mobileDrawer.querySelectorAll('.nav-link').forEach(link => {
-                link.addEventListener('click', () => {
-                    mobileDrawer.classList.remove('open');
-                    mobileMenuBtn.innerHTML = `
-                        <svg viewBox="0 0 24 24">
-                            <line x1="3" y1="12" x2="21" y2="12"></line>
-                            <line x1="3" y1="6" x2="21" y2="6"></line>
-                            <line x1="3" y1="18" x2="21" y2="18"></line>
-                        </svg>
-                    `;
-                });
+            mobileDrawer.querySelectorAll('.nav-link').forEach(l => l.addEventListener('click', closeDrawer));
+            document.addEventListener('click', e => {
+                if (!mobileDrawer.contains(e.target) && !mobileBtn.contains(e.target)) closeDrawer();
             });
 
-            // Close mobile drawer when clicking outside
-            document.addEventListener('click', (e) => {
-                if (!mobileDrawer.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
-                    mobileDrawer.classList.remove('open');
-                    mobileMenuBtn.innerHTML = `
-                        <svg viewBox="0 0 24 24">
-                            <line x1="3" y1="12" x2="21" y2="12"></line>
-                            <line x1="3" y1="6" x2="21" y2="6"></line>
-                            <line x1="3" y1="18" x2="21" y2="18"></line>
-                        </svg>
-                    `;
-                }
+            /* ─── 5. PROJECT TABS ─── */
+            document.querySelectorAll('.project-card').forEach(card => {
+                const btns = card.querySelectorAll('.tab-btn');
+                const panes = card.querySelectorAll('.tab-pane');
+
+                btns.forEach(btn => btn.addEventListener('click', () => {
+                    const target = btn.dataset.tab;
+                    btns.forEach(b => b.classList.remove('active'));
+                    panes.forEach(p => p.classList.remove('active'));
+                    btn.classList.add('active');
+                    card.querySelector(`.tab-pane[data-content="${target}"]`).classList.add('active');
+                }));
             });
 
-            // 3. CASE STUDIES TAB SYSTEM
-            const projectCards = document.querySelectorAll('.project-card');
-
-            projectCards.forEach(card => {
-                const tabButtons = card.querySelectorAll('.tab-btn');
-                const tabPanes = card.querySelectorAll('.tab-pane');
-
-                tabButtons.forEach(btn => {
-                    btn.addEventListener('click', () => {
-                        const targetTab = btn.getAttribute('data-tab');
-
-                        // Remove active class from all tabs & panes inside this card
-                        tabButtons.forEach(b => b.classList.remove('active'));
-                        tabPanes.forEach(pane => pane.classList.remove('active'));
-
-                        // Add active class to clicked tab and corresponding pane
-                        btn.classList.add('active');
-                        card.querySelector(`.tab-pane[data-content="${targetTab}"]`).classList.add('active');
-                    });
-                });
-            });
-
-            // 4. SCROLL REVEAL (IntersectionObserver)
-            const revealElements = document.querySelectorAll('.reveal');
-            
-            const revealOnScroll = new IntersectionObserver((entries, observer) => {
+            /* ─── 6. SCROLL REVEAL ─── */
+            const revealObserver = new IntersectionObserver((entries, obs) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
                         entry.target.classList.add('visible');
-                        observer.unobserve(entry.target); // Stop observing once revealed
+                        obs.unobserve(entry.target);
                     }
                 });
-            }, {
-                threshold: 0.08,
-                rootMargin: '0px 0px -50px 0px'
-            });
+            }, { threshold: 0.07, rootMargin: '0px 0px -48px 0px' });
 
-            revealElements.forEach(el => {
-                revealOnScroll.observe(el);
-            });
+            document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
 
-            // 5. CONTACT FORM HANDLER (Mock Submit)
+            /* ─── 7. ACTIVE NAV LINK ─── */
+            const sections = document.querySelectorAll('section[id]');
+            const navLinks = document.querySelectorAll('.nav-links .nav-link[href^="#"]');
+
+            const sectionObserver = new IntersectionObserver(entries => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        navLinks.forEach(link => {
+                            link.classList.toggle('active', link.getAttribute('href') === '#' + entry.target.id);
+                        });
+                    }
+                });
+            }, { rootMargin: '-28% 0px -62% 0px' });
+
+            sections.forEach(s => sectionObserver.observe(s));
+
+            /* ─── 8. ANIMATED COUNTERS ─── */
+            function easeOutCubic(t) { return 1 - Math.pow(1 - t, 3); }
+
+            function animateCounter(el) {
+                const target = parseFloat(el.dataset.target);
+                const suffix = el.dataset.suffix || '';
+                const duration = 1600;
+                const start = performance.now();
+
+                function tick(now) {
+                    const progress = Math.min((now - start) / duration, 1);
+                    const eased = easeOutCubic(progress);
+                    const value = Math.round(target * eased);
+                    el.textContent = value + suffix;
+                    if (progress < 1) requestAnimationFrame(tick);
+                    else el.textContent = target + suffix;
+                }
+
+                requestAnimationFrame(tick);
+            }
+
+            const counterObserver = new IntersectionObserver(entries => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting && !entry.target.dataset.counted) {
+                        entry.target.dataset.counted = 'true';
+                        animateCounter(entry.target);
+                    }
+                });
+            }, { threshold: 0.6 });
+
+            document.querySelectorAll('.counter').forEach(el => counterObserver.observe(el));
+
+            /* ─── 9. CONTACT FORM ─── */
             const contactForm = document.getElementById('contact-form');
             const formStatus = document.getElementById('form-status');
 
             if (contactForm) {
-                contactForm.addEventListener('submit', (e) => {
+                contactForm.addEventListener('submit', e => {
                     e.preventDefault();
-                    
                     const name = document.getElementById('name').value.trim();
                     const email = document.getElementById('email').value.trim();
                     const subject = document.getElementById('subject').value.trim();
@@ -2080,10 +2721,9 @@
                         return;
                     }
 
-                    // Simulate API request delay
-                    formStatus.className = 'form-status';
+                    formStatus.className = '';
                     formStatus.style.display = 'block';
-                    formStatus.textContent = 'Sending message...';
+                    formStatus.textContent = 'Sending…';
 
                     setTimeout(() => {
                         formStatus.className = 'form-status success';
@@ -2092,7 +2732,9 @@
                     }, 1500);
                 });
             }
+
         });
     </script>
 </body>
+
 </html>
