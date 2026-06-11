@@ -112,6 +112,13 @@
             --health-clr: #dc2626;
             --health-glow: rgba(220, 38, 38, 0.07);
             --health-glow-lg: rgba(220, 38, 38, 0.15);
+
+            --hero-glow-gradient: radial-gradient(
+                600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+                rgba(10, 87, 80, 0.06) 0%,
+                rgba(99, 102, 241, 0.03) 50%,
+                transparent 100%
+            );
         }
 
         [data-theme="dark"] {
@@ -162,6 +169,13 @@
             --health-clr: #f87171;
             --health-glow: rgba(248, 113, 113, 0.15);
             --health-glow-lg: rgba(248, 113, 113, 0.35);
+
+            --hero-glow-gradient: radial-gradient(
+                700px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+                rgba(19, 184, 166, 0.15) 0%,
+                rgba(139, 92, 246, 0.08) 50%,
+                transparent 100%
+            );
         }
 
         /* ==========================================
@@ -605,9 +619,23 @@
             z-index: 0;
         }
 
+        .hero-glow {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            z-index: 1;
+            opacity: 0;
+            transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            background: var(--hero-glow-gradient);
+        }
+
+        .hero-section:hover .hero-glow {
+            opacity: 1;
+        }
+
         .hero-section .container {
             position: relative;
-            z-index: 1;
+            z-index: 2;
         }
 
         /* Availability badge */
@@ -1943,6 +1971,7 @@
 
         <!-- HERO -->
         <section class="hero-section">
+            <div class="hero-glow"></div>
             <div class="container">
 
                 <div class="hero-avail reveal">
@@ -2766,6 +2795,24 @@
                     card.style.setProperty('--rotate-y', '0deg');
                 });
             });
+
+            /* ─── 11. HERO SPOTLIGHT GLOW ─── */
+            const heroSection = document.querySelector('.hero-section');
+            if (heroSection) {
+                let heroFrameId = null;
+                heroSection.addEventListener('mousemove', e => {
+                    if (heroFrameId) {
+                        cancelAnimationFrame(heroFrameId);
+                    }
+                    heroFrameId = requestAnimationFrame(() => {
+                        const rect = heroSection.getBoundingClientRect();
+                        const x = e.clientX - rect.left;
+                        const y = e.clientY - rect.top;
+                        heroSection.style.setProperty('--mouse-x', `${x}px`);
+                        heroSection.style.setProperty('--mouse-y', `${y}px`);
+                    });
+                });
+            }
 
         });
     </script>
