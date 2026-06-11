@@ -456,6 +456,63 @@
             resize: vertical;
             min-height: 120px;
         }
+
+        /* Duration selector styling */
+        .duration-selector {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: var(--sp-xl);
+            background: var(--card);
+            border: 1px solid var(--border);
+            padding: 6px;
+            border-radius: var(--r-full);
+            width: max-content;
+            margin-left: auto;
+            margin-right: auto;
+            box-shadow: var(--sh-sm);
+        }
+
+        .duration-btn {
+            background: none;
+            border: none;
+            color: var(--txt-1);
+            font-family: var(--font-sans);
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding: 8px 20px;
+            border-radius: var(--r-full);
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+
+        .duration-btn.active {
+            background: var(--acc);
+            color: #ffffff;
+            box-shadow: 0 4px 12px var(--acc-glow);
+        }
+
+        .price-card-billing-total {
+            font-size: 0.8rem;
+            color: var(--txt-2);
+            margin-top: 6px;
+            font-weight: 500;
+            height: 18px; /* reserve height to prevent layout shift */
+            transition: opacity 0.2s ease;
+        }
+
+        .price-discount-badge {
+            display: inline-block;
+            background: rgba(16, 185, 129, 0.15);
+            color: #10b981;
+            font-size: 0.72rem;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: var(--r-full);
+            margin-left: 8px;
+            vertical-align: middle;
+        }
     </style>
 </head>
 
@@ -646,9 +703,17 @@
         <!-- PRICING PLANS -->
         <section id="plans" style="padding: var(--sp-3xl) 0; background: var(--bg-0);">
             <div class="container">
-                <div class="section-header reveal" style="text-align: center; margin-bottom: var(--sp-xl);">
+                <div class="section-header reveal" style="text-align: center; margin-bottom: var(--sp-lg);">
                     <span class="section-eyebrow" style="color: var(--acc);">Memberships</span>
                     <h2 class="section-title">Select Your Plan.</h2>
+                </div>
+
+                <!-- Duration Selector -->
+                <div class="duration-selector reveal" style="transition-delay: 0.05s;">
+                    <button class="duration-btn active" data-duration="monthly">Monthly</button>
+                    <button class="duration-btn" data-duration="3months">3 Months</button>
+                    <button class="duration-btn" data-duration="6months">6 Months</button>
+                    <button class="duration-btn" data-duration="yearly">Yearly</button>
                 </div>
 
                 <div class="pricing-section-container">
@@ -656,7 +721,8 @@
                     <div class="price-card reveal" style="transition-delay: 0.08s;">
                         <div class="price-header">
                             <h3 class="price-name">Access Core</h3>
-                            <div class="price-val">₹1,999<span>/month</span></div>
+                            <div class="price-val" id="core-price-val">₹1,999<span>/month</span></div>
+                            <div class="price-card-billing-total" id="core-billing-total"></div>
                         </div>
                         <ul class="price-features">
                             <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> Full access to standard gym floor</li>
@@ -670,7 +736,8 @@
                     <div class="price-card popular reveal" style="transition-delay: 0.16s;">
                         <div class="price-header">
                             <h3 class="price-name">Pulse Plus</h3>
-                            <div class="price-val">₹3,999<span>/month</span></div>
+                            <div class="price-val" id="plus-price-val">₹3,999<span>/month</span></div>
+                            <div class="price-card-billing-total" id="plus-billing-total"></div>
                         </div>
                         <ul class="price-features">
                             <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> Full access to gym + Turf zones</li>
@@ -685,7 +752,8 @@
                     <div class="price-card reveal" style="transition-delay: 0.24s;">
                         <div class="price-header">
                             <h3 class="price-name">Elite Coach</h3>
-                            <div class="price-val">₹7,999<span>/month</span></div>
+                            <div class="price-val" id="elite-price-val">₹7,999<span>/month</span></div>
+                            <div class="price-card-billing-total" id="elite-billing-total"></div>
                         </div>
                         <ul class="price-features">
                             <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> 1-on-1 Assigned Personal Coach</li>
@@ -722,9 +790,24 @@
                         <div class="form-group">
                             <label for="gym-plan" class="form-label">Preferred Tier</label>
                             <select id="gym-plan" class="form-input" style="background: var(--bg-0); cursor: pointer;">
-                                <option value="Access Core">Access Core — ₹1,999/mo</option>
-                                <option value="Pulse Plus" selected>Pulse Plus — ₹3,999/mo</option>
-                                <option value="Elite Coach">Elite Coach — ₹7,999/mo</option>
+                                <optgroup label="Access Core">
+                                    <option value="Access Core - Monthly">Access Core — Monthly (₹1,999/mo)</option>
+                                    <option value="Access Core - 3 Months">Access Core — 3 Months (₹1,799/mo)</option>
+                                    <option value="Access Core - 6 Months">Access Core — 6 Months (₹1,599/mo)</option>
+                                    <option value="Access Core - Yearly">Access Core — Yearly (₹1,399/mo)</option>
+                                </optgroup>
+                                <optgroup label="Pulse Plus">
+                                    <option value="Pulse Plus - Monthly" selected>Pulse Plus — Monthly (₹3,999/mo)</option>
+                                    <option value="Pulse Plus - 3 Months">Pulse Plus — 3 Months (₹3,599/mo)</option>
+                                    <option value="Pulse Plus - 6 Months">Pulse Plus — 6 Months (₹3,199/mo)</option>
+                                    <option value="Pulse Plus - Yearly">Pulse Plus — Yearly (₹2,799/mo)</option>
+                                </optgroup>
+                                <optgroup label="Elite Coach">
+                                    <option value="Elite Coach - Monthly">Elite Coach — Monthly (₹7,999/mo)</option>
+                                    <option value="Elite Coach - 3 Months">Elite Coach — 3 Months (₹7,199/mo)</option>
+                                    <option value="Elite Coach - 6 Months">Elite Coach — 6 Months (₹6,399/mo)</option>
+                                    <option value="Elite Coach - Yearly">Elite Coach — Yearly (₹5,599/mo)</option>
+                                </optgroup>
                             </select>
                         </div>
 
@@ -750,10 +833,40 @@
 
     <!-- SCRIPTS -->
     <script>
+        let activeDuration = 'monthly'; // Default active key
+
+        const planData = {
+            monthly: {
+                core: { price: '₹1,999', total: '' },
+                plus: { price: '₹3,999', total: '' },
+                elite: { price: '₹7,999', total: '' }
+            },
+            '3months': {
+                core: { price: '₹1,799', total: 'Total billed quarterly: ₹5,397', discount: '10% Off' },
+                plus: { price: '₹3,599', total: 'Total billed quarterly: ₹10,797', discount: '10% Off' },
+                elite: { price: '₹7,199', total: 'Total billed quarterly: ₹21,597', discount: '10% Off' }
+            },
+            '6months': {
+                core: { price: '₹1,599', total: 'Total billed half-yearly: ₹9,594', discount: '20% Off' },
+                plus: { price: '₹3,199', total: 'Total billed half-yearly: ₹19,194', discount: '20% Off' },
+                elite: { price: '₹6,399', total: 'Total billed half-yearly: ₹38,394', discount: '20% Off' }
+            },
+            yearly: {
+                core: { price: '₹1,399', total: 'Total billed yearly: ₹16,788', discount: '30% Off' },
+                plus: { price: '₹2,799', total: 'Total billed yearly: ₹33,588', discount: '30% Off' },
+                elite: { price: '₹5,599', total: 'Total billed yearly: ₹67,188', discount: '30% Off' }
+            }
+        };
+
         function selectPlan(planName) {
             const selectEl = document.getElementById('gym-plan');
             if (selectEl) {
-                selectEl.value = planName;
+                let durationLabel = 'Monthly';
+                if (activeDuration === '3months') durationLabel = '3 Months';
+                else if (activeDuration === '6months') durationLabel = '6 Months';
+                else if (activeDuration === 'yearly') durationLabel = 'Yearly';
+
+                selectEl.value = `${planName} - ${durationLabel}`;
             }
         }
 
@@ -812,6 +925,66 @@
                     gymForm.reset();
                 });
             }
+
+            /* ─── DURATION & PRICING LOGIC ─── */
+            const durationButtons = document.querySelectorAll('.duration-btn');
+            const corePriceVal = document.getElementById('core-price-val');
+            const plusPriceVal = document.getElementById('plus-price-val');
+            const elitePriceVal = document.getElementById('elite-price-val');
+            
+            const coreBilling = document.getElementById('core-billing-total');
+            const plusBilling = document.getElementById('plus-billing-total');
+            const eliteBilling = document.getElementById('elite-billing-total');
+
+            function updatePricing(durationKey) {
+                activeDuration = durationKey;
+                const data = planData[durationKey];
+
+                // Smooth text transitions
+                corePriceVal.style.opacity = '0';
+                plusPriceVal.style.opacity = '0';
+                elitePriceVal.style.opacity = '0';
+                coreBilling.style.opacity = '0';
+                plusBilling.style.opacity = '0';
+                eliteBilling.style.opacity = '0';
+
+                setTimeout(() => {
+                    // Update main price elements
+                    let discountHTML = data.core.discount ? `<span class="price-discount-badge">${data.core.discount}</span>` : '';
+                    corePriceVal.innerHTML = `${data.core.price}<span>/month</span> ${discountHTML}`;
+                    
+                    discountHTML = data.plus.discount ? `<span class="price-discount-badge">${data.plus.discount}</span>` : '';
+                    plusPriceVal.innerHTML = `${data.plus.price}<span>/month</span> ${discountHTML}`;
+                    
+                    discountHTML = data.elite.discount ? `<span class="price-discount-badge">${data.elite.discount}</span>` : '';
+                    elitePriceVal.innerHTML = `${data.elite.price}<span>/month</span> ${discountHTML}`;
+
+                    // Update total billing statements
+                    coreBilling.textContent = data.core.total;
+                    plusBilling.textContent = data.plus.total;
+                    eliteBilling.textContent = data.elite.total;
+
+                    // Fade back in
+                    corePriceVal.style.opacity = '1';
+                    plusPriceVal.style.opacity = '1';
+                    elitePriceVal.style.opacity = '1';
+                    coreBilling.style.opacity = '1';
+                    plusBilling.style.opacity = '1';
+                    eliteBilling.style.opacity = '1';
+                }, 200);
+            }
+
+            durationButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    durationButtons.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    const key = btn.getAttribute('data-duration');
+                    updatePricing(key);
+                });
+            });
+
+            // Set initial state
+            updatePricing('monthly');
 
             /* ─── 3D GLOWING CARDS TILT ─── */
             const serviceCards = document.querySelectorAll('.service-card');
