@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Anti-FOUC: apply theme before paint -->
+    <script>
+        (function () {
+            var t = localStorage.getItem('theme') ||
+                (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            document.documentElement.setAttribute('data-theme', t);
+        })();
+    </script>
+
+    <title>Portfolio Vault | Shiraj Life</title>
+    <meta name="description" content="A complete directory of production applications, utility scripts, databases, and open-source projects.">
+    <link rel="stylesheet" href="shared.css">
+    <style>
+        /* Add the 3D transform property to work-card */
+        .work-card {
+            transform: perspective(1000px) rotateX(var(--rotate-x, 0deg)) rotateY(var(--rotate-y, 0deg));
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <header id="header">
+        <div class="container nav-container">
+            <a href="index.html" class="logo" aria-label="Shiraj Life Home">
+                shiraj<span>life</span>
+            </a>
+
+            <nav class="nav-links" aria-label="Main Navigation">
+                <a href="index.html#about" class="nav-link">About</a>
+                <a href="index.html#pillars" class="nav-link">Pillars</a>
+                <a href="index.html#work" class="nav-link">Work</a>
+                <a href="index.html#toolkit" class="nav-link">Toolkit</a>
+                <a href="index.html#contact" class="nav-link">Contact</a>
+            </nav>
+
+            <div class="nav-actions">
+                <button class="theme-toggle" id="theme-toggle" aria-label="Toggle visual theme">
+                    <svg class="moon-icon" viewBox="0 0 24 24">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+                    </svg>
+                    <svg class="sun-icon" viewBox="0 0 24 24">
+                        <circle cx="12" cy="12" r="5" />
+                        <line x1="12" y1="1" x2="12" y2="3" />
+                        <line x1="12" y1="21" x2="12" y2="23" />
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                        <line x1="1" y1="12" x2="3" y2="12" />
+                        <line x1="21" y1="12" x2="23" y2="12" />
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+                    </svg>
+                </button>
+
+                <button class="mobile-nav-btn" id="mobile-menu-btn" aria-label="Toggle menu navigation drawer">
+                    <svg viewBox="0 0 24 24">
+                        <line x1="3" y1="12" x2="21" y2="12" />
+                        <line x1="3" y1="6" x2="21" y2="6" />
+                        <line x1="3" y1="18" x2="21" y2="18" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- MOBILE DRAWER -->
+    <div class="mobile-drawer" id="mobile-drawer">
+        <a href="index.html#about" class="nav-link">About</a>
+        <a href="index.html#pillars" class="nav-link">Pillars</a>
+        <a href="index.html#work" class="nav-link">Work</a>
+        <a href="index.html#toolkit" class="nav-link">Toolkit</a>
+        <a href="index.html#contact" class="nav-link">Contact</a>
+    </div>
+
+    <main>
+        <section>
+            <div class="container">
+                <!-- Back navigation -->
+                <div class="back-nav">
+                    <a href="index.html#work" class="btn-text">
+                        <svg viewBox="0 0 24 24" style="transform: rotate(180deg); margin-right: 4px;">
+                            <line x1="5" y1="12" x2="19" y2="12" />
+                            <polyline points="12 5 19 12 12 19" />
+                        </svg>
+                        Back to Home
+                    </a>
+                </div>
+
+                <div class="section-header reveal">
+                    <span class="section-eyebrow">Full Vault</span>
+                    <h2 class="section-title">All Apps & Open Source Contributions.</h2>
+                </div>
+
+                <div class="work-grid">
+                    <!-- Project 1: AI Gym Mentor -->
+                    <div class="work-card card-health reveal" onclick="window.location.href='gym-mentor.html'" style="transition-delay: 0.05s;">
+                        <div class="work-card-content">
+                            <div class="work-card-meta">
+                                <span class="tag">Flutter</span>
+                                <span class="tag">SQLite</span>
+                            </div>
+                            <h3 class="work-card-title">AI Gym Mentor</h3>
+                            <p class="work-card-desc">Offline-first lifting logger and hypertrophy analyzer with local Gemini cache recommendations.</p>
+                        </div>
+                        <div class="work-card-footer">
+                            <span class="btn-text" style="font-size: 0.8rem;">View Details</span>
+                            <svg viewBox="0 0 24 24" style="width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2.5;">
+                                <line x1="5" y1="12" x2="19" y2="12" />
+                                <polyline points="12 5 19 12 12 19" />
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- Project 2: AI Finance Manager -->
+                    <div class="work-card card-finance reveal" onclick="window.location.href='finance-manager.html'" style="transition-delay: 0.1s;">
+                        <div class="work-card-content">
+                            <div class="work-card-meta">
+                                <span class="tag">Python</span>
+                                <span class="tag">Pandas</span>
+                            </div>
+                            <h3 class="work-card-title">AI Finance Manager</h3>
+                            <p class="work-card-desc">Private portfolio tracker parsing local CAS PDFs and mapping risk rebalance tables.</p>
+                        </div>
+                        <div class="work-card-footer">
+                            <span class="btn-text" style="font-size: 0.8rem;">View Details</span>
+                            <svg viewBox="0 0 24 24" style="width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2.5;">
+                                <line x1="5" y1="12" x2="19" y2="12" />
+                                <polyline points="12 5 19 12 12 19" />
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- Project 3: Habit-Flow -->
+                    <div class="work-card card-dev reveal" onclick="window.open('https://github.com/rahulsaroh/Habit-Flow', '_blank')" style="transition-delay: 0.15s;">
+                        <div class="work-card-content">
+                            <div class="work-card-meta">
+                                <span class="tag">Flutter</span>
+                                <span class="tag">Dart</span>
+                            </div>
+                            <h3 class="work-card-title">Habit-Flow</h3>
+                            <p class="work-card-desc">A premium interactive habit tracking application structured around routine building loops.</p>
+                        </div>
+                        <div class="work-card-footer">
+                            <span class="btn-text" style="font-size: 0.8rem;">View on GitHub</span>
+                            <svg viewBox="0 0 24 24" style="width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2.5;">
+                                <line x1="5" y1="12" x2="19" y2="12" />
+                                <polyline points="12 5 19 12 12 19" />
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- Project 4: Trading-App -->
+                    <div class="work-card card-finance reveal" onclick="window.open('https://github.com/rahulsaroh/Trading-App', '_blank')" style="transition-delay: 0.2s;">
+                        <div class="work-card-content">
+                            <div class="work-card-meta">
+                                <span class="tag">Flutter</span>
+                                <span class="tag">Dart</span>
+                            </div>
+                            <h3 class="work-card-title">Trading-App</h3>
+                            <p class="work-card-desc">Modern trading UI application demonstrating mock orders and real-time ledger updates.</p>
+                        </div>
+                        <div class="work-card-footer">
+                            <span class="btn-text" style="font-size: 0.8rem;">View on GitHub</span>
+                            <svg viewBox="0 0 24 24" style="width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2.5;">
+                                <line x1="5" y1="12" x2="19" y2="12" />
+                                <polyline points="12 5 19 12 12 19" />
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- Project 5: Mouse-Click-Updated -->
+                    <div class="work-card card-ai reveal" onclick="window.open('https://github.com/rahulsaroh/Mouse-Click-Updated', '_blank')" style="transition-delay: 0.25s;">
+                        <div class="work-card-content">
+                            <div class="work-card-meta">
+                                <span class="tag">Flutter</span>
+                                <span class="tag">Utility</span>
+                            </div>
+                            <h3 class="work-card-title">Mouse Click Utility</h3>
+                            <p class="work-card-desc">A custom productivity companion tool designed to manage background macro mouse clicks.</p>
+                        </div>
+                        <div class="work-card-footer">
+                            <span class="btn-text" style="font-size: 0.8rem;">View on GitHub</span>
+                            <svg viewBox="0 0 24 24" style="width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2.5;">
+                                <line x1="5" y1="12" x2="19" y2="12" />
+                                <polyline points="12 5 19 12 12 19" />
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- Project 6: Free Exercise Database -->
+                    <div class="work-card card-data reveal" onclick="window.open('https://github.com/rahulsaroh/free-exercise-db', '_blank')" style="transition-delay: 0.3s;">
+                        <div class="work-card-content">
+                            <div class="work-card-meta">
+                                <span class="tag">Dataset</span>
+                                <span class="tag">JSON</span>
+                            </div>
+                            <h3 class="work-card-title">Free Exercise DB</h3>
+                            <p class="work-card-desc">Open-source public domain exercise database detailing over 800 workout movements.</p>
+                        </div>
+                        <div class="work-card-footer">
+                            <span class="btn-text" style="font-size: 0.8rem;">View on GitHub</span>
+                            <svg viewBox="0 0 24 24" style="width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2.5;">
+                                <line x1="5" y1="12" x2="19" y2="12" />
+                                <polyline points="12 5 19 12 12 19" />
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- Project 7: Exercises Dataset -->
+                    <div class="work-card card-content reveal" onclick="window.open('https://github.com/rahulsaroh/exercises-dataset', '_blank')" style="transition-delay: 0.35s;">
+                        <div class="work-card-content">
+                            <div class="work-card-meta">
+                                <span class="tag">Resources</span>
+                                <span class="tag">Media</span>
+                            </div>
+                            <h3 class="work-card-title">Exercises Dataset</h3>
+                            <p class="work-card-desc">Comprehensive asset files including thumbnails and exercise animation files.</p>
+                        </div>
+                        <div class="work-card-footer">
+                            <span class="btn-text" style="font-size: 0.8rem;">View on GitHub</span>
+                            <svg viewBox="0 0 24 24" style="width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2.5;">
+                                <line x1="5" y1="12" x2="19" y2="12" />
+                                <polyline points="12 5 19 12 12 19" />
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- Project 8: ShirajLife Website -->
+                    <div class="work-card card-dev reveal" onclick="window.open('https://github.com/rahulsaroh/ShirajLife', '_blank')" style="transition-delay: 0.4s;">
+                        <div class="work-card-content">
+                            <div class="work-card-meta">
+                                <span class="tag">HTML</span>
+                                <span class="tag">CSS</span>
+                            </div>
+                            <h3 class="work-card-title">ShirajLife Hub</h3>
+                            <p class="work-card-desc">Code base of this brand hub, implementing custom 3D glows and theme states.</p>
+                        </div>
+                        <div class="work-card-footer">
+                            <span class="btn-text" style="font-size: 0.8rem;">View Source Code</span>
+                            <svg viewBox="0 0 24 24" style="width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2.5;">
+                                <line x1="5" y1="12" x2="19" y2="12" />
+                                <polyline points="12 5 19 12 12 19" />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="container footer-content">
+            <span class="footer-logo">shiraj<span>life</span></span>
+            <span class="footer-copy">&copy; 2026 Shiraj. All rights reserved.</span>
+        </div>
+    </footer>
+
+    <!-- SCRIPTS -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const header = document.getElementById('header');
+
+            /* Scrolled header state */
+            window.addEventListener('scroll', () => {
+                header.classList.toggle('scrolled', window.scrollY > 24);
+            }, { passive: true });
+
+            /* Theme toggle */
+            const themeBtn = document.getElementById('theme-toggle');
+            themeBtn.addEventListener('click', () => {
+                const current = document.documentElement.getAttribute('data-theme');
+                const next = current === 'dark' ? 'light' : 'dark';
+                document.documentElement.setAttribute('data-theme', next);
+                localStorage.setItem('theme', next);
+            });
+
+            /* Mobile menu */
+            const mobileBtn = document.getElementById('mobile-menu-btn');
+            const mobileDrawer = document.getElementById('mobile-drawer');
+            const hamburgerSVG = `<svg viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>`;
+            const closeSVG = `<svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`;
+
+            function closeDrawer() {
+                mobileDrawer.classList.remove('open');
+                mobileBtn.innerHTML = hamburgerSVG;
+            }
+
+            mobileBtn.addEventListener('click', e => {
+                e.stopPropagation();
+                const isOpen = mobileDrawer.classList.toggle('open');
+                mobileBtn.innerHTML = isOpen ? closeSVG : hamburgerSVG;
+            });
+
+            mobileDrawer.querySelectorAll('.nav-link').forEach(l => l.addEventListener('click', closeDrawer));
+            document.addEventListener('click', e => {
+                if (!mobileDrawer.contains(e.target) && !mobileBtn.contains(e.target)) closeDrawer();
+            });
+
+            /* ─── 3D GLOWING CARDS TILT ─── */
+            const workCards = document.querySelectorAll('.work-card');
+            workCards.forEach(card => {
+                let frameId = null;
+
+                card.addEventListener('mousemove', e => {
+                    if (frameId) {
+                        cancelAnimationFrame(frameId);
+                    }
+
+                    frameId = requestAnimationFrame(() => {
+                        const rect = card.getBoundingClientRect();
+                        const x = e.clientX - rect.left;
+                        const y = e.clientY - rect.top;
+
+                        const centerX = rect.width / 2;
+                        const centerY = rect.height / 2;
+
+                        // 12 degrees max tilt
+                        const rotateX = ((centerY - y) / centerY) * 12;
+                        const rotateY = ((x - centerX) / centerX) * 12;
+
+                        card.style.setProperty('--x', `${x}px`);
+                        card.style.setProperty('--y', `${y}px`);
+                        card.style.setProperty('--rotate-x', `${rotateX}deg`);
+                        card.style.setProperty('--rotate-y', `${rotateY}deg`);
+                    });
+                });
+
+                card.addEventListener('mouseleave', () => {
+                    if (frameId) {
+                        cancelAnimationFrame(frameId);
+                    }
+                    card.style.setProperty('--rotate-x', '0deg');
+                    card.style.setProperty('--rotate-y', '0deg');
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>

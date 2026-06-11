@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Anti-FOUC: apply theme before paint -->
+    <script>
+        (function () {
+            var t = localStorage.getItem('theme') ||
+                (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            document.documentElement.setAttribute('data-theme', t);
+        })();
+    </script>
+
+    <title>AI Gym Mentor & Fitness Logger | Shiraj Life</title>
+    <meta name="description" content="In-depth overview of AI Gym Mentor, an offline-first fitness app and Gemini-powered training coach.">
+    <link rel="stylesheet" href="shared.css">
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <header id="header">
+        <div class="container nav-container">
+            <a href="index.html" class="logo" aria-label="Shiraj Life Home">
+                shiraj<span>life</span>
+            </a>
+
+            <nav class="nav-links" aria-label="Main Navigation">
+                <a href="index.html#about" class="nav-link">About</a>
+                <a href="index.html#pillars" class="nav-link">Pillars</a>
+                <a href="index.html#work" class="nav-link">Work</a>
+                <a href="index.html#toolkit" class="nav-link">Toolkit</a>
+                <a href="index.html#contact" class="nav-link">Contact</a>
+            </nav>
+
+            <div class="nav-actions">
+                <button class="theme-toggle" id="theme-toggle" aria-label="Toggle visual theme">
+                    <svg class="moon-icon" viewBox="0 0 24 24">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+                    </svg>
+                    <svg class="sun-icon" viewBox="0 0 24 24">
+                        <circle cx="12" cy="12" r="5" />
+                        <line x1="12" y1="1" x2="12" y2="3" />
+                        <line x1="12" y1="21" x2="12" y2="23" />
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                        <line x1="1" y1="12" x2="3" y2="12" />
+                        <line x1="21" y1="12" x2="23" y2="12" />
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+                    </svg>
+                </button>
+
+                <button class="mobile-nav-btn" id="mobile-menu-btn" aria-label="Toggle menu navigation drawer">
+                    <svg viewBox="0 0 24 24">
+                        <line x1="3" y1="12" x2="21" y2="12" />
+                        <line x1="3" y1="6" x2="21" y2="6" />
+                        <line x1="3" y1="18" x2="21" y2="18" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- MOBILE DRAWER -->
+    <div class="mobile-drawer" id="mobile-drawer">
+        <a href="index.html#about" class="nav-link">About</a>
+        <a href="index.html#pillars" class="nav-link">Pillars</a>
+        <a href="index.html#work" class="nav-link">Work</a>
+        <a href="index.html#toolkit" class="nav-link">Toolkit</a>
+        <a href="index.html#contact" class="nav-link">Contact</a>
+    </div>
+
+    <main>
+        <section>
+            <div class="container">
+                <!-- Back navigation -->
+                <div class="back-nav">
+                    <a href="index.html#work" class="btn-text">
+                        <svg viewBox="0 0 24 24" style="transform: rotate(180deg); margin-right: 4px;">
+                            <line x1="5" y1="12" x2="19" y2="12" />
+                            <polyline points="12 5 19 12 12 19" />
+                        </svg>
+                        Back to Home
+                    </a>
+                </div>
+
+                <div class="showcase-grid">
+                    <!-- Column 1: Image -->
+                    <div class="showcase-visual">
+                        <img src="Apps/AI GYM Mentor/screenshot_home_active.png" alt="AI Gym Mentor Home Screen">
+                    </div>
+
+                    <!-- Column 2: Specs & Info -->
+                    <div class="showcase-info">
+                        <div class="showcase-header">
+                            <span class="app-category">Fitness & Intelligence</span>
+                            <h1>AI Gym Mentor</h1>
+                            <div class="showcase-meta-list">
+                                <span class="tag">Flutter</span>
+                                <span class="tag">SQLite</span>
+                                <span class="tag">Gemini API</span>
+                                <span class="tag">Offline-First</span>
+                            </div>
+                        </div>
+
+                        <div class="showcase-card">
+                            <h3>Overview</h3>
+                            <p>AI Gym Mentor is an offline-first fitness logging companion designed to bypass expensive, bloated subscription-based workouts applications. Built with Flutter, it utilizes lightweight local SQLite storage to achieve fast startup times and secure, absolute data isolation.</p>
+                            <p>To deliver modern intelligence offline, the application incorporates a local cache analyzer powered by the Google Gemini API. This module evaluates monthly workout statistics and tracks custom progressive overload benchmarks with zero backend server overhead.</p>
+                        </div>
+
+                        <div class="showcase-card">
+                            <h3>Features</h3>
+                            <ul class="features-list">
+                                <li><strong>Full Local Privacy</strong>: SQLite storage holds all training history, user profile parameters, and routines, leaving zero digital footprints on third-party cloud trackers.</li>
+                                <li><strong>Offline AI Coaching</strong>: A local caching layer interfaces with Gemini, mapping monthly progress reports, noting hypertrophy plateaus, and outputting specific, actionable training corrections.</li>
+                                <li><strong>Hypertrophy Curve Mapping</strong>: Analyzes volume, reps, and RPE intervals to chart visual progression lines across target muscle groups.</li>
+                                <li><strong>Structured Program Customizer</strong>: Create, edit, and template multi-week hypertrophy cycles, volume progression scales, and dynamic warm-up intervals.</li>
+                            </ul>
+                        </div>
+
+                        <div class="showcase-card">
+                            <h3>Technical Specs</h3>
+                            <div class="specs-grid">
+                                <div class="spec-item">
+                                    <span>Framework</span>
+                                    <span>Flutter (Dart)</span>
+                                </div>
+                                <div class="spec-item">
+                                    <span>Database</span>
+                                    <span>SQLite (sqflite)</span>
+                                </div>
+                                <div class="spec-item">
+                                    <span>Intelligence</span>
+                                    <span>Gemini Pro API</span>
+                                </div>
+                                <div class="spec-item">
+                                    <span>Architecture</span>
+                                    <span>Offline-First (BLoC Pattern)</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; gap: 16px;">
+                            <a href="https://play.google.com/store/apps/details?id=com.aigymmentor.app" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="flex: 1;">
+                                View on Play Store
+                            </a>
+                            <a href="https://github.com/rahulsaroh/AI-Gym-Mentor" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">
+                                View GitHub Repository
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="container footer-content">
+            <span class="footer-logo">shiraj<span>life</span></span>
+            <span class="footer-copy">&copy; 2026 Shiraj. All rights reserved.</span>
+        </div>
+    </footer>
+
+    <!-- SCRIPTS -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const header = document.getElementById('header');
+
+            /* Scrolled header state */
+            window.addEventListener('scroll', () => {
+                header.classList.toggle('scrolled', window.scrollY > 24);
+            }, { passive: true });
+
+            /* Theme toggle */
+            const themeBtn = document.getElementById('theme-toggle');
+            themeBtn.addEventListener('click', () => {
+                const current = document.documentElement.getAttribute('data-theme');
+                const next = current === 'dark' ? 'light' : 'dark';
+                document.documentElement.setAttribute('data-theme', next);
+                localStorage.setItem('theme', next);
+            });
+
+            /* Mobile menu */
+            const mobileBtn = document.getElementById('mobile-menu-btn');
+            const mobileDrawer = document.getElementById('mobile-drawer');
+            const hamburgerSVG = `<svg viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>`;
+            const closeSVG = `<svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`;
+
+            function closeDrawer() {
+                mobileDrawer.classList.remove('open');
+                mobileBtn.innerHTML = hamburgerSVG;
+            }
+
+            mobileBtn.addEventListener('click', e => {
+                e.stopPropagation();
+                const isOpen = mobileDrawer.classList.toggle('open');
+                mobileBtn.innerHTML = isOpen ? closeSVG : hamburgerSVG;
+            });
+
+            mobileDrawer.querySelectorAll('.nav-link').forEach(l => l.addEventListener('click', closeDrawer));
+            document.addEventListener('click', e => {
+                if (!mobileDrawer.contains(e.target) && !mobileBtn.contains(e.target)) closeDrawer();
+            });
+        });
+    </script>
+</body>
+
+</html>
