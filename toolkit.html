@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Anti-FOUC: apply theme before paint -->
+    <script>
+        (function () {
+            var t = localStorage.getItem('theme') ||
+                (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            document.documentElement.setAttribute('data-theme', t);
+        })();
+    </script>
+
+    <title>Skills & Toolkit | Shiraj Life</title>
+    <meta name="description" content="Development, AI automation, databases, and custom workflow toolkits stacked by Shiraj.">
+    <link rel="stylesheet" href="shared.css">
+    <style>
+        /* ==========================================
+           TOOLKIT CSS (copied from index.html)
+           ========================================== */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: var(--sp-sm);
+        }
+
+        @media (min-width: 600px) {
+            .skills-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .skills-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        /* Card Theme Links to Variables */
+        .skills-category.card-dev {
+            --glow-clr: var(--dev-clr);
+            --glow-clr-glow: var(--dev-glow);
+            --glow-clr-glow-lg: var(--dev-glow-lg);
+        }
+        .skills-category.card-ai {
+            --glow-clr: var(--ai-clr);
+            --glow-clr-glow: var(--ai-glow);
+            --glow-clr-glow-lg: var(--ai-glow-lg);
+        }
+        .skills-category.card-data {
+            --glow-clr: var(--data-clr);
+            --glow-clr-glow: var(--data-glow);
+            --glow-clr-glow-lg: var(--data-glow-lg);
+        }
+        .skills-category.card-finance {
+            --glow-clr: var(--finance-clr);
+            --glow-clr-glow: var(--finance-glow);
+            --glow-clr-glow-lg: var(--finance-glow-lg);
+        }
+        .skills-category.card-content {
+            --glow-clr: var(--content-clr);
+            --glow-clr-glow: var(--content-glow);
+            --glow-clr-glow-lg: var(--content-glow-lg);
+        }
+        .skills-category.card-health {
+            --glow-clr: var(--health-clr);
+            --glow-clr-glow: var(--health-glow);
+            --glow-clr-glow-lg: var(--health-glow-lg);
+        }
+
+        .skills-category {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--r-lg);
+            padding: var(--sp-lg);
+            position: relative;
+            overflow: hidden;
+            transform-style: preserve-3d;
+            transform: perspective(1000px) rotateX(var(--rotate-x, 0deg)) rotateY(var(--rotate-y, 0deg));
+            transition: transform 0.15s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.3s ease, border-color 0.3s ease;
+        }
+
+        /* Ambient spotlight background glow */
+        .skills-category::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(
+                300px circle at var(--x, 0px) var(--y, 0px),
+                var(--glow-clr-glow),
+                transparent 80%
+            );
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 1;
+        }
+
+        /* Cursor-following border glow outline */
+        .skills-category::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(
+                120px circle at var(--x, 0px) var(--y, 0px),
+                var(--glow-clr),
+                transparent 60%
+            );
+            border-radius: var(--r-lg);
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 0;
+            padding: 1.5px;
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+        }
+
+        .skills-category:hover {
+            border-color: transparent;
+            box-shadow: 
+                0 15px 35px -10px var(--glow-clr-glow-lg),
+                0 0 15px -3px var(--glow-clr-glow);
+        }
+
+        .skills-category:hover::before,
+        .skills-category:hover::after {
+            opacity: 1;
+        }
+
+        .skills-cat-header {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            margin-bottom: var(--sp-md);
+            padding-bottom: var(--sp-xs);
+            border-bottom: 1px solid var(--border);
+            transform: translateZ(20px);
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+
+        .skills-category:hover .skills-cat-header {
+            border-color: var(--glow-clr-glow);
+        }
+
+        .skills-cat-icon {
+            width: 30px;
+            height: 30px;
+            background: var(--acc-glow);
+            border-radius: var(--r-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+        }
+
+        .skills-category:hover .skills-cat-icon {
+            background: var(--glow-clr-glow);
+            box-shadow: 0 4px 10px var(--glow-clr-glow);
+            transform: translateZ(10px) scale(1.05);
+        }
+
+        .skills-cat-icon svg {
+            width: 14px;
+            height: 14px;
+            stroke: var(--acc);
+            fill: none;
+            stroke-width: 2;
+            transition: all 0.3s ease;
+        }
+
+        .skills-category:hover .skills-cat-icon svg {
+            stroke: var(--glow-clr);
+            transform: scale(1.1);
+        }
+
+        .skills-cat-title {
+            font-size: 0.95rem;
+            font-weight: 700;
+            letter-spacing: -0.01em;
+            transition: color 0.3s ease;
+        }
+
+        .skills-category:hover .skills-cat-title {
+            color: var(--glow-clr);
+        }
+
+        .skills-list {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            transform: translateZ(15px);
+            transition: transform 0.3s ease;
+        }
+
+        .skill-item {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            font-weight: 500;
+            padding: 5px 10px;
+            background: var(--bg-1);
+            border-radius: var(--r-sm);
+            border: 1px solid var(--border);
+            color: var(--txt-1);
+            transition: all 0.18s ease;
+            letter-spacing: 0.01em;
+        }
+
+        .skill-item:hover {
+            background: var(--glow-clr-glow);
+            border-color: var(--glow-clr);
+            color: var(--glow-clr);
+            transform: translateZ(10px) scale(1.05);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .philosophy-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: var(--sp-md);
+            margin-bottom: var(--sp-xl);
+            margin-top: var(--sp-xl);
+        }
+
+        @media (min-width: 768px) {
+            .philosophy-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .philosophy-card {
+            padding: var(--sp-md) var(--sp-md) var(--sp-md) calc(var(--sp-md) - 2px);
+            border-left: 2px solid var(--border-acc);
+            background: var(--acc-glow-lg);
+            border-radius: 0 var(--r-md) var(--r-md) 0;
+            transition: border-color 0.2s ease;
+        }
+
+        .philosophy-card:hover {
+            border-left-color: var(--acc);
+        }
+
+        .philosophy-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin-bottom: 6px;
+        }
+
+        .philosophy-desc {
+            font-size: 0.875rem;
+            line-height: 1.72;
+        }
+
+        /* Metrics */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1px;
+            background: var(--border);
+            border-radius: var(--r-lg);
+            overflow: hidden;
+            border: 1px solid var(--border);
+            margin-top: var(--sp-xl);
+        }
+
+        @media (min-width: 768px) {
+            .metrics-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        .metric-card {
+            background: var(--card);
+            padding: var(--sp-lg);
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            transition: background 0.2s ease;
+        }
+
+        .metric-card:hover {
+            background: var(--bg-1);
+        }
+
+        .metric-number {
+            font-family: var(--font-mono);
+            font-size: clamp(2rem, 3.5vw + 0.3rem, 3.25rem);
+            font-weight: 600;
+            color: var(--acc);
+            line-height: 1;
+            letter-spacing: -0.02em;
+        }
+
+        .metric-label {
+            font-family: var(--font-mono);
+            font-size: 0.65rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--txt-2);
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <header id="header">
+        <div class="container nav-container">
+            <a href="index.html" class="logo" aria-label="Shiraj Life Home">
+                shiraj<span>life</span>
+            </a>
+
+            <nav class="nav-links" aria-label="Main Navigation">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="about.html" class="nav-link">About</a>
+                <a href="pillars.html" class="nav-link">Pillars</a>
+                <a href="work.html" class="nav-link">Work</a>
+                <a href="toolkit.html" class="nav-link active">Toolkit</a>
+                <a href="contact.html" class="nav-link">Contact</a>
+            </nav>
+
+            <div class="nav-actions">
+                <button class="theme-toggle" id="theme-toggle" aria-label="Toggle visual theme">
+                    <svg class="moon-icon" viewBox="0 0 24 24">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+                    </svg>
+                    <svg class="sun-icon" viewBox="0 0 24 24">
+                        <circle cx="12" cy="12" r="5" />
+                        <line x1="12" y1="1" x2="12" y2="3" />
+                        <line x1="12" y1="21" x2="12" y2="23" />
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                        <line x1="1" y1="12" x2="3" y2="12" />
+                        <line x1="21" y1="12" x2="23" y2="12" />
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+                    </svg>
+                </button>
+
+                <button class="mobile-nav-btn" id="mobile-menu-btn" aria-label="Toggle menu navigation drawer">
+                    <svg viewBox="0 0 24 24">
+                        <line x1="3" y1="12" x2="21" y2="12" />
+                        <line x1="3" y1="6" x2="21" y2="6" />
+                        <line x1="3" y1="18" x2="21" y2="18" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- MOBILE DRAWER -->
+    <div class="mobile-drawer" id="mobile-drawer">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="about.html" class="nav-link">About</a>
+        <a href="pillars.html" class="nav-link">Pillars</a>
+        <a href="work.html" class="nav-link">Work</a>
+        <a href="toolkit.html" class="nav-link active">Toolkit</a>
+        <a href="contact.html" class="nav-link">Contact</a>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <main>
+        <section id="toolkit">
+            <div class="container">
+                <div class="section-header reveal">
+                    <span class="section-eyebrow">04 / The System</span>
+                    <h2 class="section-title">My stacked toolkit.</h2>
+                </div>
+
+                <div class="skills-grid">
+                    <!-- Development -->
+                    <div class="skills-category card-dev reveal" style="transition-delay:0.08s;">
+                        <div class="skills-cat-header">
+                            <div class="skills-cat-icon">
+                                <svg viewBox="0 0 24 24">
+                                    <polyline points="16 18 22 12 16 6" />
+                                    <polyline points="8 6 2 12 8 18" />
+                                </svg>
+                            </div>
+                            <h3 class="skills-cat-title">Development</h3>
+                        </div>
+                        <div class="skills-list">
+                            <span class="skill-item">Flutter</span>
+                            <span class="skill-item">Dart</span>
+                            <span class="skill-item">Python</span>
+                            <span class="skill-item">Kotlin</span>
+                            <span class="skill-item">HTML/CSS/JS</span>
+                            <span class="skill-item">Firebase</span>
+                            <span class="skill-item">Git/GitHub</span>
+                        </div>
+                    </div>
+
+                    <!-- AI & Automation -->
+                    <div class="skills-category card-ai reveal" style="transition-delay:0.16s;">
+                        <div class="skills-cat-header">
+                            <div class="skills-cat-icon">
+                                <svg viewBox="0 0 24 24">
+                                    <circle cx="12" cy="12" r="10" />
+                                    <path
+                                        d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+                                    <path d="M2 12h20" />
+                                </svg>
+                            </div>
+                            <h3 class="skills-cat-title">AI & Automation</h3>
+                        </div>
+                        <div class="skills-list">
+                            <span class="skill-item">Gemini API</span>
+                            <span class="skill-item">Prompt Engineering</span>
+                            <span class="skill-item">Cursor IDE</span>
+                            <span class="skill-item">Python Scripts</span>
+                            <span class="skill-item">Automations</span>
+                        </div>
+                    </div>
+
+                    <!-- Databases -->
+                    <div class="skills-category card-data reveal" style="transition-delay:0.24s;">
+                        <div class="skills-cat-header">
+                            <div class="skills-cat-icon">
+                                <svg viewBox="0 0 24 24">
+                                    <ellipse cx="12" cy="5" rx="9" ry="3" />
+                                    <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5" />
+                                    <path d="M3 12c0 1.66 4 3 9 3s9-1.34 9-3" />
+                                </svg>
+                            </div>
+                            <h3 class="skills-cat-title">Databases</h3>
+                        </div>
+                        <div class="skills-list">
+                            <span class="skill-item">SQL</span>
+                            <span class="skill-item">SQLite</span>
+                            <span class="skill-item">PostgreSQL</span>
+                            <span class="skill-item">Database Design</span>
+                            <span class="skill-item">Query Tuning</span>
+                        </div>
+                    </div>
+
+                    <!-- Finance & Analytics -->
+                    <div class="skills-category card-finance reveal" style="transition-delay:0.32s;">
+                        <div class="skills-cat-header">
+                            <div class="skills-cat-icon">
+                                <svg viewBox="0 0 24 24">
+                                    <line x1="12" y1="1" x2="12" y2="23" />
+                                    <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+                                </svg>
+                            </div>
+                            <h3 class="skills-cat-title">Finance & Analytics</h3>
+                        </div>
+                        <div class="skills-list">
+                            <span class="skill-item">Portfolio Tracking</span>
+                            <span class="skill-item">CAS Parsing</span>
+                            <span class="skill-item">Tax Planning</span>
+                            <span class="skill-item">Pandas / NumPy</span>
+                            <span class="skill-item">Asset Allocation</span>
+                        </div>
+                    </div>
+
+                    <!-- Content & Sharing -->
+                    <div class="skills-category card-content reveal" style="transition-delay:0.4s;">
+                        <div class="skills-cat-header">
+                            <div class="skills-cat-icon">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M12 20h9" />
+                                    <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
+                                </svg>
+                            </div>
+                            <h3 class="skills-cat-title">Content & Sharing</h3>
+                        </div>
+                        <div class="skills-list">
+                            <span class="skill-item">Technical Writing</span>
+                            <span class="skill-item">App Diaries</span>
+                            <span class="skill-item">Guides/Playbooks</span>
+                            <span class="skill-item">Notion Workspaces</span>
+                        </div>
+                    </div>
+
+                    <!-- Athletic Systems -->
+                    <div class="skills-category card-health reveal" style="transition-delay:0.48s;">
+                        <div class="skills-cat-header">
+                            <div class="skills-cat-icon">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                                </svg>
+                            </div>
+                            <h3 class="skills-cat-title">Athletic Systems</h3>
+                        </div>
+                        <div class="skills-list">
+                            <span class="skill-item">Lifting Logs</span>
+                            <span class="skill-item">Volume Progression</span>
+                            <span class="skill-item">Hypertrophy Cycles</span>
+                            <span class="skill-item">Cardio Schedules</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Philosophy Cards -->
+                <div class="philosophy-grid">
+                    <div class="philosophy-card reveal" style="transition-delay:0.08s;">
+                        <h3 class="philosophy-title">Air-Gapped Privacy</h3>
+                        <p class="philosophy-desc">Utility apps shouldn't sell tracking logs to the cloud. I design local-first offline databases so your logs remain yours.</p>
+                    </div>
+
+                    <div class="philosophy-card reveal" style="transition-delay:0.16s;">
+                        <h3 class="philosophy-title">Pragmatic Logic</h3>
+                        <p class="philosophy-desc">Code is a scaling tool for systems execution. I prioritize clear SQLite relations and clean CLI pipelines over bloated frameworks alone.</p>
+                    </div>
+
+                    <div class="philosophy-card reveal" style="transition-delay:0.24s;">
+                        <h3 class="philosophy-title">Compounding Returns</h3>
+                        <p class="philosophy-desc">Every line of SQL written, every lifting workout tracked, and every asset added to a balanced portfolio compounds over decade-long horizons.</p>
+                    </div>
+                </div>
+
+                <!-- Animated Metrics -->
+                <div class="metrics-grid reveal" style="transition-delay:0.32s;">
+                    <div class="metric-card">
+                        <span class="metric-number counter" data-target="5" data-suffix="+">5+</span>
+                        <span class="metric-label">Apps Built & Logged</span>
+                    </div>
+                    <div class="metric-card">
+                        <span class="metric-number counter" data-target="10" data-suffix="+">10+</span>
+                        <span class="metric-label">developing apps with github repos</span>
+                    </div>
+                    <div class="metric-card">
+                        <span class="metric-number counter" data-target="1" data-suffix=" Lakh+">1 Lakh+</span>
+                        <span class="metric-label">lines of codes done till now</span>
+                    </div>
+                    <div class="metric-card">
+                        <span class="metric-number counter" data-target="100" data-suffix="%">100%</span>
+                        <span class="metric-label">Customer satisfaction</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="container footer-content">
+            <span class="footer-logo">shiraj<span>life</span></span>
+            <span class="footer-copy">&copy; 2026 Shiraj. All rights reserved.</span>
+        </div>
+    </footer>
+
+    <!-- SCRIPTS -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const header = document.getElementById('header');
+
+            /* Scrolled header state */
+            window.addEventListener('scroll', () => {
+                header.classList.toggle('scrolled', window.scrollY > 24);
+            }, { passive: true });
+
+            /* Theme toggle */
+            const themeBtn = document.getElementById('theme-toggle');
+            themeBtn.addEventListener('click', () => {
+                const current = document.documentElement.getAttribute('data-theme');
+                const next = current === 'dark' ? 'light' : 'dark';
+                document.documentElement.setAttribute('data-theme', next);
+                localStorage.setItem('theme', next);
+            });
+
+            /* Mobile menu */
+            const mobileBtn = document.getElementById('mobile-menu-btn');
+            const mobileDrawer = document.getElementById('mobile-drawer');
+            const hamburgerSVG = `<svg viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>`;
+            const closeSVG = `<svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`;
+
+            function closeDrawer() {
+                mobileDrawer.classList.remove('open');
+                mobileBtn.innerHTML = hamburgerSVG;
+            }
+
+            mobileBtn.addEventListener('click', e => {
+                e.stopPropagation();
+                const isOpen = mobileDrawer.classList.toggle('open');
+                mobileBtn.innerHTML = isOpen ? closeSVG : hamburgerSVG;
+            });
+
+            mobileDrawer.querySelectorAll('.nav-link').forEach(l => l.addEventListener('click', closeDrawer));
+            document.addEventListener('click', e => {
+                if (!mobileDrawer.contains(e.target) && !mobileBtn.contains(e.target)) closeDrawer();
+            });
+
+            /* ─── ANIMATED COUNTERS ─── */
+            function easeOutCubic(t) { return 1 - Math.pow(1 - t, 3); }
+
+            function animateCounter(el) {
+                const target = parseFloat(el.dataset.target);
+                const suffix = el.dataset.suffix || '';
+                const duration = 1600;
+                const start = performance.now();
+
+                function tick(now) {
+                    const progress = Math.min((now - start) / duration, 1);
+                    const eased = easeOutCubic(progress);
+                    const value = Math.round(target * eased);
+                    el.textContent = value + suffix;
+                    if (progress < 1) requestAnimationFrame(tick);
+                    else el.textContent = target + suffix;
+                }
+
+                requestAnimationFrame(tick);
+            }
+
+            const counterObserver = new IntersectionObserver(entries => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting && !entry.target.dataset.counted) {
+                        entry.target.dataset.counted = 'true';
+                        animateCounter(entry.target);
+                    }
+                });
+            }, { threshold: 0.6 });
+
+            document.querySelectorAll('.counter').forEach(el => counterObserver.observe(el));
+
+            /* ─── 3D GLOWING CARDS TILT ─── */
+            const skillsCards = document.querySelectorAll('.skills-category');
+            skillsCards.forEach(card => {
+                let frameId = null;
+
+                card.addEventListener('mousemove', e => {
+                    if (frameId) {
+                        cancelAnimationFrame(frameId);
+                    }
+
+                    frameId = requestAnimationFrame(() => {
+                        const rect = card.getBoundingClientRect();
+                        const x = e.clientX - rect.left;
+                        const y = e.clientY - rect.top;
+
+                        const centerX = rect.width / 2;
+                        const centerY = rect.height / 2;
+
+                        const rotateX = ((centerY - y) / centerY) * 12;
+                        const rotateY = ((x - centerX) / centerX) * 12;
+
+                        card.style.setProperty('--x', `${x}px`);
+                        card.style.setProperty('--y', `${y}px`);
+                        card.style.setProperty('--rotate-x', `${rotateX}deg`);
+                        card.style.setProperty('--rotate-y', `${rotateY}deg`);
+                    });
+                });
+
+                card.addEventListener('mouseleave', () => {
+                    if (frameId) {
+                        cancelAnimationFrame(frameId);
+                    }
+                    card.style.setProperty('--rotate-x', '0deg');
+                    card.style.setProperty('--rotate-y', '0deg');
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>

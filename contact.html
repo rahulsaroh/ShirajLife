@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Anti-FOUC: apply theme before paint -->
+    <script>
+        (function () {
+            var t = localStorage.getItem('theme') ||
+                (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            document.documentElement.setAttribute('data-theme', t);
+        })();
+    </script>
+
+    <title>Get in Touch | Shiraj Life</title>
+    <meta name="description" content="Initiate a dialogue. Contact Shiraj for database automation, Flutter projects, or physical coaching.">
+    <link rel="stylesheet" href="shared.css">
+    
+    <style>
+        /* ==========================================
+           CONTACT PAGE SPECIFIC CSS
+           ========================================== */
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: var(--sp-xl);
+            margin-top: var(--sp-lg);
+        }
+
+        @media (min-width: 768px) {
+            .contact-grid {
+                grid-template-columns: 5fr 7fr;
+            }
+        }
+
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: var(--sp-md);
+        }
+
+        .contact-sub {
+            font-size: 1.05rem;
+            color: var(--txt-1);
+            line-height: 1.78;
+        }
+
+        .contact-methods {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .contact-method {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.95rem;
+            color: var(--txt-1);
+            font-weight: 500;
+            transition: color 0.2s ease;
+            padding: 4px 0;
+        }
+
+        .contact-method:hover {
+            color: var(--acc);
+        }
+
+        .contact-method svg {
+            width: 18px;
+            height: 18px;
+            stroke: var(--acc);
+            fill: none;
+            stroke-width: 2;
+            flex-shrink: 0;
+        }
+
+        .contact-form {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--r-lg);
+            padding: var(--sp-lg);
+            display: flex;
+            flex-direction: column;
+            gap: var(--sp-md);
+            box-shadow: var(--sh-sm);
+        }
+
+        @media (min-width: 768px) {
+            .contact-form {
+                padding: var(--sp-xl);
+            }
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .form-label {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: var(--txt-1);
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+        }
+
+        .form-input {
+            background: var(--bg-0);
+            border: 1.5px solid var(--border);
+            border-radius: var(--r-md);
+            padding: 0.68rem var(--sp-sm);
+            color: var(--txt-0);
+            font-family: var(--font-sans);
+            font-size: 0.9rem;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        .form-input::placeholder {
+            color: var(--txt-2);
+        }
+
+        .form-input:focus {
+            border-color: var(--acc);
+            background: var(--card);
+            box-shadow: 0 0 0 3px var(--acc-glow);
+        }
+
+        textarea.form-input {
+            resize: vertical;
+            min-height: 140px;
+        }
+
+        .form-status {
+            font-size: 0.875rem;
+            font-weight: 600;
+            display: none;
+            margin-bottom: 8px;
+        }
+
+        .form-status.success {
+            color: var(--acc);
+            display: block;
+        }
+
+        .form-status.error {
+            color: #ef4444;
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <header id="header">
+        <div class="container nav-container">
+            <a href="index.html" class="logo" aria-label="Shiraj Life Home">
+                shiraj<span>life</span>
+            </a>
+
+            <nav class="nav-links" aria-label="Main Navigation">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="about.html" class="nav-link">About</a>
+                <a href="pillars.html" class="nav-link">Pillars</a>
+                <a href="work.html" class="nav-link">Work</a>
+                <a href="toolkit.html" class="nav-link">Toolkit</a>
+                <a href="contact.html" class="nav-link active">Contact</a>
+            </nav>
+
+            <div class="nav-actions">
+                <button class="theme-toggle" id="theme-toggle" aria-label="Toggle visual theme">
+                    <svg class="moon-icon" viewBox="0 0 24 24">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+                    </svg>
+                    <svg class="sun-icon" viewBox="0 0 24 24">
+                        <circle cx="12" cy="12" r="5" />
+                        <line x1="12" y1="1" x2="12" y2="3" />
+                        <line x1="12" y1="21" x2="12" y2="23" />
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                        <line x1="1" y1="12" x2="3" y2="12" />
+                        <line x1="21" y1="12" x2="23" y2="12" />
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+                    </svg>
+                </button>
+
+                <button class="mobile-nav-btn" id="mobile-menu-btn" aria-label="Toggle menu navigation drawer">
+                    <svg viewBox="0 0 24 24">
+                        <line x1="3" y1="12" x2="21" y2="12" />
+                        <line x1="3" y1="6" x2="21" y2="6" />
+                        <line x1="3" y1="18" x2="21" y2="18" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- MOBILE DRAWER -->
+    <div class="mobile-drawer" id="mobile-drawer">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="about.html" class="nav-link">About</a>
+        <a href="pillars.html" class="nav-link">Pillars</a>
+        <a href="work.html" class="nav-link">Work</a>
+        <a href="toolkit.html" class="nav-link">Toolkit</a>
+        <a href="contact.html" class="nav-link active">Contact</a>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <main>
+        <section id="contact">
+            <div class="container">
+                <div class="section-header reveal">
+                    <span class="section-eyebrow">06 / Connect</span>
+                    <h2 class="section-title">Initiate a dialogue.</h2>
+                </div>
+
+                <div class="contact-grid">
+                    <div class="contact-info reveal" style="transition-delay:0.08s;">
+                        <p class="contact-sub">
+                            I am open to discussions regarding database automation, Flutter development projects,
+                            local-first architectures, or structured athletic programming.
+                        </p>
+                        <div class="contact-methods">
+                            <a href="mailto:rahulsaroh007@gmail.com" class="contact-method">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                                    <polyline points="22,6 12,13 2,6" />
+                                </svg>
+                                rahulsaroh007@gmail.com
+                            </a>
+                            <a href="https://wa.me/917715962857" class="contact-method" target="_blank" rel="noopener noreferrer">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                                </svg>
+                                +91 77159 62857
+                            </a>
+                            <a href="https://instagram.com/rahulshiraj" class="contact-method" target="_blank" rel="noopener noreferrer">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                                    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                                </svg>
+                                instagram.com/rahulshiraj
+                            </a>
+                            <div class="contact-method">
+                                <svg viewBox="0 0 24 24">
+                                    <circle cx="12" cy="12" r="10" />
+                                    <line x1="2" y1="12" x2="22" y2="12" />
+                                    <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+                                </svg>
+                                Mumbai, Maharashtra, India
+                            </div>
+                        </div>
+                        <div class="contact-qr" style="margin-top: 2rem; display: flex; flex-direction: column; gap: 0.5rem;">
+                            <span class="form-label" style="font-size: 0.75rem; letter-spacing: 0.05em; text-transform: uppercase;">Scan to connect on Instagram</span>
+                            <img src="instagram_qr.png" alt="Instagram @rahulshiraj QR Code" style="max-width: 180px; width: 100%; height: auto; border-radius: 12px; box-shadow: var(--sh-md); border: 1px solid var(--border); transition: transform 0.3s ease;" onmouseover="this.style.transform='scale(1.03)'" onmouseout="this.style.transform='scale(1)'">
+                        </div>
+                    </div>
+
+                    <div class="reveal" style="transition-delay:0.18s;">
+                        <form action="https://formsubmit.co/rahulsaroh007@gmail.com" method="POST" class="contact-form" id="contact-form">
+                            <div class="form-group">
+                                <label for="name" class="form-label">full_name</label>
+                                <input type="text" id="name" name="name" class="form-input"
+                                    placeholder="e.g. Rahul Sharma" required autocomplete="name">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="email" class="form-label">email_address</label>
+                                <input type="email" id="email" name="email" class="form-input"
+                                    placeholder="e.g. rahul@example.com" required autocomplete="email">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="subject" class="form-label">subject_focus</label>
+                                <input type="text" id="subject" name="subject" class="form-input"
+                                    placeholder="e.g. App Dev Project / Collaboration" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="message" class="form-label">detailed_message</label>
+                                <textarea id="message" name="message" class="form-input"
+                                    placeholder="Describe project parameters, timelines, or topics..."
+                                    required></textarea>
+                            </div>
+
+                            <span id="form-status" class="form-status"></span>
+
+                            <button type="submit" class="btn btn-primary" style="align-self:flex-start;">
+                                Send Message
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="container footer-content">
+            <span class="footer-logo">shiraj<span>life</span></span>
+            <span class="footer-copy">&copy; 2026 Shiraj. Stacked &amp; Compiled in Mumbai. All Rights Reserved.</span>
+        </div>
+    </footer>
+
+    <!-- SCRIPTS -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const header = document.getElementById('header');
+
+            /* Scrolled header state */
+            window.addEventListener('scroll', () => {
+                header.classList.toggle('scrolled', window.scrollY > 24);
+            }, { passive: true });
+
+            /* Theme toggle */
+            const themeBtn = document.getElementById('theme-toggle');
+            themeBtn.addEventListener('click', () => {
+                const current = document.documentElement.getAttribute('data-theme');
+                const next = current === 'dark' ? 'light' : 'dark';
+                document.documentElement.setAttribute('data-theme', next);
+                localStorage.setItem('theme', next);
+            });
+
+            /* Mobile menu */
+            const mobileBtn = document.getElementById('mobile-menu-btn');
+            const mobileDrawer = document.getElementById('mobile-drawer');
+            const hamburgerSVG = `<svg viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>`;
+            const closeSVG = `<svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`;
+
+            function closeDrawer() {
+                mobileDrawer.classList.remove('open');
+                mobileBtn.innerHTML = hamburgerSVG;
+            }
+
+            mobileBtn.addEventListener('click', e => {
+                e.stopPropagation();
+                const isOpen = mobileDrawer.classList.toggle('open');
+                mobileBtn.innerHTML = isOpen ? closeSVG : hamburgerSVG;
+            });
+
+            mobileDrawer.querySelectorAll('.nav-link').forEach(l => l.addEventListener('click', closeDrawer));
+            document.addEventListener('click', e => {
+                if (!mobileDrawer.contains(e.target) && !mobileBtn.contains(e.target)) closeDrawer();
+            });
+
+            /* Contact form handler (AJAX fallback to native submit) */
+            const contactForm = document.getElementById('contact-form');
+            const formStatus = document.getElementById('form-status');
+
+            if (contactForm) {
+                contactForm.addEventListener('submit', e => {
+                    const name = document.getElementById('name').value.trim();
+                    const email = document.getElementById('email').value.trim();
+                    const subject = document.getElementById('subject').value.trim();
+                    const message = document.getElementById('message').value.trim();
+
+                    if (!name || !email || !subject || !message) {
+                        e.preventDefault();
+                        formStatus.className = 'form-status error';
+                        formStatus.textContent = 'Please fill out all required fields.';
+                        return;
+                    }
+
+                    // If running locally as a file, let browser submit standard POST to bypass local CORS rules
+                    if (window.location.protocol === 'file:') {
+                        return; // Let browser submit form naturally to the defined action/method
+                    }
+
+                    // Otherwise use AJAX submit
+                    e.preventDefault();
+                    formStatus.className = '';
+                    formStatus.style.display = 'block';
+                    formStatus.textContent = 'Sending…';
+
+                    fetch("https://formsubmit.co/ajax/rahulsaroh007@gmail.com", {
+                        method: "POST",
+                        headers: { 
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            name: name,
+                            email: email,
+                            subject: subject,
+                            message: message
+                        })
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            formStatus.className = 'form-status success';
+                            formStatus.textContent = `Thank you, ${name}! Your message has been sent successfully.`;
+                            contactForm.reset();
+                        } else {
+                            throw new Error("Submission failed");
+                        }
+                    })
+                    .catch(error => {
+                        // Fallback to standard submit if fetch fails (e.g. adblocker, network issues)
+                        formStatus.className = 'form-status error';
+                        formStatus.textContent = 'Submitting form...';
+                        contactForm.submit(); // Bypasses the event listener and submits natively
+                    });
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>
