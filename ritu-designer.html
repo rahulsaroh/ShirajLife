@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Anti-FOUC: apply theme before paint -->
+    <script>
+        (function () {
+            var t = localStorage.getItem('theme') || 'light'; // Default to light for elegant fashion theme
+            document.documentElement.setAttribute('data-theme', t);
+        })();
+    </script>
+
+    <title>Ritu Designer | Diwan Fashion House</title>
+    <meta name="description" content="Customized outfits, professional fashion styling, and tailoring classes by Ritu at Diwan Fashion House.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="shared.css">
+    
+    <style>
+        /* ==========================================
+           LUXURY FASHION SYSTEM OVERRIDES
+           ========================================== */
+        :root {
+            --font-display: 'Playfair Display', serif;
+            --font-sans: 'Montserrat', sans-serif;
+            
+            /* High-end Fashion Palette */
+            --acc: #800020; /* Luxury Maroon / Burgundy */
+            --acc-hi: #5c0017;
+            --acc-glow: rgba(128, 0, 32, 0.08);
+            --border-acc: rgba(128, 0, 32, 0.2);
+            --gold: #d4af37;
+            --gold-glow: rgba(212, 175, 55, 0.15);
+        }
+
+        [data-theme="dark"] {
+            --acc: #b32d4a;
+            --acc-hi: #e64a6c;
+            --acc-glow: rgba(179, 45, 74, 0.15);
+            --border-acc: rgba(179, 45, 74, 0.3);
+        }
+
+        body {
+            font-family: var(--font-sans);
+            letter-spacing: 0.02em;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: var(--font-display);
+            font-weight: 700;
+        }
+
+        /* Hero Styling */
+        .fashion-hero {
+            position: relative;
+            min-height: 90vh;
+            display: flex;
+            align-items: center;
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.3) 100%), url('ritu_model_outfit.png');
+            background-size: cover;
+            background-position: center;
+            color: #ffffff;
+            border-bottom: 1px solid var(--border);
+            padding: var(--sp-2xl) 0;
+        }
+
+        .fashion-hero-content {
+            max-width: 680px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .fashion-hero-logo {
+            font-family: var(--font-sans);
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.3em;
+            color: var(--gold);
+            margin-bottom: var(--sp-sm);
+            display: block;
+        }
+
+        .fashion-hero h1 {
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            line-height: 1.1;
+            margin-bottom: var(--sp-sm);
+            color: #ffffff;
+        }
+
+        .fashion-hero p {
+            font-size: clamp(1rem, 2vw, 1.25rem);
+            margin-bottom: var(--sp-lg);
+            font-weight: 300;
+            color: rgba(255, 255, 255, 0.9);
+            line-height: 1.6;
+        }
+
+        /* About Section Custom Outfits */
+        .fashion-grid-2 {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: var(--sp-xl);
+            align-items: center;
+        }
+
+        @media (min-width: 992px) {
+            .fashion-grid-2 {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .fashion-image-container {
+            position: relative;
+            border-radius: var(--r-lg);
+            overflow: hidden;
+            border: 1px solid var(--border);
+            box-shadow: var(--sh-lg);
+        }
+
+        .fashion-image-container img {
+            width: 100%;
+            display: block;
+            height: auto;
+            transition: transform 0.6s ease;
+        }
+
+        .fashion-image-container:hover img {
+            transform: scale(1.05);
+        }
+
+        .social-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--r-full);
+            padding: 8px 20px;
+            font-weight: 600;
+            font-size: 0.825rem;
+            margin-bottom: var(--sp-md);
+            box-shadow: var(--sh-sm);
+        }
+
+        .social-pill svg {
+            width: 18px;
+            height: 18px;
+            fill: var(--acc);
+        }
+
+        /* Metric Cards */
+        .stat-grid-fashion {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--sp-sm);
+            margin-top: var(--sp-md);
+        }
+
+        .stat-card-fashion {
+            background: var(--bg-1);
+            border: 1px solid var(--border);
+            border-radius: var(--r-md);
+            padding: var(--sp-sm);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card-fashion:hover {
+            border-color: var(--border-acc);
+            background: var(--card);
+            transform: translateY(-3px);
+        }
+
+        .stat-card-fashion span:first-child {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--acc);
+            display: block;
+        }
+
+        .stat-card-fashion span:last-child {
+            font-size: 0.65rem;
+            color: var(--txt-2);
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+        }
+
+        /* Service Cards */
+        .service-fashion-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: var(--sp-md);
+        }
+
+        @media (min-width: 768px) {
+            .service-fashion-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .service-fashion-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--r-lg);
+            padding: var(--sp-lg);
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            box-shadow: var(--sh-sm);
+            transition: all 0.3s ease;
+        }
+
+        .service-fashion-card:hover {
+            border-color: var(--gold);
+            box-shadow: 0 12px 30px var(--gold-glow);
+            transform: translateY(-5px);
+        }
+
+        .service-fashion-icon {
+            width: 46px;
+            height: 46px;
+            background: var(--acc-glow);
+            border-radius: var(--r-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--border-acc);
+        }
+
+        .service-fashion-icon svg {
+            width: 22px;
+            height: 22px;
+            stroke: var(--acc);
+            fill: none;
+            stroke-width: 2;
+        }
+
+        .service-fashion-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
+        .service-fashion-desc {
+            font-size: 0.88rem;
+            color: var(--txt-1);
+            line-height: 1.6;
+        }
+
+        /* Inquiry Form */
+        .inquiry-container {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--r-lg);
+            padding: var(--sp-lg);
+            box-shadow: var(--sh-md);
+            margin-top: var(--sp-lg);
+        }
+
+        @media (min-width: 768px) {
+            .inquiry-container {
+                padding: var(--sp-xl);
+            }
+        }
+
+        /* Leaf motif */
+        .leaf-bullet {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.95rem;
+            color: var(--txt-1);
+            margin-bottom: 12px;
+        }
+
+        .leaf-bullet::before {
+            content: '🍃';
+            font-size: 1rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <header id="header">
+        <div class="container nav-container">
+            <a href="index.html" class="logo" aria-label="Shiraj Life Home">
+                shiraj<span>life</span>
+            </a>
+
+            <nav class="nav-links" aria-label="Main Navigation">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="about.html" class="nav-link">About</a>
+                <a href="pillars.html" class="nav-link">Pillars</a>
+                <a href="work.html" class="nav-link">Work</a>
+                <a href="toolkit.html" class="nav-link">Toolkit</a>
+                <a href="clients.html" class="nav-link">Clients</a>
+                <a href="contact.html" class="nav-link">Contact</a>
+            </nav>
+
+            <div class="nav-actions">
+                <button class="theme-toggle" id="theme-toggle" aria-label="Toggle visual theme">
+                    <svg class="moon-icon" viewBox="0 0 24 24">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+                    </svg>
+                    <svg class="sun-icon" viewBox="0 0 24 24">
+                        <circle cx="12" cy="12" r="5" />
+                        <line x1="12" y1="1" x2="12" y2="3" />
+                        <line x1="12" y1="21" x2="12" y2="23" />
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                        <line x1="1" y1="12" x2="3" y2="12" />
+                        <line x1="21" y1="12" x2="23" y2="12" />
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+                    </svg>
+                </button>
+
+                <button class="mobile-nav-btn" id="mobile-menu-btn" aria-label="Toggle menu navigation drawer">
+                    <svg viewBox="0 0 24 24">
+                        <line x1="3" y1="12" x2="21" y2="12" />
+                        <line x1="3" y1="6" x2="21" y2="6" />
+                        <line x1="3" y1="18" x2="21" y2="18" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- MOBILE DRAWER -->
+    <div class="mobile-drawer" id="mobile-drawer">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="about.html" class="nav-link">About</a>
+        <a href="pillars.html" class="nav-link">Pillars</a>
+        <a href="work.html" class="nav-link">Work</a>
+        <a href="toolkit.html" class="nav-link">Toolkit</a>
+        <a href="clients.html" class="nav-link">Clients</a>
+        <a href="contact.html" class="nav-link">Contact</a>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <main>
+
+        <!-- LUXURY HERO -->
+        <section class="fashion-hero">
+            <div class="container">
+                <div class="fashion-hero-content">
+                    <span class="fashion-hero-logo">Diwan Fashion House</span>
+                    <h1>Ritu Designer</h1>
+                    <p>
+                        Crafting customized luxury ethnic wear, bespoke lehengas, and modern couture tailored to your unique identity.
+                    </p>
+                    <div class="hero-ctas">
+                        <a href="#collection" class="btn btn-primary" style="background: var(--acc); color: #fff;">Explore Designs</a>
+                        <a href="#contact-ritu" class="btn btn-secondary" style="border-color: #fff; color: #fff;">Inquire Now</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PROFILE BRIEF -->
+        <section id="about-ritu">
+            <div class="container">
+                <div class="fashion-grid-2">
+                    <div class="fashion-image-container">
+                        <img src="boutique_interior.png" alt="Diwan Fashion House Boutique Interior">
+                    </div>
+                    <div>
+                        <div class="social-pill">
+                            <svg viewBox="0 0 24 24">
+                                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                            </svg>
+                            <span>@its_official_ritu11</span>
+                        </div>
+                        <h2 class="section-title" style="margin-bottom: var(--sp-md);">Elegant styling meets meticulous tailoring.</h2>
+                        <p style="margin-bottom: var(--sp-md); line-height: 1.7;">
+                            Welcome to <strong>Diwan Fashion House</strong>, headed by premier fashion stylist and designer Ritu. We believe that clothing is an extension of personal narrative. We specialize in designing bespoke bridal lehengas, customized party gowns, structured blouses, and contemporary Indo-Western designs.
+                        </p>
+                        <div class="leaf-bullet">Customized Outfits tailored to client measurements</div>
+                        <div class="leaf-bullet">Professional Fashion Stylist consultations</div>
+                        <div class="leaf-bullet">Premium Fabric collections at Diwan Fashion House</div>
+                        <div class="leaf-bullet">Interactive Stitching Classes for aspiring designers</div>
+
+                        <div class="stat-grid-fashion">
+                            <div class="stat-card-fashion">
+                                <span>800+</span>
+                                <span>Designs Logged</span>
+                            </div>
+                            <div class="stat-card-fashion">
+                                <span>14.4K</span>
+                                <span>Followers</span>
+                            </div>
+                            <div class="stat-card-fashion">
+                                <span>600+</span>
+                                <span>Following</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SERVICES -->
+        <section id="services-ritu" style="background: var(--bg-0);">
+            <div class="container">
+                <div class="section-header" style="text-align: center;">
+                    <span class="section-eyebrow">Our Offerings</span>
+                    <h2 class="section-title">Bespoke Design & Styling.</h2>
+                </div>
+
+                <div class="service-fashion-grid">
+                    <!-- Custom Outfits -->
+                    <div class="service-fashion-card">
+                        <div class="service-fashion-icon">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+                            </svg>
+                        </div>
+                        <h3 class="service-fashion-title">Custom Outfits</h3>
+                        <p class="service-fashion-desc">
+                            Individually patterned and hand-crafted pieces. From bridal ensembles and formal lehengas to sleek crop tops and festive suits, made precisely to your size guidelines.
+                        </p>
+                    </div>
+
+                    <!-- Fashion Styling -->
+                    <div class="service-fashion-card">
+                        <div class="service-fashion-icon">
+                            <svg viewBox="0 0 24 24">
+                                <circle cx="12" cy="12" r="10" />
+                                <line x1="2" y1="12" x2="22" y2="12" />
+                                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+                            </svg>
+                        </div>
+                        <h3 class="service-fashion-title">Bespoke Styling</h3>
+                        <p class="service-fashion-desc">
+                            Personal styling audits for high-stakes events, weddings, corporate functions, or photographic campaigns. We outline color coordination, silhouettes, and jewelry match parameters.
+                        </p>
+                    </div>
+
+                    <!-- Stitching Academy -->
+                    <div class="service-fashion-card">
+                        <div class="service-fashion-icon">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M12 20h9" />
+                                <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
+                            </svg>
+                        </div>
+                        <h3 class="service-fashion-title">Stitching Academy</h3>
+                        <p class="service-fashion-desc">
+                            Structured sewing and tailoring classes. Learn pattern drafting, sleeve alignments, fabric selection, and advanced embroidery techniques from Ritu.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PORTFOLIO / WORKSPACE GALLERY -->
+        <section id="collection">
+            <div class="container">
+                <div class="section-header" style="text-align: center;">
+                    <span class="section-eyebrow">Creative Workspace</span>
+                    <h2 class="section-title">The Design Atelier.</h2>
+                </div>
+
+                <div class="fashion-grid-2">
+                    <div>
+                        <h3 style="font-size: 1.75rem; margin-bottom: var(--sp-sm);">Bespoke Stitching Classes</h3>
+                        <p style="line-height: 1.7; color: var(--txt-1); margin-bottom: var(--sp-md);">
+                            We believe that tailoring is an art form. In our physical stitching studio, we host interactive coaching modules where students master stitching techniques, fabric cutting, and couture finishes. 
+                        </p>
+                        <div class="leaf-bullet">Step-by-step drafting lessons</div>
+                        <div class="leaf-bullet">Hands-on machine operation guidelines</div>
+                        <div class="leaf-bullet">Flexible weekend schedules available</div>
+                        <div class="leaf-bullet">Completion certificate by Diwan Fashion House</div>
+                    </div>
+                    <div class="fashion-image-container">
+                        <img src="stitching_class.png" alt="Stitching classes workspace at Diwan Fashion House">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- BOOKING / CONTACT -->
+        <section id="contact-ritu" style="background: var(--bg-0);">
+            <div class="container">
+                <div class="section-header" style="text-align: center; margin-bottom: var(--sp-lg);">
+                    <span class="section-eyebrow">Initiate Order</span>
+                    <h2 class="section-title">Schedule a Consultation.</h2>
+                </div>
+
+                <div class="inquiry-container">
+                    <div style="display: grid; grid-template-columns: 1fr; gap: var(--sp-lg); @media (min-width: 768px) { grid-template-columns: 5fr 7fr; }">
+                        <div>
+                            <h3 style="font-size: 1.5rem; margin-bottom: var(--sp-sm);">Connect with Ritu</h3>
+                            <p style="font-size: 0.9rem; color: var(--txt-1); line-height: 1.7; margin-bottom: var(--sp-md);">
+                                Ready to commission a custom outfit or register for the next batch of stitching classes? Reach out via our channels or submit the brief form below.
+                            </p>
+                            <div class="contact-methods">
+                                <a href="https://instagram.com/its_official_ritu11" class="contact-method" target="_blank" rel="noopener noreferrer">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                                        <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                                    </svg>
+                                    Instagram DM for Orders
+                                </a>
+                                <a href="https://maps.app.goo.gl/U7rCP9VD2V9cLTwB8" class="contact-method" target="_blank" rel="noopener noreferrer">
+                                    <svg viewBox="0 0 24 24">
+                                        <circle cx="12" cy="12" r="10" />
+                                        <line x1="2" y1="12" x2="22" y2="12" />
+                                        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+                                    </svg>
+                                    Find Boutique on Google Maps
+                                </a>
+                            </div>
+                        </div>
+
+                        <div>
+                            <form id="ritu-inquiry-form" class="contact-form" style="padding: 0; box-shadow: none; background: transparent; border: none;">
+                                <div class="form-group">
+                                    <label for="ritu-name" class="form-label">Name</label>
+                                    <input type="text" id="ritu-name" class="form-input" placeholder="e.g. Priyanjali" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="ritu-contact" class="form-label">Phone / Email</label>
+                                    <input type="text" id="ritu-contact" class="form-input" placeholder="e.g. +91 99999 88888" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="ritu-interest" class="form-label">Interest Focus</label>
+                                    <select id="ritu-interest" class="form-input" style="background: var(--bg-0); cursor: pointer;">
+                                        <option value="custom">Customized Outfit Design</option>
+                                        <option value="styling">Personal Styling Consultation</option>
+                                        <option value="classes">Stitching & Tailoring Classes</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="ritu-message" class="form-label">Your Design parameters</label>
+                                    <textarea id="ritu-message" class="form-input" placeholder="Specify sizes, timelines, fabrics, or details..." required></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary" style="background: var(--acc); color: #fff; margin-top: 10px;">Send Brief</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="container footer-content">
+            <span class="footer-logo">Ritu<span>Designer</span></span>
+            <span class="footer-copy">&copy; 2026 Diwan Fashion House. All rights reserved. Followed by @shiraj_life.</span>
+        </div>
+    </footer>
+
+    <!-- SCRIPTS -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const header = document.getElementById('header');
+
+            /* Scrolled header state */
+            window.addEventListener('scroll', () => {
+                header.classList.toggle('scrolled', window.scrollY > 24);
+            }, { passive: true });
+
+            /* Theme toggle */
+            const themeBtn = document.getElementById('theme-toggle');
+            themeBtn.addEventListener('click', () => {
+                const current = document.documentElement.getAttribute('data-theme');
+                const next = current === 'dark' ? 'light' : 'dark';
+                document.documentElement.setAttribute('data-theme', next);
+                localStorage.setItem('theme', next);
+            });
+
+            /* Mobile menu */
+            const mobileBtn = document.getElementById('mobile-menu-btn');
+            const mobileDrawer = document.getElementById('mobile-drawer');
+            const hamburgerSVG = `<svg viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>`;
+            const closeSVG = `<svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`;
+
+            function closeDrawer() {
+                mobileDrawer.classList.remove('open');
+                mobileBtn.innerHTML = hamburgerSVG;
+            }
+
+            mobileBtn.addEventListener('click', e => {
+                e.stopPropagation();
+                const isOpen = mobileDrawer.classList.toggle('open');
+                mobileBtn.innerHTML = isOpen ? closeSVG : hamburgerSVG;
+            });
+
+            mobileDrawer.querySelectorAll('.nav-link').forEach(l => l.addEventListener('click', closeDrawer));
+            document.addEventListener('click', e => {
+                if (!mobileDrawer.contains(e.target) && !mobileBtn.contains(e.target)) closeDrawer();
+            });
+
+            /* Simple form submit handler */
+            const rituForm = document.getElementById('ritu-inquiry-form');
+            if (rituForm) {
+                rituForm.addEventListener('submit', e => {
+                    e.preventDefault();
+                    alert("Thank you! Your inquiry brief has been sent to Ritu. She will get in touch with you shortly.");
+                    rituForm.reset();
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>
