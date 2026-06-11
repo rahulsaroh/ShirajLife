@@ -2465,7 +2465,7 @@
                     </div>
 
                     <div class="reveal" style="transition-delay:0.18s;">
-                        <form class="contact-form" id="contact-form">
+                        <form action="https://formsubmit.co/rahulsaroh007@gmail.com" method="POST" class="contact-form" id="contact-form">
                             <div class="form-group">
                                 <label for="name" class="form-label">full_name</label>
                                 <input type="text" id="name" name="name" class="form-input"
@@ -2687,11 +2687,9 @@
                         return;
                     }
 
-                    // If running locally as a file, submit via standard form POST to bypass local CORS rules
+                    // If running locally as a file, let browser submit standard POST to bypass local CORS rules
                     if (window.location.protocol === 'file:') {
-                        contactForm.action = "https://formsubmit.co/rahulsaroh007@gmail.com";
-                        contactForm.method = "POST";
-                        return; // Let browser submit form naturally
+                        return; // Let browser submit form naturally to the defined action/method
                     }
 
                     // Otherwise use AJAX submit
@@ -2726,9 +2724,7 @@
                         // Fallback to standard submit if fetch fails (e.g. adblocker, network issues)
                         formStatus.className = 'form-status error';
                         formStatus.textContent = 'Submitting form...';
-                        contactForm.action = "https://formsubmit.co/rahulsaroh007@gmail.com";
-                        contactForm.method = "POST";
-                        contactForm.submit();
+                        contactForm.submit(); // Bypasses the event listener and submits natively
                     });
                 });
             }
