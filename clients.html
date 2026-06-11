@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Anti-FOUC: apply theme before paint -->
+    <script>
+        (function () {
+            var t = localStorage.getItem('theme') ||
+                (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            document.documentElement.setAttribute('data-theme', t);
+        })();
+    </script>
+
+    <title>My Clients | Shiraj Life</title>
+    <meta name="description" content="Collaborations and client case studies with Shiraj. Empowering growth through engineering, planning, and automation.">
+    <link rel="stylesheet" href="shared.css">
+    
+    <style>
+        /* ==========================================
+           CLIENTS PAGE SPECIFIC CSS
+           ========================================== */
+        .clients-intro {
+            max-width: 780px;
+            margin-bottom: var(--sp-xl);
+        }
+
+        .clients-intro p {
+            font-size: 1.1rem;
+            line-height: 1.75;
+            color: var(--txt-1);
+        }
+
+        .clients-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: var(--sp-lg);
+            margin-top: var(--sp-lg);
+        }
+
+        @media (min-width: 768px) {
+            .clients-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .client-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--r-lg);
+            padding: var(--sp-lg);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 320px;
+            transform-style: preserve-3d;
+            transition: transform 0.15s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.3s ease, border-color 0.3s ease;
+            cursor: pointer;
+        }
+
+        .client-card:hover {
+            border-color: var(--acc);
+            box-shadow: 0 10px 30px rgba(10, 87, 80, 0.05), 
+                        0 1px 8px rgba(10, 87, 80, 0.1);
+        }
+
+        .client-card-content {
+            transform: translateZ(30px);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .client-card-footer {
+            transform: translateZ(20px);
+            margin-top: var(--sp-md);
+        }
+
+        .client-focus {
+            font-family: var(--font-mono);
+            font-size: 0.72rem;
+            color: var(--acc);
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+        }
+
+        .client-name {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: var(--txt-0);
+        }
+
+        .client-desc {
+            font-size: 0.88rem;
+            color: var(--txt-1);
+            line-height: 1.6;
+            text-align: justify;
+        }
+
+        .client-metric {
+            font-family: var(--font-mono);
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--acc);
+        }
+
+        .client-metric-label {
+            font-size: 0.7rem;
+            color: var(--txt-2);
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            display: block;
+        }
+
+        /* Ambient spotlight background glow */
+        .client-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(
+                220px circle at var(--x, 50%) var(--y, 50%),
+                var(--acc-glow),
+                transparent 80%
+            );
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 1;
+        }
+
+        .client-card:hover::before {
+            opacity: 1;
+        }
+
+        /* Testimonials section styling */
+        .testimonial-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--r-lg);
+            padding: var(--sp-lg);
+            box-shadow: var(--sh-sm);
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            position: relative;
+        }
+
+        .testimonial-card::after {
+            content: '"';
+            font-family: var(--font-display);
+            font-size: 5rem;
+            color: var(--acc);
+            opacity: 0.08;
+            position: absolute;
+            top: -10px;
+            right: 20px;
+            line-height: 1;
+            pointer-events: none;
+        }
+
+        .testimonial-text {
+            font-style: italic;
+            font-size: 0.98rem;
+            line-height: 1.7;
+            color: var(--txt-0);
+        }
+
+        .testimonial-author {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--acc);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <header id="header">
+        <div class="container nav-container">
+            <a href="index.html" class="logo" aria-label="Shiraj Life Home">
+                shiraj<span>life</span>
+            </a>
+
+            <nav class="nav-links" aria-label="Main Navigation">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="about.html" class="nav-link">About</a>
+                <a href="pillars.html" class="nav-link">Pillars</a>
+                <a href="work.html" class="nav-link">Work</a>
+                <a href="toolkit.html" class="nav-link">Toolkit</a>
+                <a href="clients.html" class="nav-link active">Clients</a>
+                <a href="contact.html" class="nav-link">Contact</a>
+            </nav>
+
+            <div class="nav-actions">
+                <button class="theme-toggle" id="theme-toggle" aria-label="Toggle visual theme">
+                    <svg class="moon-icon" viewBox="0 0 24 24">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+                    </svg>
+                    <svg class="sun-icon" viewBox="0 0 24 24">
+                        <circle cx="12" cy="12" r="5" />
+                        <line x1="12" y1="1" x2="12" y2="3" />
+                        <line x1="12" y1="21" x2="12" y2="23" />
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                        <line x1="1" y1="12" x2="3" y2="12" />
+                        <line x1="21" y1="12" x2="23" y2="12" />
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+                    </svg>
+                </button>
+
+                <button class="mobile-nav-btn" id="mobile-menu-btn" aria-label="Toggle menu navigation drawer">
+                    <svg viewBox="0 0 24 24">
+                        <line x1="3" y1="12" x2="21" y2="12" />
+                        <line x1="3" y1="6" x2="21" y2="6" />
+                        <line x1="3" y1="18" x2="21" y2="18" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- MOBILE DRAWER -->
+    <div class="mobile-drawer" id="mobile-drawer">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="about.html" class="nav-link">About</a>
+        <a href="pillars.html" class="nav-link">Pillars</a>
+        <a href="work.html" class="nav-link">Work</a>
+        <a href="toolkit.html" class="nav-link">Toolkit</a>
+        <a href="clients.html" class="nav-link active">Clients</a>
+        <a href="contact.html" class="nav-link">Contact</a>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <main>
+        <section id="clients">
+            <div class="container">
+                <div class="section-header reveal">
+                    <span class="section-eyebrow">Clients</span>
+                    <h2 class="section-title">Collaborators & Partners.</h2>
+                </div>
+
+                <div class="clients-intro reveal" style="transition-delay:0.08s;">
+                    <p>
+                        I work alongside select business founders, coaching brands, and asset advisors. 
+                        By applying audit-level discipline and custom developer stacks, I help them optimize their internal data flows, build premium applications, and design scaling models.
+                    </p>
+                </div>
+
+                <div class="clients-grid">
+                    <!-- Client 1: Gym Mentor Coaching -->
+                    <div class="client-card reveal card-dev" style="transition-delay:0.12s;">
+                        <div class="client-card-content">
+                            <span class="client-focus">Fitness & Coaching</span>
+                            <h3 class="client-name">Gym Mentor Coaching</h3>
+                            <p class="client-desc">
+                                Engineered local-first mobile progress dashboards. Designed volume progression tracking models that allow fitness coaches to systematically program hypertrophy cycles without cloud reliance.
+                            </p>
+                        </div>
+                        <div class="client-card-footer">
+                            <span class="client-metric">+40%</span>
+                            <span class="client-metric-label">Progress Tracking Efficiency</span>
+                        </div>
+                    </div>
+
+                    <!-- Client 2: Wealth Rebalance Advisors -->
+                    <div class="client-card reveal card-finance" style="transition-delay:0.2s;">
+                        <div class="client-card-content">
+                            <span class="client-focus">Financial Planning</span>
+                            <h3 class="client-name">Wealth Rebalance Advisors</h3>
+                            <p class="client-desc">
+                                Built a python-based parsing pipeline that extracts Consolidated Account Statement (CAS) transaction entries from encrypted PDFs. Integrated layout tables mapping instant asset-rebalancing metrics.
+                            </p>
+                        </div>
+                        <div class="client-card-footer">
+                            <span class="client-metric">99.9%</span>
+                            <span class="client-metric-label">PDF Parsing Accuracy</span>
+                        </div>
+                    </div>
+
+                    <!-- Client 3: Public Audits Maharashtra -->
+                    <div class="client-card reveal card-data" style="transition-delay:0.28s;">
+                        <div class="client-card-content">
+                            <span class="client-focus">Compliance Analytics</span>
+                            <h3 class="client-name">Compliance Analytics</h3>
+                            <p class="client-desc">
+                                Programmed offline transaction checkers and ledger auditors. Re-architected data-validation scripts, helping teams execute deep ledger audit compliance checks on public accounts.
+                            </p>
+                        </div>
+                        <div class="client-card-footer">
+                            <span class="client-metric">9 Years</span>
+                            <span class="client-metric-label">Public Sector Experience</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Testimonials Grid -->
+                <div class="section-header reveal" style="margin-top: var(--sp-2xl); margin-bottom: var(--sp-lg);">
+                    <span class="section-eyebrow">Feedback</span>
+                    <h2 class="section-title">Testimonials.</h2>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr; gap: var(--sp-md); margin-top: var(--sp-md); @media (min-width: 768px) { grid-template-columns: repeat(2, 1fr); }">
+                    <!-- Testimonial 1 -->
+                    <div class="testimonial-card reveal" style="transition-delay:0.08s;">
+                        <p class="testimonial-text">
+                            "Shiraj brought absolute engineering precision to our fitness tracking. The offline SQLite architecture he structured transformed how our coaches track client volume cycles."
+                        </p>
+                        <span class="testimonial-author">— Founder, Gym Mentor Premium Coach</span>
+                    </div>
+
+                    <!-- Testimonial 2 -->
+                    <div class="testimonial-card reveal" style="transition-delay:0.16s;">
+                        <p class="testimonial-text">
+                            "His out-of-the-box thinking on CAS parsing saved our wealth management team hours of manual entry. We rebalanced portfolios instantly with 0% margin of error."
+                        </p>
+                        <span class="testimonial-author">— Partner, Wealth Rebalance Advisors</span>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="container footer-content">
+            <span class="footer-logo">shiraj<span>life</span></span>
+            <span class="footer-copy">&copy; 2026 Shiraj. Stacked &amp; Compiled in Mumbai. All Rights Reserved.</span>
+        </div>
+    </footer>
+
+    <!-- SCRIPTS -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const header = document.getElementById('header');
+
+            /* Scrolled header state */
+            window.addEventListener('scroll', () => {
+                header.classList.toggle('scrolled', window.scrollY > 24);
+            }, { passive: true });
+
+            /* Theme toggle */
+            const themeBtn = document.getElementById('theme-toggle');
+            themeBtn.addEventListener('click', () => {
+                const current = document.documentElement.getAttribute('data-theme');
+                const next = current === 'dark' ? 'light' : 'dark';
+                document.documentElement.setAttribute('data-theme', next);
+                localStorage.setItem('theme', next);
+            });
+
+            /* Mobile menu */
+            const mobileBtn = document.getElementById('mobile-menu-btn');
+            const mobileDrawer = document.getElementById('mobile-drawer');
+            const hamburgerSVG = `<svg viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>`;
+            const closeSVG = `<svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`;
+
+            function closeDrawer() {
+                mobileDrawer.classList.remove('open');
+                mobileBtn.innerHTML = hamburgerSVG;
+            }
+
+            mobileBtn.addEventListener('click', e => {
+                e.stopPropagation();
+                const isOpen = mobileDrawer.classList.toggle('open');
+                mobileBtn.innerHTML = isOpen ? closeSVG : hamburgerSVG;
+            });
+
+            mobileDrawer.querySelectorAll('.nav-link').forEach(l => l.addEventListener('click', closeDrawer));
+            document.addEventListener('click', e => {
+                if (!mobileDrawer.contains(e.target) && !mobileBtn.contains(e.target)) closeDrawer();
+            });
+
+            /* ─── 3D GLOWING CARDS TILT ─── */
+            const clientCards = document.querySelectorAll('.client-card');
+            clientCards.forEach(card => {
+                let frameId = null;
+
+                card.addEventListener('mousemove', e => {
+                    if (frameId) {
+                        cancelAnimationFrame(frameId);
+                    }
+
+                    frameId = requestAnimationFrame(() => {
+                        const rect = card.getBoundingClientRect();
+                        const x = e.clientX - rect.left;
+                        const y = e.clientY - rect.top;
+
+                        const centerX = rect.width / 2;
+                        const centerY = rect.height / 2;
+
+                        const rotateX = ((centerY - y) / centerY) * 10;
+                        const rotateY = ((x - centerX) / centerX) * 10;
+
+                        card.style.setProperty('--x', `${x}px`);
+                        card.style.setProperty('--y', `${y}px`);
+                        card.style.setProperty('--rotate-x', `${rotateX}deg`);
+                        card.style.setProperty('--rotate-y', `${rotateY}deg`);
+                    });
+                });
+
+                card.addEventListener('mouseleave', () => {
+                    if (frameId) {
+                        cancelAnimationFrame(frameId);
+                    }
+                    card.style.setProperty('--rotate-x', '0deg');
+                    card.style.setProperty('--rotate-y', '0deg');
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>
