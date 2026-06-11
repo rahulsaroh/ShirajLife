@@ -38,11 +38,12 @@
             grid-template-columns: 1fr;
             gap: var(--sp-lg);
             margin-top: var(--sp-lg);
+            justify-content: center;
         }
 
         @media (min-width: 768px) {
             .clients-grid {
-                grid-template-columns: repeat(3, 1fr);
+                grid-template-columns: repeat(auto-fit, minmax(320px, 420px));
             }
         }
 
@@ -58,6 +59,7 @@
             justify-content: space-between;
             min-height: 320px;
             transform-style: preserve-3d;
+            transform: perspective(1000px) rotateX(var(--rotate-x, 0deg)) rotateY(var(--rotate-y, 0deg));
             transition: transform 0.15s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.3s ease, border-color 0.3s ease;
             cursor: pointer;
         }
@@ -127,7 +129,7 @@
             bottom: 0;
             background: radial-gradient(
                 220px circle at var(--x, 50%) var(--y, 50%),
-                var(--acc-glow),
+                var(--glow-clr-glow, var(--acc-glow)),
                 transparent 80%
             );
             pointer-events: none;
@@ -260,48 +262,27 @@
                 </div>
 
                 <div class="clients-grid">
-                    <!-- Client 1: Gym Mentor Coaching -->
-                    <div class="client-card reveal card-dev" style="transition-delay:0.12s;">
+                    <!-- Client 1: Ritu Designer -->
+                    <div class="client-card reveal card-content" onclick="window.location.href='ritu-designer.html'" style="transition-delay:0.12s; --glow-clr: #800020; --glow-clr-glow: rgba(128, 0, 32, 0.12);">
                         <div class="client-card-content">
-                            <span class="client-focus">Fitness & Coaching</span>
-                            <h3 class="client-name">Gym Mentor Coaching</h3>
+                            <span class="client-focus">Boutique & Fashion</span>
+                            <h3 class="client-name">Ritu Designer</h3>
                             <p class="client-desc">
-                                Engineered local-first mobile progress dashboards. Designed volume progression tracking models that allow fitness coaches to systematically program hypertrophy cycles without cloud reliance.
+                                Crafted a luxury portfolio site for Diwan Fashion House. Implemented professional fashion styling showcases, couture layout portfolios, and structured tailoring class inquiry flows.
                             </p>
                         </div>
-                        <div class="client-card-footer">
-                            <span class="client-metric">+40%</span>
-                            <span class="client-metric-label">Progress Tracking Efficiency</span>
-                        </div>
-                    </div>
-
-                    <!-- Client 2: Wealth Rebalance Advisors -->
-                    <div class="client-card reveal card-finance" style="transition-delay:0.2s;">
-                        <div class="client-card-content">
-                            <span class="client-focus">Financial Planning</span>
-                            <h3 class="client-name">Wealth Rebalance Advisors</h3>
-                            <p class="client-desc">
-                                Built a python-based parsing pipeline that extracts Consolidated Account Statement (CAS) transaction entries from encrypted PDFs. Integrated layout tables mapping instant asset-rebalancing metrics.
-                            </p>
-                        </div>
-                        <div class="client-card-footer">
-                            <span class="client-metric">99.9%</span>
-                            <span class="client-metric-label">PDF Parsing Accuracy</span>
-                        </div>
-                    </div>
-
-                    <!-- Client 3: Public Audits Maharashtra -->
-                    <div class="client-card reveal card-data" style="transition-delay:0.28s;">
-                        <div class="client-card-content">
-                            <span class="client-focus">Compliance Analytics</span>
-                            <h3 class="client-name">Compliance Analytics</h3>
-                            <p class="client-desc">
-                                Programmed offline transaction checkers and ledger auditors. Re-architected data-validation scripts, helping teams execute deep ledger audit compliance checks on public accounts.
-                            </p>
-                        </div>
-                        <div class="client-card-footer">
-                            <span class="client-metric">9 Years</span>
-                            <span class="client-metric-label">Public Sector Experience</span>
+                        <div class="client-card-footer" style="display: flex; justify-content: space-between; align-items: flex-end; width: 100%;">
+                            <div>
+                                <span class="client-metric">14.4k+</span>
+                                <span class="client-metric-label">Instagram Followers</span>
+                            </div>
+                            <span class="btn-text" style="font-size: 0.8rem; display: inline-flex; align-items: center; gap: 4px; color: var(--acc); font-weight: 600;">
+                                View Case Study
+                                <svg viewBox="0 0 24 24" style="width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2.5;">
+                                    <line x1="5" y1="12" x2="19" y2="12" />
+                                    <polyline points="12 5 19 12 12 19" />
+                                </svg>
+                            </span>
                         </div>
                     </div>
                 </div>
@@ -312,21 +293,13 @@
                     <h2 class="section-title">Testimonials.</h2>
                 </div>
 
-                <div style="display: grid; grid-template-columns: 1fr; gap: var(--sp-md); margin-top: var(--sp-md); @media (min-width: 768px) { grid-template-columns: repeat(2, 1fr); }">
+                <div style="display: grid; grid-template-columns: 1fr; gap: var(--sp-md); margin-top: var(--sp-md);">
                     <!-- Testimonial 1 -->
                     <div class="testimonial-card reveal" style="transition-delay:0.08s;">
                         <p class="testimonial-text">
-                            "Shiraj brought absolute engineering precision to our fitness tracking. The offline SQLite architecture he structured transformed how our coaches track client volume cycles."
+                            "Shiraj built an incredibly elegant, high-contrast, responsive landing page for Diwan Fashion House boutique. The customized outfit form and styling portfolios look absolutely stunning and have significantly improved client registrations."
                         </p>
-                        <span class="testimonial-author">— Founder, Gym Mentor Premium Coach</span>
-                    </div>
-
-                    <!-- Testimonial 2 -->
-                    <div class="testimonial-card reveal" style="transition-delay:0.16s;">
-                        <p class="testimonial-text">
-                            "His out-of-the-box thinking on CAS parsing saved our wealth management team hours of manual entry. We rebalanced portfolios instantly with 0% margin of error."
-                        </p>
-                        <span class="testimonial-author">— Partner, Wealth Rebalance Advisors</span>
+                        <span class="testimonial-author">— Ritu, Founder of Diwan Fashion House</span>
                     </div>
                 </div>
 
