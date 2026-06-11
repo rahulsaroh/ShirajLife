@@ -58,10 +58,13 @@
         /* Gym Hero Styling */
         .gym-hero {
             position: relative;
-            min-height: 80vh;
+            min-height: 85vh;
             display: flex;
             align-items: center;
-            background: linear-gradient(135deg, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0.5) 100%);
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.75) 0%, rgba(0, 0, 0, 0.45) 100%), url('gym_hero_bg.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
             color: #ffffff;
             border-bottom: 1px solid var(--border);
             padding: var(--sp-2xl) 0;
@@ -71,7 +74,7 @@
         .gym-hero-bg {
             position: absolute;
             top: 0; left: 0; right: 0; bottom: 0;
-            background-image: radial-gradient(circle at 80% 20%, rgba(255, 74, 28, 0.15) 0%, transparent 50%);
+            background: radial-gradient(circle at 80% 20%, rgba(255, 74, 28, 0.18) 0%, transparent 60%);
             z-index: 1;
         }
 
@@ -129,7 +132,7 @@
             padding: var(--sp-xl);
             display: flex;
             flex-direction: column;
-            gap: var(--sp-sm);
+            gap: var(--sp-xs);
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
@@ -141,6 +144,27 @@
         .service-card:hover {
             border-color: var(--acc);
             box-shadow: 0 10px 30px var(--acc-glow);
+        }
+
+        .service-card-img-header {
+            width: 100%;
+            height: 160px;
+            overflow: hidden;
+            border-radius: var(--r-md);
+            border: 1px solid var(--border);
+            margin-bottom: var(--sp-sm);
+            transform: translateZ(15px);
+        }
+
+        .service-card-img-header img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .service-card:hover .service-card-img-header img {
+            transform: scale(1.08);
         }
 
         .service-icon {
@@ -161,6 +185,99 @@
             line-height: 1.6;
             color: var(--txt-1);
             transform: translateZ(20px);
+        }
+
+        /* Accordion Collage Styles */
+        .gym-collage {
+            display: flex;
+            flex-direction: column;
+            gap: var(--sp-md);
+            margin-top: var(--sp-xl);
+        }
+
+        @media (min-width: 768px) {
+            .gym-collage {
+                flex-direction: row;
+                height: 380px;
+            }
+        }
+
+        .collage-pane {
+            flex: 1;
+            height: 250px;
+            position: relative;
+            overflow: hidden;
+            border-radius: var(--r-lg);
+            border: 1px solid var(--border);
+            transition: flex 0.6s cubic-bezier(0.25, 1, 0.5, 1), border-color 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+
+        @media (min-width: 768px) {
+            .collage-pane {
+                height: 100%;
+            }
+        }
+
+        .collage-pane img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease, filter 0.6s ease;
+            filter: grayscale(40%) brightness(0.65);
+        }
+
+        .collage-pane:hover {
+            border-color: var(--acc);
+            box-shadow: 0 10px 30px var(--acc-glow);
+        }
+
+        @media (min-width: 768px) {
+            .collage-pane:hover {
+                flex: 2.2;
+            }
+        }
+
+        .collage-pane:hover img {
+            transform: scale(1.05);
+            filter: grayscale(0%) brightness(0.95);
+        }
+
+        .pane-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: var(--sp-md);
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.95));
+            color: #ffffff;
+            opacity: 0.85;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            z-index: 2;
+        }
+
+        .collage-pane:hover .pane-caption {
+            opacity: 1;
+        }
+
+        .pane-title {
+            font-family: var(--font-display);
+            font-size: 1.25rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: #ffffff;
+        }
+
+        .pane-sub {
+            font-size: 0.75rem;
+            color: var(--acc);
+            font-family: var(--font-mono);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
         }
 
         /* Pricing Table */
@@ -192,6 +309,16 @@
         .price-card.popular {
             border-color: var(--acc);
             box-shadow: 0 5px 20px var(--acc-glow);
+        }
+
+        @keyframes accPulse {
+            0% { box-shadow: 0 0 10px rgba(255, 74, 28, 0.08); }
+            50% { box-shadow: 0 0 30px rgba(255, 74, 28, 0.25); }
+            100% { box-shadow: 0 0 10px rgba(255, 74, 28, 0.08); }
+        }
+
+        .price-card.popular {
+            animation: accPulse 4s infinite ease-in-out;
         }
 
         .price-card.popular::before {
@@ -380,6 +507,34 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Interactive Accordion Collage -->
+                <div class="gym-collage reveal" style="transition-delay: 0.2s;">
+                    <!-- Pane 1 -->
+                    <div class="collage-pane" onclick="window.location.hash = '#services'">
+                        <img src="gym_hero_bg.png" alt="Barbell Lifting Platforms at IronPulse">
+                        <div class="pane-caption">
+                            <span class="pane-sub">Lifting Zone</span>
+                            <h4 class="pane-title">Barbell Platforms</h4>
+                        </div>
+                    </div>
+                    <!-- Pane 2 -->
+                    <div class="collage-pane" onclick="window.location.hash = '#services'">
+                        <img src="gym_strength.png" alt="Premium dumbbell stacks at IronPulse">
+                        <div class="pane-caption">
+                            <span class="pane-sub">Free Weights</span>
+                            <h4 class="pane-title">Dumbbell Bay</h4>
+                        </div>
+                    </div>
+                    <!-- Pane 3 -->
+                    <div class="collage-pane" onclick="window.location.hash = '#services'">
+                        <img src="gym_hiit.png" alt="Functional Turf Circuits at IronPulse">
+                        <div class="pane-caption">
+                            <span class="pane-sub">Cardio Circuits</span>
+                            <h4 class="pane-title">Functional Turf</h4>
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
 
@@ -394,6 +549,9 @@
                 <div class="services-grid-3">
                     <!-- Card 1: Strength -->
                     <div class="service-card reveal" style="transition-delay: 0.08s;">
+                        <div class="service-card-img-header">
+                            <img src="gym_strength.png" alt="Strength and Conditioning Gear">
+                        </div>
                         <div class="service-icon">🏋️‍♂️</div>
                         <h3 class="service-title">Strength &amp; Conditioning</h3>
                         <p class="service-desc">
@@ -403,6 +561,9 @@
 
                     <!-- Card 2: Coaching -->
                     <div class="service-card reveal" style="transition-delay: 0.16s;">
+                        <div class="service-card-img-header">
+                            <img src="gym_hero_bg.png" alt="Assigned coaching log">
+                        </div>
                         <div class="service-icon">📋</div>
                         <h3 class="service-title">1-on-1 Elite Coaching</h3>
                         <p class="service-desc">
@@ -412,6 +573,9 @@
 
                     <!-- Card 3: HIIT -->
                     <div class="service-card reveal" style="transition-delay: 0.24s;">
+                        <div class="service-card-img-header">
+                            <img src="gym_hiit.png" alt="Metabolic circuit area">
+                        </div>
                         <div class="service-icon">⚡</div>
                         <h3 class="service-title">Metabolic Circuits</h3>
                         <p class="service-desc">
