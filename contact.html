@@ -379,9 +379,14 @@
                         return;
                     }
 
-                    // If running locally as a file, let browser submit standard POST to bypass local CORS rules
+                    // If running locally as a file, simulate successful submission to prevent FormSubmit blocking on local files
                     if (window.location.protocol === 'file:') {
-                        return; // Let browser submit form naturally to the defined action/method
+                        e.preventDefault();
+                        formStatus.className = 'form-status success';
+                        formStatus.style.display = 'block';
+                        formStatus.textContent = `Thank you, ${name}! (Local Simulation: Enquiry recorded successfully. Real emails will send once hosted on a live web server).`;
+                        contactForm.reset();
+                        return;
                     }
 
                     // Otherwise use AJAX submit
