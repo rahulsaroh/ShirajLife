@@ -82,7 +82,7 @@
     --card: #151a1e;
     --txt-0: #edf0f5;
     --txt-1: #9aa1ac;
-    --txt-2: #5e6571;
+    --txt-2: #7c8594; /* Increased contrast for WCAG AA compliance (4.7:1) */
     --acc: #13b8a6;
     --acc-hi: #18d1be;
     --acc-br: #1ee8d4;
@@ -796,4 +796,94 @@ footer {
 /* Animations */
 .reveal {
     opacity: 1; /* Fallback for no-js, otherwise handled by JS transitions */
+}
+
+/* ==========================================
+   CUSTOM SLIDE-IN TOAST NOTIFICATIONS
+   ========================================== */
+.toast-container {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.toast {
+    background: var(--card);
+    border: 1.5px solid var(--border-hi);
+    border-left: 4px solid var(--acc);
+    border-radius: var(--r-md);
+    padding: 14px 20px;
+    box-shadow: var(--sh-lg);
+    color: var(--txt-0);
+    font-family: var(--font-sans);
+    font-size: 0.88rem;
+    font-weight: 600;
+    min-width: 280px;
+    max-width: 420px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transform: translateY(100px);
+    opacity: 0;
+    transition: all 0.4s var(--ease-expo);
+}
+
+.toast.show {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.toast.success { border-left-color: var(--data-clr); }
+.toast.error { border-left-color: var(--health-clr); }
+.toast.info { border-left-color: var(--dev-clr); }
+.toast.warning { border-left-color: var(--finance-clr); }
+
+/* ==========================================
+   HERO SCROLL INDICATOR
+   ========================================== */
+.scroll-indicator {
+    position: absolute;
+    bottom: var(--sp-md);
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    justify-content: center;
+    opacity: 0.6;
+    transition: opacity 0.3s;
+    z-index: 10;
+}
+
+.scroll-indicator:hover {
+    opacity: 1;
+}
+
+.mouse-wheel {
+    width: 24px;
+    height: 38px;
+    border: 2px solid var(--txt-2);
+    border-radius: var(--r-full);
+    position: relative;
+}
+
+.mouse-wheel::before {
+    content: '';
+    position: absolute;
+    top: 8px;
+    left: 50%;
+    width: 4px;
+    height: 8px;
+    background: var(--acc);
+    border-radius: var(--r-full);
+    transform: translateX(-50%);
+    animation: scrollMouse 1.8s ease-in-out infinite;
+}
+
+@keyframes scrollMouse {
+    0% { top: 8px; opacity: 1; }
+    50% { top: 16px; opacity: 0.3; }
+    100% { top: 8px; opacity: 1; }
 }

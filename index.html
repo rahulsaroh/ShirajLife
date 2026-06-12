@@ -32,6 +32,10 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Font Preloads -->
+    <link rel="preload" href="https://fonts.gstatic.com/s/outfit/v11/F3o1Rqw0AJQ85i2yDDKK.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="https://fonts.gstatic.com/s/plusjakartasans/v8/L0x5DFIqthQayVu1R2iISg.woff2" as="font" type="font/woff2" crossorigin>
+    
     <link
         href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500;600&display=swap"
         rel="stylesheet">
@@ -124,7 +128,7 @@
             --card: #151a1e;
             --txt-0: #edf0f5;
             --txt-1: #9aa1ac;
-            --txt-2: #5e6571;
+            --txt-2: #7c8594; /* Increased contrast for WCAG AA compliance (4.7:1) */
             --acc: #13b8a6;
             --acc-hi: #18d1be;
             --acc-br: #1ee8d4;
@@ -1928,6 +1932,7 @@
             </nav>
 
             <div class="nav-actions">
+                <a href="login.html" id="header-portal-btn" class="btn btn-secondary" style="padding: 6px 14px; font-size: 0.8rem;">Client Portal</a>
                 <button class="theme-toggle" id="theme-toggle" aria-label="Toggle visual theme">
                     <svg class="moon-icon" viewBox="0 0 24 24">
                         <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
@@ -1993,9 +1998,13 @@
                 </p>
 
                 <div class="hero-ctas reveal" style="transition-delay:0.32s;">
-                    <a href="#work" class="btn btn-primary">Explore Case Studies</a>
+                    <a href="work.html" class="btn btn-primary">Explore Case Studies</a>
                     <a href="#contact" class="btn btn-secondary">Get in Touch</a>
                 </div>
+            </div>
+            <!-- Scroll Indicator Wheel -->
+            <div class="scroll-indicator reveal" style="transition-delay:0.4s;">
+                <div class="mouse-wheel"></div>
             </div>
         </section>
 
@@ -2015,406 +2024,6 @@
                 <div class="ticker-item"><span class="ticker-dot"></span>Medicine Tracker: Your medicine tracking app</div>
             </div>
         </div>
-
-        <!-- ABOUT / IDENTITY -->
-        <section id="about">
-            <div class="container">
-                <div class="section-header reveal">
-                    <span class="section-eyebrow">Identity</span>
-                    <h2 class="section-title">Stable discipline meets raw execution.</h2>
-                </div>
-
-                <div class="about-grid">
-                    <div class="about-quote-wrap reveal" style="transition-delay:0.1s;">
-                        <span class="quote-mark">"</span>
-                        <p class="about-quote">
-                            "I believe in <em>compounding feedback loops</em> and rigorous daily routines over fleeting
-                            motivation."
-                        </p>
-                    </div>
-
-                    <div class="about-content reveal" style="transition-delay:0.2s;">
-                        <p class="about-text">
-                            I hold a <strong>Graduation degree in Engineering</strong> combined with a <strong>Masters in Business Administration (MBA)</strong>. This unique academic intersection of logical engineering principles and strategic business management forms the bedrock of how I approach problem-solving.
-                        </p>
-                        <p class="about-text">
-                            For the past <strong>9 years</strong>, I have been working in the <strong>Government of India</strong>. This extensive tenure has given me deep insights into operational governance, system audits, compliance, and large-scale data integrity.
-                        </p>
-                        <p class="about-text">
-                            Outside of government duties, I design systems to <strong>help businesses grow with out-of-the-box thinking</strong>. I translate analytical and structural discipline into digital products, planning strategies, and custom software architectures (using <strong>Flutter, Dart, Python, and SQL</strong>) to solve operational bottlenecks and drive growth.
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- PILLARS -->
-        <section id="pillars">
-            <div class="container">
-                <div class="section-header reveal">
-                    <span class="section-eyebrow">Focus Areas</span>
-                    <h2 class="section-title">The pillars of my execution.</h2>
-                </div>
-
-                <div class="pillars-grid">
-                    <!-- 01 Build -->
-                    <div class="pillar-card reveal" style="transition-delay:0.08s;">
-                        <div class="pillar-inner">
-                            <span class="pillar-num">01</span>
-                            <div class="pillar-icon">
-                                <svg viewBox="0 0 24 24">
-                                    <polyline points="16 18 22 12 16 6" />
-                                    <polyline points="8 6 2 12 8 18" />
-                                </svg>
-                            </div>
-                            <h3 class="pillar-title">Build</h3>
-                            <p class="pillar-desc">Constructing high-performance, offline-first applications and script
-                                automations using Flutter, Python, and SQL databases.</p>
-                        </div>
-                    </div>
-
-                    <!-- 02 Optimize -->
-                    <div class="pillar-card reveal" style="transition-delay:0.16s;">
-                        <div class="pillar-inner">
-                            <span class="pillar-num">02</span>
-                            <div class="pillar-icon">
-                                <svg viewBox="0 0 24 24">
-                                    <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
-                                </svg>
-                            </div>
-                            <h3 class="pillar-title">Optimize</h3>
-                            <p class="pillar-desc">Structuring athletic systems, monitoring progress load cycles,
-                                cardiovascular logs, and running metrics with strict consistency.</p>
-                        </div>
-                    </div>
-
-                    <!-- 03 Analyze -->
-                    <div class="pillar-card reveal" style="transition-delay:0.24s;">
-                        <div class="pillar-inner">
-                            <span class="pillar-num">03</span>
-                            <div class="pillar-icon">
-                                <svg viewBox="0 0 24 24">
-                                    <line x1="18" y1="20" x2="18" y2="10" />
-                                    <line x1="12" y1="20" x2="12" y2="4" />
-                                    <line x1="6" y1="20" x2="6" y2="14" />
-                                </svg>
-                            </div>
-                            <h3 class="pillar-title">Analyze</h3>
-                            <p class="pillar-desc">Parsing finance, ledger data, and portfolio allocation scripts to
-                                extract clean patterns for capital compounding.</p>
-                        </div>
-                    </div>
-
-                    <!-- 04 Share -->
-                    <div class="pillar-card reveal" style="transition-delay:0.32s;">
-                        <div class="pillar-inner">
-                            <span class="pillar-num">04</span>
-                            <div class="pillar-icon">
-                                <svg viewBox="0 0 24 24">
-                                    <path d="M12 20h9" />
-                                    <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
-                                </svg>
-                            </div>
-                            <h3 class="pillar-title">Share</h3>
-                            <p class="pillar-desc">Drafting educational content, sharing engineering logs, app build
-                                diaries, and productivity frameworks for future developers.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- PROJECTS / WORK -->
-        <section id="work">
-            <div class="container">
-                <div class="section-header reveal">
-                    <span class="section-eyebrow">My Work</span>
-                    <h2 class="section-title">Featured Production Applications.</h2>
-                </div>
-
-                <div class="projects-wrapper">
-
-                    <!-- Project 1: AI Gym Mentor -->
-                    <div class="project-card reveal">
-                        <div class="project-visual">
-                            <img src="Apps/AI%20GYM%20Mentor/screenshot_home_active.png" alt="AI Gym Mentor Screenshot" style="width:100%; height:auto; border-radius:8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
-                        </div>
-
-                        <div class="project-info">
-                            <div>
-                                <div class="project-meta">
-                                    <span class="project-tag">Flutter</span>
-                                    <span class="project-tag">SQLite</span>
-                                    <span class="project-tag">Gemini API</span>
-                                </div>
-                                <h3 class="project-title">AI Gym Mentor & Fitness Logger</h3>
-                                <p class="project-desc">A localized workout logger and progress analyzer designed to
-                                    bypass bloated, cloud-dependent subscription apps.</p>
-
-                                <div class="project-tabs" data-project="gym-mentor">
-                                    <button class="tab-btn active" data-tab="problem">Problem</button>
-                                    <button class="tab-btn" data-tab="approach">Approach</button>
-                                    <button class="tab-btn" data-tab="impact">Impact</button>
-                                </div>
-
-                                <div class="project-tab-contents" data-project="gym-mentor">
-                                    <div class="tab-pane active" data-content="problem">
-                                        Traditional lifting logs require constant internet connection, sell tracking
-                                        logs to third parties, or lack personalized insights on progressive overload
-                                        intervals.
-                                    </div>
-                                    <div class="tab-pane" data-content="approach">
-                                        Built an offline-first Flutter application structured around local SQLite
-                                        schemas. Added a local, offline cache module utilizing the Gemini API to analyze
-                                        monthly workouts, mapping hypertrophy curves and providing structured gym
-                                        recommendations.
-                                    </div>
-                                    <div class="tab-pane" data-content="impact">
-                                        Successfully tested with a local group of 15 gym enthusiasts, resulting in a 30%
-                                        speedup in workout logging overhead and consistent progression tracking.
-                                    </div>
-                                </div>
-                            </div>
-                            <div style="display: flex; gap: 16px; align-items: center; flex-wrap: wrap;">
-                                <a href="gym-mentor.html" class="btn-text">
-                                    Read Case Study
-                                    <svg viewBox="0 0 24 24">
-                                        <line x1="5" y1="12" x2="19" y2="12" />
-                                        <polyline points="12 5 19 12 12 19" />
-                                    </svg>
-                                </a>
-                                <span style="color: var(--border-hi); opacity: 0.5;">|</span>
-                                <a href="https://play.google.com/store/apps/details?id=com.aigymmentor.app" target="_blank" rel="noopener noreferrer" class="btn-text">
-                                    View on Play Store
-                                    <svg viewBox="0 0 24 24">
-                                        <line x1="5" y1="12" x2="19" y2="12" />
-                                        <polyline points="12 5 19 12 12 19" />
-                                    </svg>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Project 2: FinTrack -->
-                    <div class="project-card reveal">
-                        <div class="project-visual">
-                            <img src="Apps/AI%20Finance%20Manager/Screenshot%202026-02-19%20113234.png" alt="Private Portfolio Screenshot" style="width:100%; height:auto; border-radius:8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
-                        </div>
-
-                        <div class="project-info">
-                            <div>
-                                <div class="project-meta">
-                                    <span class="project-tag">Python</span>
-                                    <span class="project-tag">SQL</span>
-                                    <span class="project-tag">Pandas</span>
-                                </div>
-                                <h3 class="project-title">Private Portfolio & Wealth Tracker</h3>
-                                <p class="project-desc">A local parser and analytical rebalancer that visualizes
-                                    financial assets and tax efficiency without cloud integrations.</p>
-
-                                <div class="project-tabs" data-project="fintrack">
-                                    <button class="tab-btn active" data-tab="problem">Problem</button>
-                                    <button class="tab-btn" data-tab="approach">Approach</button>
-                                    <button class="tab-btn" data-tab="impact">Impact</button>
-                                </div>
-
-                                <div class="project-tab-contents" data-project="fintrack">
-                                    <div class="tab-pane active" data-content="problem">
-                                        Indian retail investors must log accounts across multiple stock brokers, mutual
-                                        fund platforms, and banking portals, exposing delicate transactional files to
-                                        third-party sync apps.
-                                    </div>
-                                    <div class="tab-pane" data-content="approach">
-                                        Developed a Python validation pipeline utilizing PDF parsing scripts to extract
-                                        CAS files. This loads statements into SQLite databases, building local
-                                        rebalancing recommendations based on tax brackets and risk levels.
-                                    </div>
-                                    <div class="tab-pane" data-content="impact">
-                                        Consolidates total family wealth calculations in under 2 minutes with absolute
-                                        data isolation, streamlining tax planning before the fiscal year-end.
-                                    </div>
-                                </div>
-                            </div>
-                            <div style="display: flex; gap: 16px; align-items: center; flex-wrap: wrap;">
-                                <a href="finance-manager.html" class="btn-text">
-                                    Read Case Study
-                                    <svg viewBox="0 0 24 24">
-                                        <line x1="5" y1="12" x2="19" y2="12" />
-                                        <polyline points="12 5 19 12 12 19" />
-                                    </svg>
-                                </a>
-                                <span style="color: var(--border-hi); opacity: 0.5;">|</span>
-                                <a href="https://play.google.com/store/apps/details?id=com.shiraj.financialcalculators" target="_blank" rel="noopener noreferrer" class="btn-text">
-                                    View on Play Store
-                                    <svg viewBox="0 0 24 24">
-                                        <line x1="5" y1="12" x2="19" y2="12" />
-                                        <polyline points="12 5 19 12 12 19" />
-                                    </svg>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-
-
-
-                </div>
-
-                <div class="more-work-container reveal" style="margin-top: var(--sp-xl); text-align: center;">
-                    <div style="background: var(--card); border: 1px solid var(--border); border-radius: var(--r-lg); padding: var(--sp-lg); max-width: 600px; margin: 0 auto; box-shadow: var(--sh-sm); transition: border-color 0.3s, box-shadow 0.3s; position: relative; overflow: hidden;" class="more-work-card">
-                        <h4 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--txt-0);">Looking for more?</h4>
-                        <p style="color: var(--txt-1); font-size: 0.95rem; margin-bottom: 1.5rem; line-height: 1.6;">Explore my full portfolio vault showing all open-source utilities, developer databases, and interactive tools.</p>
-                        <a href="work.html" class="btn btn-secondary" style="display: inline-flex; align-items: center; gap: 8px;">
-                            Explore All Projects
-                            <svg viewBox="0 0 24 24" style="width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2;">
-                                <line x1="5" y1="12" x2="19" y2="12" />
-                                <polyline points="12 5 19 12 12 19" />
-                            </svg>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- TOOLKIT -->
-        <section id="toolkit">
-            <div class="container">
-                <div class="section-header reveal">
-                    <span class="section-eyebrow">The System</span>
-                    <h2 class="section-title">My stacked toolkit.</h2>
-                </div>
-
-                <div class="skills-grid">
-                    <!-- Development -->
-                    <div class="skills-category card-dev reveal" style="transition-delay:0.08s;">
-                        <div class="skills-cat-header">
-                            <div class="skills-cat-icon">
-                                <svg viewBox="0 0 24 24">
-                                    <polyline points="16 18 22 12 16 6" />
-                                    <polyline points="8 6 2 12 8 18" />
-                                </svg>
-                            </div>
-                            <h3 class="skills-cat-title">Development</h3>
-                        </div>
-                        <div class="skills-list">
-                            <span class="skill-item">Flutter</span>
-                            <span class="skill-item">Dart</span>
-                            <span class="skill-item">Python</span>
-                            <span class="skill-item">Kotlin</span>
-                            <span class="skill-item">HTML/CSS/JS</span>
-                            <span class="skill-item">Firebase</span>
-                            <span class="skill-item">Git/GitHub</span>
-                        </div>
-                    </div>
-
-                    <!-- AI & Automation -->
-                    <div class="skills-category card-ai reveal" style="transition-delay:0.16s;">
-                        <div class="skills-cat-header">
-                            <div class="skills-cat-icon">
-                                <svg viewBox="0 0 24 24">
-                                    <circle cx="12" cy="12" r="10" />
-                                    <path
-                                        d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
-                                    <path d="M2 12h20" />
-                                </svg>
-                            </div>
-                            <h3 class="skills-cat-title">AI & Automation</h3>
-                        </div>
-                        <div class="skills-list">
-                            <span class="skill-item">Gemini API</span>
-                            <span class="skill-item">Prompt Engineering</span>
-                            <span class="skill-item">LLM Orchestration</span>
-                            <span class="skill-item">Script Automations</span>
-                            <span class="skill-item">VS Code Tools</span>
-                        </div>
-                    </div>
-
-                    <!-- Data & Databases -->
-                    <div class="skills-category card-data reveal" style="transition-delay:0.24s;">
-                        <div class="skills-cat-header">
-                            <div class="skills-cat-icon">
-                                <svg viewBox="0 0 24 24">
-                                    <ellipse cx="12" cy="5" rx="9" ry="3" />
-                                    <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5" />
-                                    <path d="M3 12c0 1.66 4 3 9 3s9-1.34 9-3" />
-                                </svg>
-                            </div>
-                            <h3 class="skills-cat-title">Data & Databases</h3>
-                        </div>
-                        <div class="skills-list">
-                            <span class="skill-item">SQL (PostgreSQL)</span>
-                            <span class="skill-item">SQLite</span>
-                            <span class="skill-item">Database Design</span>
-                            <span class="skill-item">Pandas / NumPy</span>
-                            <span class="skill-item">Data Cleansing</span>
-                        </div>
-                    </div>
-
-                    <!-- Finance & Analysis -->
-                    <div class="skills-category card-finance reveal" style="transition-delay:0.32s;">
-                        <div class="skills-cat-header">
-                            <div class="skills-cat-icon">
-                                <svg viewBox="0 0 24 24">
-                                    <line x1="18" y1="20" x2="18" y2="10" />
-                                    <line x1="12" y1="20" x2="12" y2="4" />
-                                    <line x1="6" y1="20" x2="6" y2="14" />
-                                </svg>
-                            </div>
-                            <h3 class="skills-cat-title">Finance & Analysis</h3>
-                        </div>
-                        <div class="skills-list">
-                            <span class="skill-item">Public Accounting</span>
-                            <span class="skill-item">Audit Verification</span>
-                            <span class="skill-item">Asset Modeling</span>
-                            <span class="skill-item">Taxation (India)</span>
-                            <span class="skill-item">Risk Assessment</span>
-                        </div>
-                    </div>
-
-                    <!-- Content & Digital -->
-                    <div class="skills-category card-content reveal" style="transition-delay:0.40s;">
-                        <div class="skills-cat-header">
-                            <div class="skills-cat-icon">
-                                <svg viewBox="0 0 24 24">
-                                    <rect x="2" y="2" width="20" height="20" rx="2.18" />
-                                    <line x1="7" y1="2" x2="7" y2="22" />
-                                    <line x1="17" y1="2" x2="17" y2="22" />
-                                    <line x1="2" y1="12" x2="22" y2="12" />
-                                    <line x1="2" y1="7" x2="7" y2="7" />
-                                    <line x1="2" y1="17" x2="7" y2="17" />
-                                    <line x1="17" y1="17" x2="22" y2="17" />
-                                    <line x1="17" y1="7" x2="22" y2="7" />
-                                </svg>
-                            </div>
-                            <h3 class="skills-cat-title">Content & Digital</h3>
-                        </div>
-                        <div class="skills-list">
-                            <span class="skill-item">YouTube Scripting</span>
-                            <span class="skill-item">Video Post-Production</span>
-                            <span class="skill-item">Technical Documentation</span>
-                            <span class="skill-item">Educational Architecture</span>
-                        </div>
-                    </div>
-
-                    <!-- Health & Fitness -->
-                    <div class="skills-category card-health reveal" style="transition-delay:0.48s;">
-                        <div class="skills-cat-header">
-                            <div class="skills-cat-icon">
-                                <svg viewBox="0 0 24 24">
-                                    <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
-                                </svg>
-                            </div>
-                            <h3 class="skills-cat-title">Health & Fitness</h3>
-                        </div>
-                        <div class="skills-list">
-                            <span class="skill-item">Hypertrophy Coaching</span>
-                            <span class="skill-item">RPE/RIR Progression</span>
-                            <span class="skill-item">Cardio Tracking</span>
-                            <span class="skill-item">Biomechanics</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
 
         <!-- PHILOSOPHY & METRICS -->
         <section>
@@ -2850,6 +2459,7 @@
 
         });
     </script>
+    <script src="shared-auth.js"></script>
 </body>
 
 </html>

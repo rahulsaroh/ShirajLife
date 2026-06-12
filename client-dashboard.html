@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Anti-FOUC: apply theme before paint -->
+    <script>
+        (function () {
+            var t = localStorage.getItem('theme') ||
+                (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            document.documentElement.setAttribute('data-theme', t);
+        })();
+    </script>
+
+    <title>Client Dashboard | Shiraj Life</title>
+    <meta name="description" content="Manage your active project status, timelines, and communications.">
+    <!-- Font Preloads -->
+    <link rel="preload" href="https://fonts.gstatic.com/s/outfit/v11/F3o1Rqw0AJQ85i2yDDKK.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="https://fonts.gstatic.com/s/plusjakartasans/v8/L0x5DFIqthQayVu1R2iISg.woff2" as="font" type="font/woff2" crossorigin>
+
+    <link rel="stylesheet" href="shared.css">
+
+    <style>
+        /* ==========================================
+           CLIENT DASHBOARD SPECIFIC STYLES
+           ========================================== */
+        .dash-section {
+            padding-top: calc(68px + var(--sp-sm));
+            padding-bottom: var(--sp-xl);
+            min-height: 85vh;
+        }
+
+        .welcome-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--r-lg);
+            padding: var(--sp-md);
+            box-shadow: var(--sh-md);
+            margin-bottom: var(--sp-md);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .welcome-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--acc);
+        }
+
+        .dash-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: var(--sp-md);
+            align-items: start;
+        }
+
+        @media (min-width: 992px) {
+            .dash-grid {
+                grid-template-columns: 1.2fr 0.8fr;
+            }
+        }
+
+        /* Stat widgets */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: var(--sp-xs);
+            margin-bottom: var(--sp-md);
+        }
+
+        .stat-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--r-md);
+            padding: 18px 20px;
+            box-shadow: var(--sh-sm);
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .stat-card-title {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            color: var(--txt-2);
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        .stat-card-value {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--txt-0);
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: var(--r-full);
+            width: fit-content;
+        }
+
+        .status-badge.in-progress {
+            background: rgba(217, 119, 6, 0.08);
+            border: 1px solid rgba(217, 119, 6, 0.2);
+            color: var(--finance-clr);
+        }
+
+        .status-badge.completed {
+            background: rgba(5, 150, 105, 0.08);
+            border: 1px solid rgba(5, 150, 105, 0.2);
+            color: var(--data-clr);
+        }
+
+        /* Progress Bar wrapper */
+        .progress-container {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-top: 8px;
+        }
+
+        .progress-label-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--txt-1);
+        }
+
+        .progress-track {
+            background: var(--bg-1);
+            height: 10px;
+            border-radius: var(--r-full);
+            overflow: hidden;
+            width: 100%;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, var(--acc), var(--acc-br));
+            height: 100%;
+            border-radius: var(--r-full);
+            width: 0%;
+            transition: width 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* Project Timeline Checklist */
+        .timeline-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--r-lg);
+            padding: var(--sp-md);
+            box-shadow: var(--sh-sm);
+            display: flex;
+            flex-direction: column;
+            gap: var(--sp-sm);
+        }
+
+        .timeline-title {
+            font-size: 1.2rem;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 8px;
+        }
+
+        .timeline-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            position: relative;
+            margin-left: 12px;
+            padding-left: 20px;
+            border-left: 2px dashed var(--border);
+        }
+
+        .timeline-item {
+            position: relative;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .timeline-dot {
+            position: absolute;
+            left: -27px;
+            top: 4px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--bg-2);
+            border: 2px solid var(--card);
+            box-shadow: 0 0 0 2px var(--border);
+            transition: all 0.3s ease;
+        }
+
+        .timeline-item.completed .timeline-dot {
+            background: var(--acc);
+            box-shadow: 0 0 0 2px var(--acc-glow);
+        }
+
+        .timeline-label {
+            font-size: 0.92rem;
+            font-weight: 500;
+            color: var(--txt-1);
+            transition: color 0.2s ease;
+        }
+
+        .timeline-item.completed .timeline-label {
+            color: var(--txt-0);
+            font-weight: 600;
+        }
+
+        .timeline-check {
+            font-size: 0.72rem;
+            color: var(--acc);
+            font-family: var(--font-mono);
+            font-weight: 700;
+            background: var(--acc-glow);
+            padding: 2px 6px;
+            border-radius: 4px;
+            margin-left: auto;
+        }
+
+        /* Messaging Module */
+        .chat-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--r-lg);
+            padding: var(--sp-md);
+            box-shadow: var(--sh-sm);
+            display: flex;
+            flex-direction: column;
+            gap: var(--sp-sm);
+            height: 480px;
+        }
+
+        .chat-title {
+            font-size: 1.1rem;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 8px;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            padding-right: 6px;
+        }
+
+        .chat-messages::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .chat-messages::-webkit-scrollbar-thumb {
+            background: var(--border-hi);
+            border-radius: 2px;
+        }
+
+        .msg-bubble {
+            max-width: 85%;
+            padding: 10px 14px;
+            border-radius: var(--r-md);
+            font-size: 0.88rem;
+            line-height: 1.5;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .msg-bubble.shiraj {
+            background: var(--bg-1);
+            color: var(--txt-0);
+            align-self: flex-start;
+            border-bottom-left-radius: 2px;
+        }
+
+        .msg-bubble.client {
+            background: var(--acc-glow);
+            color: var(--txt-0);
+            align-self: flex-end;
+            border-bottom-right-radius: 2px;
+            border: 1px solid var(--border-acc);
+        }
+
+        .msg-time {
+            font-size: 0.65rem;
+            color: var(--txt-2);
+            align-self: flex-end;
+        }
+
+        .chat-input-row {
+            display: flex;
+            gap: 8px;
+            margin-top: 6px;
+        }
+
+        .chat-input {
+            flex: 1;
+            background: var(--bg-0);
+            border: 1.5px solid var(--border);
+            border-radius: var(--r-md);
+            padding: 10px 14px;
+            color: var(--txt-0);
+            font-size: 0.9rem;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        .chat-input:focus {
+            border-color: var(--acc);
+            background: var(--card);
+        }
+
+        .chat-send-btn {
+            background: var(--acc);
+            color: var(--sel-txt);
+            border: none;
+            border-radius: var(--r-md);
+            padding: 0 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .chat-send-btn:hover {
+            background: var(--acc-hi);
+        }
+
+        .chat-send-btn svg {
+            width: 16px;
+            height: 16px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2.5;
+        }
+
+        /* Log out link in header styles */
+        .header-logout-btn {
+            background: none;
+            border: 1px solid var(--border);
+            color: var(--txt-1);
+            font-size: 0.8rem;
+            padding: 6px 14px;
+            border-radius: var(--r-md);
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .header-logout-btn:hover {
+            color: var(--txt-0);
+            background: var(--bg-1);
+            border-color: var(--border-hi);
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Firebase SDK (v8 Compatibility) -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="shared-auth.js"></script>
+    <script>
+        // Support admin preview mode via ?preview=clientId URL parameter
+        const _previewId = new URLSearchParams(window.location.search).get('preview');
+        let _clientUser;
+
+        if (_previewId) {
+            // Admin preview: check that admin is logged in
+            const _admin = ShirajAuth.getCurrentUser();
+            if (!_admin || _admin.role !== 'admin') {
+                window.location.href = 'login.html';
+            } else {
+                const _previewClient = ShirajAuth.getClientById(_previewId);
+                if (!_previewClient) {
+                    showToast('Client not found.', 'error');
+                    setTimeout(() => {
+                        window.location.href = 'admin-dashboard.html';
+                    }, 1500);
+                } else {
+                    _clientUser = { role: 'client', clientId: _previewId, name: _previewClient.name, _isAdminPreview: true };
+                }
+            }
+        } else {
+            // Normal client login check
+            _clientUser = ShirajAuth.requireAuth('client');
+            if (!_clientUser) {
+                document.write('<!--');
+            }
+        }
+        // Expose as 'user' for the rest of the page scripts
+        const user = _clientUser;
+    </script>
+
+    <!-- HEADER -->
+    <header id="header">
+        <div class="container nav-container">
+            <a href="index.html" class="logo" aria-label="Shiraj Life Home">
+                Shiraj<span>Life</span>
+            </a>
+
+            <nav class="nav-links" aria-label="Main Navigation">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="about.html" class="nav-link">About</a>
+                <a href="services.html" class="nav-link">Services</a>
+                <a href="work.html" class="nav-link">Work</a>
+                <a href="toolkit.html" class="nav-link">Toolkit</a>
+                <a href="clients.html" class="nav-link">Clients</a>
+                <a href="contact.html" class="nav-link">Contact</a>
+            </nav>
+
+            <div class="nav-actions">
+                <button class="theme-toggle" id="theme-toggle" aria-label="Toggle visual theme">
+                    <svg class="moon-icon" viewBox="0 0 24 24">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+                    </svg>
+                    <svg class="sun-icon" viewBox="0 0 24 24">
+                        <circle cx="12" cy="12" r="5" />
+                        <line x1="12" y1="1" x2="12" y2="3" />
+                        <line x1="12" y1="21" x2="12" y2="23" />
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                        <line x1="1" y1="12" x2="3" y2="12" />
+                        <line x1="21" y1="12" x2="23" y2="12" />
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+                    </svg>
+                </button>
+
+                <button class="header-logout-btn" onclick="ShirajAuth.logout()">Log Out</button>
+
+                <button class="mobile-nav-btn" id="mobile-menu-btn" aria-label="Toggle menu navigation drawer">
+                    <svg viewBox="0 0 24 24">
+                        <line x1="3" y1="12" x2="21" y2="12" />
+                        <line x1="3" y1="6" x2="21" y2="6" />
+                        <line x1="3" y1="18" x2="21" y2="18" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- MOBILE DRAWER -->
+    <div class="mobile-drawer" id="mobile-drawer">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="about.html" class="nav-link">About</a>
+        <a href="services.html" class="nav-link">Services</a>
+        <a href="work.html" class="nav-link">Work</a>
+        <a href="toolkit.html" class="nav-link">Toolkit</a>
+        <a href="clients.html" class="nav-link">Clients</a>
+        <a href="contact.html" class="nav-link">Contact</a>
+        <a href="#" class="nav-link" onclick="ShirajAuth.logout()">Log Out</a>
+    </div>
+
+    <!-- MAIN INTERACTIVE SPACE -->
+    <main>
+        <section class="dash-section">
+            <div class="container">
+                <!-- Welcome Banner -->
+                <div class="welcome-card">
+                    <span class="section-eyebrow" id="client-eyebrow">Services Workspace</span>
+                    <h1 id="welcome-title" style="letter-spacing: -0.03em;">Welcome back, Client</h1>
+                    <p id="welcome-service" style="color:var(--txt-1); font-size:0.95rem;">Active Service: Loading Details...</p>
+                    <div id="project-status" class="status-badge">Loading...</div>
+                </div>
+
+                <!-- Financial Stats -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <span class="stat-card-title">Total Project Value</span>
+                        <span class="stat-card-value" id="val-contract">₹0</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-card-title">Amount Paid</span>
+                        <span class="stat-card-value" id="val-paid" style="color: var(--acc);">₹0</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-card-title">Balance Outstanding</span>
+                        <span class="stat-card-value" id="val-balance">₹0</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-card-title">Website Renewal</span>
+                        <span class="stat-card-value" id="val-renewal" style="font-size:1rem; font-weight:700;">—</span>
+                    </div>
+                </div>
+
+                <!-- Dashboard Content Grid -->
+                <div class="dash-grid">
+                    <!-- Left Column: Details and Checklist -->
+                    <div style="display:flex; flex-direction:column; gap:20px;">
+                        <div class="timeline-card">
+                            <h2 class="timeline-title">Project Overview</h2>
+                            <p id="client-project-details" style="font-size:0.95rem; color: var(--txt-1); line-height: 1.65; margin-bottom: 8px;">
+                                Loading project brief...
+                            </p>
+
+                            <!-- Overall Progress Bar -->
+                            <div class="progress-container">
+                                <div class="progress-label-row">
+                                    <span>Milestones Completed</span>
+                                    <span id="progress-text">0%</span>
+                                </div>
+                                <div class="progress-track">
+                                    <div class="progress-fill" id="progress-fill"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Milestone Checklist -->
+                        <div class="timeline-card">
+                            <h2 class="timeline-title">Interactive Timeline &amp; Milestones</h2>
+                            <ul class="timeline-list" id="timeline-list">
+                                <!-- Populated dynamically by JS -->
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Right Column: Messages Feed (read-only) -->
+                    <div class="chat-card">
+                        <h2 class="chat-title">Messages from Shiraj</h2>
+                        <div class="chat-messages" id="chat-messages">
+                            <!-- Message bubbles populated dynamically -->
+                        </div>
+                        <div style="padding: 10px 14px; background: var(--bg-0); border: 1px solid var(--border); border-radius: var(--r-md); font-size:0.8rem; color:var(--txt-2); display:flex; align-items:center; gap:8px;">
+                            <svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;flex-shrink:0;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                            Messages are sent by Shiraj. Contact via the main website to reach out.
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="container footer-content">
+            <span class="footer-logo">Shiraj<span>Life</span></span>
+            <span class="footer-copy">&copy; 2026 Shiraj. Stacked &amp; Compiled in Mumbai. All Rights Reserved.</span>
+        </div>
+    </footer>
+
+    <!-- SCRIPTS -->
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            // Show admin preview banner if applicable
+            if (user && user._isAdminPreview) {
+                const banner = document.createElement('div');
+                banner.style.cssText = 'position:fixed;top:68px;left:0;right:0;z-index:1500;background:var(--finance-clr);color:#fff;text-align:center;padding:8px 16px;font-size:0.82rem;font-weight:700;letter-spacing:0.03em;';
+                banner.innerHTML = `👁️ ADMIN PREVIEW MODE — Viewing portal for <strong>${escapeHTMLGlobal(user.name)}</strong>. <a href="admin-dashboard.html" style="color:#fff;text-decoration:underline;margin-left:12px;">Return to Admin</a>`;
+                document.body.insertBefore(banner, document.body.firstChild);
+            }
+
+            const header = document.getElementById('header');
+            window.addEventListener('scroll', () => {
+                header.classList.toggle('scrolled', window.scrollY > 24);
+            }, { passive: true });
+
+            // Mobile menu drawer
+            const mobileBtn = document.getElementById('mobile-menu-btn');
+            const mobileDrawer = document.getElementById('mobile-drawer');
+            const hamburgerSVG = `<svg viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>`;
+            const closeSVG = `<svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`;
+
+            mobileBtn.addEventListener('click', e => {
+                e.stopPropagation();
+                const isOpen = mobileDrawer.classList.toggle('open');
+                mobileBtn.innerHTML = isOpen ? closeSVG : hamburgerSVG;
+            });
+
+            // Theme toggle
+            const themeBtn = document.getElementById('theme-toggle');
+            if (themeBtn) {
+                themeBtn.addEventListener('click', () => {
+                    const current = document.documentElement.getAttribute('data-theme');
+                    const next = current === 'dark' ? 'light' : 'dark';
+                    document.documentElement.setAttribute('data-theme', next);
+                    localStorage.setItem('theme', next);
+                });
+            }
+
+            // Global HTML escaper
+            function escapeHTMLGlobal(str) {
+                return String(str).replace(/[&<>'"]/g, 
+                    tag => ({
+                        '&': '&amp;',
+                        '<': '&lt;',
+                        '>': '&gt;',
+                        "'": '&#39;',
+                        '"': '&quot;'
+                    }[tag] || tag)
+                );
+            }
+            window.escapeHTMLGlobal = escapeHTMLGlobal;
+
+            // --- DASHBOARD CORE DATA POPULATION ---
+            const clientData = ShirajAuth.getClientById(user.clientId);
+            if (!clientData) {
+                showToast("Client profile not found. Logging out.", "error");
+                setTimeout(() => {
+                    ShirajAuth.logout();
+                }, 1500);
+                return;
+            }
+
+            // Fill header info
+            document.getElementById("client-eyebrow").textContent = `${clientData.name} Portal`;
+            document.getElementById("welcome-title").textContent = `Welcome back, ${clientData.name}`;
+            document.getElementById("welcome-service").textContent = `Active Service: ${clientData.service}`;
+            
+            // Project status badge
+            const statusBadge = document.getElementById("project-status");
+            statusBadge.textContent = clientData.status;
+            if (clientData.status === "Completed") {
+                statusBadge.className = "status-badge completed";
+            } else {
+                statusBadge.className = "status-badge in-progress";
+            }
+
+            // Financial breakdown values formatting (INR)
+            const formatter = new Intl.NumberFormat('en-IN', {
+                style: 'currency',
+                currency: 'INR',
+                maximumFractionDigits: 0
+            });
+            document.getElementById("val-contract").textContent = formatter.format(clientData.totalContract);
+            document.getElementById("val-paid").textContent = formatter.format(clientData.paidAmount);
+            
+            const valBalance = document.getElementById("val-balance");
+            valBalance.textContent = formatter.format(clientData.balanceAmount);
+            if (clientData.balanceAmount > 0) {
+                valBalance.style.color = "var(--finance-clr)";
+            } else {
+                valBalance.style.color = "var(--data-clr)";
+            }
+
+            // Renewal date
+            const valRenewal = document.getElementById("val-renewal");
+            if (clientData.renewalDate) {
+                const rd = new Date(clientData.renewalDate + 'T00:00:00');
+                valRenewal.textContent = rd.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
+                // Highlight if renewal is within 90 days
+                const daysLeft = Math.ceil((rd - new Date()) / (1000 * 60 * 60 * 24));
+                if (daysLeft <= 90) valRenewal.style.color = 'var(--finance-clr)';
+            } else {
+                valRenewal.textContent = 'Not Set';
+            }
+
+            // Project description text
+            document.getElementById("client-project-details").textContent = clientData.details;
+
+            // Render project progress fill bar
+            const pFill = document.getElementById("progress-fill");
+            const pText = document.getElementById("progress-text");
+            setTimeout(() => {
+                pFill.style.width = `${clientData.progress}%`;
+            }, 100);
+            pText.textContent = `${clientData.progress}%`;
+
+            // Timeline builder
+            const timelineList = document.getElementById("timeline-list");
+            function renderTimeline() {
+                timelineList.innerHTML = '';
+                clientData.timeline.forEach((step) => {
+                    const li = document.createElement("li");
+                    li.className = `timeline-item ${step.completed ? 'completed' : ''}`;
+                    li.innerHTML = `
+                        <div class="timeline-dot"></div>
+                        <span class="timeline-label">${escapeHTMLGlobal(step.label)}</span>
+                        ${step.completed ? '<span class="timeline-check">DONE</span>' : '<span class="timeline-check" style="background:none; color:var(--txt-2); font-weight:normal;">PENDING</span>'}
+                    `;
+                    timelineList.appendChild(li);
+                });
+            }
+            renderTimeline();
+
+            // --- MESSAGING — READ ONLY (no send for clients) ---
+            const chatMessages = document.getElementById("chat-messages");
+
+            function renderMessages() {
+                chatMessages.innerHTML = '';
+                if (!clientData.messages || clientData.messages.length === 0) {
+                    chatMessages.innerHTML = `
+                        <div style="text-align:center; color:var(--txt-2); font-size:0.8rem; margin-top:20px;">
+                            No messages yet from Shiraj.
+                        </div>
+                    `;
+                    return;
+                }
+                
+                // Show only messages from Shiraj (read-only feed)
+                clientData.messages.forEach(msg => {
+                    const bubble = document.createElement("div");
+                    bubble.className = `msg-bubble shiraj`;
+                    
+                    let tStr = msg.time;
+                    if (tStr && tStr.includes(" ")) {
+                        tStr = tStr.split(" ").slice(1).join(" ");
+                    }
+                    
+                    bubble.innerHTML = `
+                        <span style="font-size:0.72rem; font-weight:700; color:var(--acc); margin-bottom:2px;">${escapeHTMLGlobal(msg.sender)}</span>
+                        <span>${escapeHTMLGlobal(msg.text)}</span>
+                        <span class="msg-time">${tStr}</span>
+                    `;
+                    chatMessages.appendChild(bubble);
+                });
+
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+            renderMessages();
+
+            // Listen for admin updates in real-time (same browser, different tab)
+            window.addEventListener("storage", () => {
+                const refreshedClient = ShirajAuth.getClientById(clientData.id);
+                if (refreshedClient) {
+                    document.getElementById("welcome-service").textContent = `Active Service: ${refreshedClient.service}`;
+                    document.getElementById("val-contract").textContent = formatter.format(refreshedClient.totalContract);
+                    document.getElementById("val-paid").textContent = formatter.format(refreshedClient.paidAmount);
+                    
+                    const refreshedBalance = document.getElementById("val-balance");
+                    refreshedBalance.textContent = formatter.format(refreshedClient.balanceAmount);
+                    refreshedBalance.style.color = refreshedClient.balanceAmount > 0 ? "var(--finance-clr)" : "var(--data-clr)";
+
+                    // Renewal date refresh
+                    const refreshRenewal = document.getElementById("val-renewal");
+                    if (refreshedClient.renewalDate) {
+                        const rd2 = new Date(refreshedClient.renewalDate + 'T00:00:00');
+                        refreshRenewal.textContent = rd2.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
+                        const daysLeft2 = Math.ceil((rd2 - new Date()) / (1000 * 60 * 60 * 24));
+                        refreshRenewal.style.color = daysLeft2 <= 90 ? 'var(--finance-clr)' : '';
+                    } else {
+                        refreshRenewal.textContent = 'Not Set';
+                    }
+
+                    document.getElementById("client-project-details").textContent = refreshedClient.details;
+                    pFill.style.width = `${refreshedClient.progress}%`;
+                    pText.textContent = `${refreshedClient.progress}%`;
+
+                    clientData.timeline = refreshedClient.timeline;
+                    clientData.messages = refreshedClient.messages;
+                    clientData.status = refreshedClient.status;
+
+                    statusBadge.textContent = clientData.status;
+                    statusBadge.className = clientData.status === "Completed" ? "status-badge completed" : "status-badge in-progress";
+
+                    renderTimeline();
+                    renderMessages();
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

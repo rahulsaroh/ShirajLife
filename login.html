@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Anti-FOUC: apply theme before paint -->
+    <script>
+        (function () {
+            var t = localStorage.getItem('theme') ||
+                (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            document.documentElement.setAttribute('data-theme', t);
+        })();
+    </script>
+
+    <title>Portal Login | Shiraj Life</title>
+    <meta name="description" content="Client and Administrator portal login for Shiraj Life dashboard management.">
+    <!-- Font Preloads -->
+    <link rel="preload" href="https://fonts.gstatic.com/s/outfit/v11/F3o1Rqw0AJQ85i2yDDKK.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="https://fonts.gstatic.com/s/plusjakartasans/v8/L0x5DFIqthQayVu1R2iISg.woff2" as="font" type="font/woff2" crossorigin>
+
+    <link rel="stylesheet" href="shared.css">
+
+    <style>
+        /* ==========================================
+           LOGIN PAGE SPECIFIC STYLES
+           ========================================== */
+        .login-section {
+            min-height: 85vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            padding: var(--sp-xl) 0;
+        }
+
+        /* Ambient spotlight background glow for login page */
+        .login-section::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: radial-gradient(circle, var(--dot) 1.5px, transparent 1.5px);
+            background-size: 28px 28px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .login-glow {
+            position: absolute;
+            width: 450px;
+            height: 450px;
+            background: radial-gradient(circle, var(--acc-glow) 0%, transparent 70%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .login-container {
+            width: 100%;
+            max-width: 440px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .login-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--r-lg);
+            padding: var(--sp-lg) var(--sp-md);
+            box-shadow: var(--sh-lg);
+            display: flex;
+            flex-direction: column;
+            gap: var(--sp-md);
+            transition: transform 0.3s var(--ease-expo), border-color 0.3s ease;
+        }
+
+        .login-card:hover {
+            border-color: var(--border-acc);
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: var(--sp-xs);
+        }
+
+        .login-subtitle {
+            font-size: 0.88rem;
+            color: var(--txt-2);
+            margin-top: 4px;
+        }
+
+        /* Tabs Selector */
+        .login-tabs {
+            display: flex;
+            background: var(--bg-1);
+            border: 1px solid var(--border);
+            border-radius: var(--r-md);
+            padding: 4px;
+            margin-bottom: 8px;
+        }
+
+        .login-tab-btn {
+            flex: 1;
+            background: none;
+            border: none;
+            padding: 10px;
+            font-family: var(--font-display);
+            font-weight: 600;
+            font-size: 0.88rem;
+            color: var(--txt-1);
+            border-radius: calc(var(--r-md) - 4px);
+            transition: all 0.25s var(--ease-expo);
+        }
+
+        .login-tab-btn.active {
+            background: var(--card);
+            color: var(--acc);
+            box-shadow: var(--sh-sm);
+        }
+
+        /* Form Controls */
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            position: relative;
+        }
+
+        .form-label {
+            font-family: var(--font-mono);
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: var(--txt-1);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .form-input {
+            width: 100%;
+            background: var(--bg-0);
+            border: 1.5px solid var(--border);
+            border-radius: var(--r-md);
+            padding: 12px 16px;
+            color: var(--txt-0);
+            font-family: var(--font-sans);
+            font-size: 0.92rem;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        .form-input:focus {
+            border-color: var(--acc);
+            background: var(--card);
+            box-shadow: 0 0 0 3px var(--acc-glow);
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 14px;
+            background: none;
+            border: none;
+            color: var(--txt-2);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 4px;
+            transition: color 0.2s ease;
+        }
+
+        .password-toggle:hover {
+            color: var(--txt-0);
+        }
+
+        .password-toggle svg {
+            width: 18px;
+            height: 18px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2;
+        }
+
+        /* Error Message Alert */
+        .error-alert {
+            background: rgba(220, 38, 38, 0.08);
+            border: 1.5px solid rgba(220, 38, 38, 0.22);
+            color: var(--health-clr);
+            font-size: 0.85rem;
+            padding: 12px var(--sp-sm);
+            border-radius: var(--r-md);
+            display: none;
+            align-items: center;
+            gap: 8px;
+            animation: shake 0.4s var(--ease-expo);
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-6px); }
+            40%, 80% { transform: translateX(6px); }
+        }
+
+        /* Submit Button with Loading Spinner */
+        .submit-btn {
+            width: 100%;
+            padding: 13px;
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: 0.95rem;
+            letter-spacing: -0.01em;
+            margin-top: 10px;
+            position: relative;
+        }
+
+        .submit-text {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: opacity 0.2s ease;
+        }
+
+        .spinner {
+            width: 18px;
+            height: 18px;
+            border: 2.5px solid rgba(255, 255, 255, 0.25);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            display: none;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .submit-btn.loading .submit-text {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .submit-btn.loading .spinner {
+            display: block;
+        }
+
+        @keyframes spin {
+            to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        /* Mock credentials helper */
+        .creds-helper {
+            background: var(--bg-0);
+            border: 1px solid var(--border);
+            border-radius: var(--r-md);
+            padding: 12px;
+            font-size: 0.78rem;
+            color: var(--txt-1);
+            line-height: 1.5;
+            margin-top: var(--sp-md);
+        }
+
+        .creds-helper strong {
+            color: var(--txt-0);
+            font-family: var(--font-mono);
+        }
+
+        .creds-helper .helper-title {
+            font-weight: 700;
+            text-transform: uppercase;
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            color: var(--acc);
+            margin-bottom: 4px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <header id="header">
+        <div class="container nav-container">
+            <a href="index.html" class="logo" aria-label="Shiraj Life Home">
+                Shiraj<span>Life</span>
+            </a>
+
+            <nav class="nav-links" aria-label="Main Navigation">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="about.html" class="nav-link">About</a>
+                <a href="services.html" class="nav-link">Services</a>
+                <a href="work.html" class="nav-link">Work</a>
+                <a href="toolkit.html" class="nav-link">Toolkit</a>
+                <a href="clients.html" class="nav-link">Clients</a>
+                <a href="contact.html" class="nav-link">Contact</a>
+            </nav>
+
+            <div class="nav-actions">
+                <button class="theme-toggle" id="theme-toggle" aria-label="Toggle visual theme">
+                    <svg class="moon-icon" viewBox="0 0 24 24">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+                    </svg>
+                    <svg class="sun-icon" viewBox="0 0 24 24">
+                        <circle cx="12" cy="12" r="5" />
+                        <line x1="12" y1="1" x2="12" y2="3" />
+                        <line x1="12" y1="21" x2="12" y2="23" />
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                        <line x1="1" y1="12" x2="3" y2="12" />
+                        <line x1="21" y1="12" x2="23" y2="12" />
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+                    </svg>
+                </button>
+
+                <button class="mobile-nav-btn" id="mobile-menu-btn" aria-label="Toggle menu navigation drawer">
+                    <svg viewBox="0 0 24 24">
+                        <line x1="3" y1="12" x2="21" y2="12" />
+                        <line x1="3" y1="6" x2="21" y2="6" />
+                        <line x1="3" y1="18" x2="21" y2="18" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- MOBILE DRAWER -->
+    <div class="mobile-drawer" id="mobile-drawer">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="about.html" class="nav-link">About</a>
+        <a href="services.html" class="nav-link">Services</a>
+        <a href="work.html" class="nav-link">Work</a>
+        <a href="toolkit.html" class="nav-link">Toolkit</a>
+        <a href="clients.html" class="nav-link">Clients</a>
+        <a href="contact.html" class="nav-link">Contact</a>
+    </div>
+
+    <!-- MAIN LOGIN PANEL -->
+    <main>
+        <section class="login-section">
+            <div class="login-glow"></div>
+            <div class="container login-container">
+                <div class="login-card">
+                    <div class="login-header">
+                        <h2>Portal Login.</h2>
+                        <p class="login-subtitle">Access your projects or admin workspace</p>
+                    </div>
+
+                    <!-- Tabs to switch roles -->
+                    <div class="login-tabs">
+                        <button type="button" class="login-tab-btn active" id="tab-client" onclick="switchRole('client')">Client Portal</button>
+                        <button type="button" class="login-tab-btn" id="tab-admin" onclick="switchRole('admin')">Admin Panel</button>
+                    </div>
+
+                    <!-- Error Alert -->
+                    <div class="error-alert" id="error-alert">
+                        <svg viewBox="0 0 24 24" style="width:18px; height:18px; fill:none; stroke:currentColor; stroke-width:2;">
+                            <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+                        </svg>
+                        <span id="error-text">Incorrect username or password.</span>
+                    </div>
+
+                    <!-- Login Form -->
+                    <form id="login-form" style="display:flex; flex-direction:column; gap:16px;">
+                        <div class="form-group">
+                            <label for="username" class="form-label" id="username-label">Client Username</label>
+                            <input type="text" id="username" class="form-input" placeholder="e.g. ritu" required autocomplete="username">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="password" class="form-label">Password</label>
+                            <div class="input-wrapper">
+                                <input type="password" id="password" class="form-input" placeholder="••••••••" required autocomplete="current-password">
+                                <button type="button" class="password-toggle" id="pw-toggle" aria-label="Toggle password visibility">
+                                    <svg viewBox="0 0 24 24">
+                                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                        <circle cx="12" cy="12" r="3"/>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary submit-btn" id="submit-btn">
+                            <span class="submit-text">
+                                Proceed to Dashboard
+                                <svg viewBox="0 0 24 24" style="width:16px; height:16px; fill:none; stroke:currentColor; stroke-width:2.5;">
+                                    <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+                                </svg>
+                            </span>
+                            <div class="spinner"></div>
+                        </button>
+                    </form>
+
+                    <!-- Mock Credentials helper box -->
+                    <div class="creds-helper">
+                        <div class="helper-title">Demo Credentials</div>
+                        <div id="creds-content">
+                            Client: Username <strong>ritu</strong> / Password <strong>ritu123</strong> (or <strong>opulence</strong> / <strong>ironpulse</strong>)
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="container footer-content">
+            <span class="footer-logo">Shiraj<span>Life</span></span>
+            <span class="footer-copy">&copy; 2026 Shiraj. Stacked &amp; Compiled in Mumbai. All Rights Reserved.</span>
+        </div>
+    </footer>
+
+    <!-- Firebase SDK (v8 Compatibility) -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <!-- SCRIPTS -->
+    <script src="shared-auth.js"></script>
+    <script>
+        let selectedRole = "client";
+
+        function switchRole(role) {
+            selectedRole = role;
+            const tabClient = document.getElementById("tab-client");
+            const tabAdmin = document.getElementById("tab-admin");
+            const userLabel = document.getElementById("username-label");
+            const usernameInput = document.getElementById("username");
+            const credsContent = document.getElementById("creds-content");
+
+            if (role === "admin") {
+                tabClient.classList.remove("active");
+                tabAdmin.classList.add("active");
+                userLabel.textContent = "Admin Username";
+                usernameInput.placeholder = "e.g. admin";
+                credsContent.innerHTML = "Admin: Username <strong>admin</strong> / Password <strong>admin123</strong>";
+            } else {
+                tabClient.classList.add("active");
+                tabAdmin.classList.remove("active");
+                userLabel.textContent = "Client Username";
+                usernameInput.placeholder = "e.g. ritu";
+                credsContent.innerHTML = "Client: Username <strong>ritu</strong> / Password <strong>ritu123</strong> (or <strong>opulence</strong> / <strong>ironpulse</strong>)";
+            }
+            // Hide error alert when switching
+            document.getElementById("error-alert").style.display = "none";
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Check if already logged in and redirect accordingly
+            const user = ShirajAuth.getCurrentUser();
+            if (user) {
+                window.location.href = user.role === 'admin' ? 'admin-dashboard.html' : 'client-dashboard.html';
+                return;
+            }
+
+            const header = document.getElementById('header');
+            window.addEventListener('scroll', () => {
+                header.classList.toggle('scrolled', window.scrollY > 24);
+            }, { passive: true });
+
+            // Theme toggle
+            const themeBtn = document.getElementById('theme-toggle');
+            themeBtn.addEventListener('click', () => {
+                const current = document.documentElement.getAttribute('data-theme');
+                const next = current === 'dark' ? 'light' : 'dark';
+                document.documentElement.setAttribute('data-theme', next);
+                localStorage.setItem('theme', next);
+            });
+
+            // Mobile menu toggle
+            const mobileBtn = document.getElementById('mobile-menu-btn');
+            const mobileDrawer = document.getElementById('mobile-drawer');
+            const hamburgerSVG = `<svg viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>`;
+            const closeSVG = `<svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`;
+
+            function closeDrawer() {
+                mobileDrawer.classList.remove('open');
+                mobileBtn.innerHTML = hamburgerSVG;
+            }
+
+            mobileBtn.addEventListener('click', e => {
+                e.stopPropagation();
+                const isOpen = mobileDrawer.classList.toggle('open');
+                mobileBtn.innerHTML = isOpen ? closeSVG : hamburgerSVG;
+            });
+
+            // Password Toggle logic
+            const pwInput = document.getElementById("password");
+            const pwToggle = document.getElementById("pw-toggle");
+            pwToggle.addEventListener("click", () => {
+                if (pwInput.type === "password") {
+                    pwInput.type = "text";
+                    pwToggle.innerHTML = `
+                        <svg viewBox="0 0 24 24">
+                            <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/>
+                            <line x1="1" y1="1" x2="23" y2="23"/>
+                        </svg>
+                    `;
+                } else {
+                    pwInput.type = "password";
+                    pwToggle.innerHTML = `
+                        <svg viewBox="0 0 24 24">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                            <circle cx="12" cy="12" r="3"/>
+                        </svg>
+                    `;
+                }
+            });
+
+            // Form Submit Logic
+            const form = document.getElementById("login-form");
+            const submitBtn = document.getElementById("submit-btn");
+            const errorAlert = document.getElementById("error-alert");
+            const errorText = document.getElementById("error-text");
+
+            form.addEventListener("submit", e => {
+                e.preventDefault();
+                errorAlert.style.display = "none";
+                submitBtn.classList.add("loading");
+
+                const usernameVal = document.getElementById("username").value;
+                const passwordVal = pwInput.value;
+
+                // Simulate loading state for clean premium feel
+                setTimeout(async () => {
+                    try {
+                        const result = await ShirajAuth.login(usernameVal, passwordVal, selectedRole);
+                        if (result.success) {
+                            const user = ShirajAuth.getCurrentUser();
+                            window.location.href = user.role === 'admin' ? 'admin-dashboard.html' : 'client-dashboard.html';
+                        } else {
+                            submitBtn.classList.remove("loading");
+                            errorText.textContent = result.message;
+                            errorAlert.style.display = "flex";
+                        }
+                    } catch (err) {
+                        submitBtn.classList.remove("loading");
+                        errorText.textContent = "An error occurred during authentication.";
+                        errorAlert.style.display = "flex";
+                    }
+                }, 800);
+            });
+        });
+    </script>
+</body>
+
+</html>

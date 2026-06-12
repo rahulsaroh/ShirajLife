@@ -1,0 +1,1346 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Anti-FOUC: apply theme before paint -->
+    <script>
+        (function () {
+            var t = localStorage.getItem('theme') ||
+                (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            document.documentElement.setAttribute('data-theme', t);
+        })();
+    </script>
+
+    <title>Admin Dashboard | Shiraj Life</title>
+    <meta name="description" content="Manage client credentials, contract values, project tracking, and incoming queries.">
+    <!-- Font Preloads -->
+    <link rel="preload" href="https://fonts.gstatic.com/s/outfit/v11/F3o1Rqw0AJQ85i2yDDKK.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="https://fonts.gstatic.com/s/plusjakartasans/v8/L0x5DFIqthQayVu1R2iISg.woff2" as="font" type="font/woff2" crossorigin>
+
+    <link rel="stylesheet" href="shared.css">
+
+    <style>
+        /* ==========================================
+           ADMIN DASHBOARD SPECIFIC STYLES
+           ========================================== */
+        .admin-section {
+            padding-top: calc(68px + var(--sp-sm));
+            padding-bottom: var(--sp-xl);
+            min-height: 85vh;
+        }
+
+        .admin-header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: var(--sp-md);
+        }
+
+        /* Metrics grid */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--sp-sm);
+            margin-bottom: var(--sp-md);
+        }
+
+        .metric-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--r-lg);
+            padding: 22px 24px;
+            box-shadow: var(--sh-sm);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .metric-info {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .metric-lbl {
+            font-family: var(--font-mono);
+            font-size: 0.72rem;
+            color: var(--txt-2);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .metric-val {
+            font-size: 1.6rem;
+            font-weight: 900;
+            color: var(--txt-0);
+        }
+
+        .metric-icon {
+            background: var(--bg-1);
+            color: var(--acc);
+            width: 44px;
+            height: 44px;
+            border-radius: var(--r-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .metric-icon svg {
+            width: 20px;
+            height: 20px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2.5;
+        }
+
+        /* Two column layout */
+        .admin-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: var(--sp-md);
+            align-items: start;
+        }
+
+        @media (min-width: 1200px) {
+            .admin-grid {
+                grid-template-columns: 1.45fr 0.55fr;
+            }
+        }
+
+        /* Clients Directory Table Container */
+        .directory-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--r-lg);
+            padding: var(--sp-md);
+            box-shadow: var(--sh-md);
+        }
+
+        .directory-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--sp-sm);
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .directory-title {
+            font-size: 1.25rem;
+        }
+
+        .search-box {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .search-input {
+            background: var(--bg-0);
+            border: 1.5px solid var(--border);
+            border-radius: var(--r-md);
+            padding: 8px 12px 8px 34px;
+            font-size: 0.85rem;
+            color: var(--txt-0);
+            outline: none;
+            width: 200px;
+            transition: all 0.25s var(--ease-expo);
+        }
+
+        .search-input:focus {
+            border-color: var(--acc);
+            width: 260px;
+            background: var(--card);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 12px;
+            color: var(--txt-2);
+            pointer-events: none;
+        }
+
+        .search-icon svg {
+            width: 14px;
+            height: 14px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2.5;
+        }
+
+        /* Responsive Table */
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+            border-radius: var(--r-md);
+            border: 1px solid var(--border);
+            background: var(--bg-0);
+        }
+
+        .clients-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 0.88rem;
+        }
+
+        .clients-table th {
+            background: var(--bg-1);
+            color: var(--txt-1);
+            font-family: var(--font-mono);
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            padding: 14px 16px;
+            border-bottom: 1.5px solid var(--border);
+        }
+
+        .clients-table td {
+            padding: 14px 16px;
+            border-bottom: 1px solid var(--border);
+            vertical-align: middle;
+            color: var(--txt-1);
+            background: var(--card);
+        }
+
+        .clients-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .client-profile-cell {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .client-cell-name {
+            font-weight: 700;
+            color: var(--txt-0);
+            font-size: 0.92rem;
+        }
+
+        .client-cell-meta {
+            font-size: 0.75rem;
+            color: var(--txt-2);
+            font-family: var(--font-mono);
+        }
+
+        .status-dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: 6px;
+        }
+
+        .status-dot.active {
+            background: var(--data-clr);
+            box-shadow: 0 0 8px var(--data-clr);
+        }
+
+        .status-dot.pending {
+            background: var(--finance-clr);
+            box-shadow: 0 0 8px var(--finance-clr);
+        }
+
+        .progress-micro-track {
+            background: var(--bg-1);
+            height: 6px;
+            border-radius: var(--r-full);
+            overflow: hidden;
+            width: 80px;
+            margin-top: 4px;
+        }
+
+        .progress-micro-fill {
+            background: var(--acc);
+            height: 100%;
+            border-radius: var(--r-full);
+        }
+
+        /* Action Buttons */
+        .actions-cell {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+        }
+
+        .action-btn {
+            background: none;
+            border: 1px solid var(--border);
+            padding: 6px 10px;
+            border-radius: var(--r-sm);
+            cursor: pointer;
+            color: var(--txt-1);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .action-btn:hover {
+            color: var(--txt-0);
+            background: var(--bg-1);
+            border-color: var(--border-hi);
+        }
+
+        .action-btn.edit:hover {
+            color: var(--finance-clr);
+            border-color: rgba(217, 119, 6, 0.3);
+            background: rgba(217, 119, 6, 0.05);
+        }
+
+        .action-btn.view:hover {
+            color: var(--acc);
+            border-color: var(--border-acc);
+            background: var(--acc-glow);
+        }
+
+        .action-btn.delete:hover {
+            color: var(--health-clr);
+            border-color: rgba(220, 38, 38, 0.3);
+            background: rgba(220, 38, 38, 0.05);
+        }
+
+        /* Global Feedback Feed */
+        .feedback-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--r-lg);
+            padding: var(--sp-md);
+            box-shadow: var(--sh-sm);
+            display: flex;
+            flex-direction: column;
+            gap: var(--sp-sm);
+            max-height: 600px;
+        }
+
+        .feedback-title {
+            font-size: 1.15rem;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 8px;
+        }
+
+        .feedback-scroll {
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            padding-right: 6px;
+            flex: 1;
+        }
+
+        .feedback-scroll::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .feedback-scroll::-webkit-scrollbar-thumb {
+            background: var(--border-hi);
+            border-radius: 2px;
+        }
+
+        .feedback-item {
+            background: var(--bg-0);
+            border: 1px solid var(--border);
+            border-radius: var(--r-md);
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .feedback-item:hover {
+            background: var(--bg-1);
+            border-color: var(--border-hi);
+        }
+
+        .feedback-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .feedback-client-name {
+            font-weight: 700;
+            color: var(--txt-0);
+            font-size: 0.85rem;
+        }
+
+        .feedback-time {
+            font-family: var(--font-mono);
+            font-size: 0.65rem;
+            color: var(--txt-2);
+        }
+
+        .feedback-text {
+            font-size: 0.82rem;
+            color: var(--txt-1);
+            line-height: 1.5;
+            word-break: break-word;
+        }
+
+        /* --- MODAL DIALOGS --- */
+        .modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(13, 16, 18, 0.65);
+            backdrop-filter: blur(8px);
+            z-index: 2000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+        }
+
+        .modal.open {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--card);
+            border: 1px solid var(--border-hi);
+            border-radius: var(--r-lg);
+            width: 100%;
+            max-width: 520px;
+            padding: var(--sp-md);
+            box-shadow: var(--sh-lg);
+            position: relative;
+            animation: zoomIn 0.3s var(--ease-expo);
+        }
+
+        @keyframes zoomIn {
+            from { transform: scale(0.92); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .modal-close {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            background: none;
+            border: none;
+            color: var(--txt-2);
+            cursor: pointer;
+            padding: 4px;
+        }
+
+        .modal-close:hover {
+            color: var(--txt-0);
+        }
+
+        .modal-close svg {
+            width: 20px;
+            height: 20px;
+            stroke: currentColor;
+            stroke-width: 2.5;
+        }
+
+        .modal-title {
+            font-size: 1.35rem;
+            margin-bottom: var(--sp-sm);
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 8px;
+        }
+
+        .modal-form {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .form-row-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+        
+        .modal-form label {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: var(--txt-1);
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .modal-form input, .modal-form select, .modal-form textarea {
+            width: 100%;
+            background: var(--bg-0);
+            border: 1.5px solid var(--border);
+            border-radius: var(--r-md);
+            padding: 10px 12px;
+            color: var(--txt-0);
+            font-size: 0.9rem;
+            outline: none;
+            transition: border-color 0.2s ease;
+        }
+
+        .modal-form input:focus, .modal-form select:focus, .modal-form textarea:focus {
+            border-color: var(--acc);
+            background: var(--card);
+        }
+
+        /* Reply box inside feedback */
+        .quick-reply-box {
+            border-top: 1px solid var(--border);
+            padding-top: var(--sp-xs);
+            margin-top: var(--sp-xs);
+            display: none;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .quick-reply-title {
+            font-family: var(--font-mono);
+            font-size: 0.72rem;
+            color: var(--acc);
+            font-weight: 700;
+        }
+
+        .quick-reply-input-row {
+            display: flex;
+            gap: 6px;
+        }
+
+        .quick-reply-input {
+            flex: 1;
+            background: var(--bg-0);
+            border: 1px solid var(--border);
+            border-radius: var(--r-sm);
+            padding: 6px 10px;
+            font-size: 0.8rem;
+            color: var(--txt-0);
+            outline: none;
+        }
+
+        .quick-reply-input:focus {
+            border-color: var(--acc);
+        }
+
+        .quick-reply-btn {
+            background: var(--acc);
+            color: white;
+            border: none;
+            border-radius: var(--r-sm);
+            padding: 0 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Firebase SDK (v8 Compatibility) -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="shared-auth.js"></script>
+    <script>
+        // Check authorization synchronously
+        const userCheck = ShirajAuth.requireAuth('admin');
+        if (!userCheck) {
+            document.write('<!--');
+        }
+    </script>
+
+    <!-- HEADER -->
+    <header id="header">
+        <div class="container nav-container">
+            <a href="index.html" class="logo" aria-label="Shiraj Life Home">
+                Shiraj<span>Life</span>
+            </a>
+
+            <nav class="nav-links" aria-label="Main Navigation">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="about.html" class="nav-link">About</a>
+                <a href="services.html" class="nav-link">Services</a>
+                <a href="work.html" class="nav-link">Work</a>
+                <a href="toolkit.html" class="nav-link">Toolkit</a>
+                <a href="clients.html" class="nav-link">Clients</a>
+                <a href="contact.html" class="nav-link">Contact</a>
+            </nav>
+
+            <div class="nav-actions">
+                <button class="theme-toggle" id="theme-toggle" aria-label="Toggle visual theme">
+                    <svg class="moon-icon" viewBox="0 0 24 24">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+                    </svg>
+                    <svg class="sun-icon" viewBox="0 0 24 24">
+                        <circle cx="12" cy="12" r="5" />
+                        <line x1="12" y1="1" x2="12" y2="3" />
+                        <line x1="12" y1="21" x2="12" y2="23" />
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                        <line x1="1" y1="12" x2="3" y2="12" />
+                        <line x1="21" y1="12" x2="23" y2="12" />
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+                    </svg>
+                </button>
+
+                <button class="header-logout-btn" onclick="ShirajAuth.logout()">Log Out</button>
+
+                <button class="mobile-nav-btn" id="mobile-menu-btn" aria-label="Toggle menu navigation drawer">
+                    <svg viewBox="0 0 24 24">
+                        <line x1="3" y1="12" x2="21" y2="12" />
+                        <line x1="3" y1="6" x2="21" y2="6" />
+                        <line x1="3" y1="18" x2="21" y2="18" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- MOBILE DRAWER -->
+    <div class="mobile-drawer" id="mobile-drawer">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="about.html" class="nav-link">About</a>
+        <a href="services.html" class="nav-link">Services</a>
+        <a href="work.html" class="nav-link">Work</a>
+        <a href="toolkit.html" class="nav-link">Toolkit</a>
+        <a href="clients.html" class="nav-link">Clients</a>
+        <a href="contact.html" class="nav-link">Contact</a>
+        <a href="#" class="nav-link" onclick="ShirajAuth.logout()">Log Out</a>
+    </div>
+
+    <!-- MAIN DASHBOARD CONTENT -->
+    <main>
+        <section class="admin-section">
+            <div class="container">
+                
+                <!-- Page Title Row -->
+                <div class="admin-header-row">
+                    <div>
+                        <span class="section-eyebrow">Admin Console</span>
+                        <h1 style="letter-spacing:-0.03em;">Clients Manager.</h1>
+                    </div>
+                    <button class="btn btn-primary" onclick="openAddModal()">
+                        <svg viewBox="0 0 24 24" style="width:16px; height:16px; fill:none; stroke:currentColor; stroke-width:2.5; margin-right:4px;">
+                            <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+                        </svg>
+                        Add New Client
+                    </button>
+                </div>
+
+                <!-- Financial Metrics Summary Cards -->
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-info">
+                            <span class="metric-lbl">Total Client Accounts</span>
+                            <span class="metric-val" id="metric-clients-count">0</span>
+                        </div>
+                        <div class="metric-icon">
+                            <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                        </div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-info">
+                            <span class="metric-lbl">Contracted Value</span>
+                            <span class="metric-val" id="metric-contract-value">₹0</span>
+                        </div>
+                        <div class="metric-icon" style="color: var(--dev-clr); background: var(--dev-glow);">
+                            <svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                        </div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-info">
+                            <span class="metric-lbl">Revenue Received</span>
+                            <span class="metric-val" id="metric-paid-value" style="color:var(--acc);">₹0</span>
+                        </div>
+                        <div class="metric-icon" style="color: var(--data-clr); background: var(--data-glow);">
+                            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 14 14"/></svg>
+                        </div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-info">
+                            <span class="metric-lbl">Outstanding Balance</span>
+                            <span class="metric-val" id="metric-balance-value">₹0</span>
+                        </div>
+                        <div class="metric-icon" style="color: var(--finance-clr); background: var(--finance-glow);">
+                            <svg viewBox="0 0 24 24"><polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Admin Action Layout Grid -->
+                <div class="admin-grid">
+                    <!-- Directory Panel -->
+                    <div class="directory-card">
+                        <div class="directory-header">
+                            <h2 class="directory-title">Clients Directory</h2>
+                            <div class="search-box">
+                                <span class="search-icon">
+                                    <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                                </span>
+                                <input type="text" id="search-input" class="search-input" placeholder="Search clients or services...">
+                            </div>
+                        </div>
+
+                        <!-- Table -->
+                        <div class="table-responsive">
+                            <table class="clients-table">
+                                <thead>
+                                    <tr>
+                                        <th>Client Profile</th>
+                                        <th>Project Service</th>
+                                        <th>Contract Details</th>
+                                        <th>Status &amp; Progress</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="clients-tbody">
+                                    <!-- Rendered dynamically by JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Client Messages Feed -->
+                    <div class="feedback-card">
+                        <h2 class="feedback-title">Clients Feedback &amp; Updates</h2>
+                        <div class="feedback-scroll" id="feedback-feed">
+                            <!-- Populated dynamically by JS -->
+                        </div>
+
+                        <!-- Mini Quick Reply Panel -->
+                        <div class="quick-reply-box" id="reply-container">
+                            <span class="quick-reply-title" id="reply-to-title">Reply to Client</span>
+                            <form id="reply-form" class="quick-reply-input-row">
+                                <input type="text" id="reply-msg-text" class="quick-reply-input" placeholder="Type a response..." required>
+                                <button type="submit" class="quick-reply-btn">Send</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+    </main>
+
+    <!-- ADD CLIENT MODAL -->
+    <div class="modal" id="add-modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeAddModal()">
+                <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+            <h3 class="modal-title">Create Client Profile</h3>
+            <form id="add-client-form" class="modal-form">
+                <div class="form-row-2">
+                    <div>
+                        <label for="add-name">Client Name</label>
+                        <input type="text" id="add-name" placeholder="e.g. Diwan Couture" required>
+                    </div>
+                    <div>
+                        <label for="add-username">Login Username</label>
+                        <input type="text" id="add-username" placeholder="e.g. diwan" required>
+                    </div>
+                </div>
+
+                <div class="form-row-2">
+                    <div>
+                        <label for="add-password">Login Password</label>
+                        <input type="text" id="add-password" placeholder="e.g. diwan123" required>
+                    </div>
+                    <div>
+                        <label for="add-service">Active Service</label>
+                        <input type="text" id="add-service" placeholder="e.g. Couture Portfolio Website" required>
+                    </div>
+                </div>
+
+                <div class="form-row-2">
+                    <div>
+                        <label for="add-contract">Contract Value (₹)</label>
+                        <input type="number" id="add-contract" value="100000" min="0" required>
+                    </div>
+                    <div>
+                        <label for="add-paid">Paid Amount (₹)</label>
+                        <input type="number" id="add-paid" value="0" min="0" required>
+                    </div>
+                </div>
+
+                <div class="form-row-2">
+                    <div>
+                        <label for="add-progress">Progress (%)</label>
+                        <input type="number" id="add-progress" value="10" min="0" max="100" required>
+                    </div>
+                    <div>
+                        <label for="add-status">Status</label>
+                        <select id="add-status">
+                            <option value="In Progress">In Progress</option>
+                            <option value="Completed">Completed</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row-2">
+                    <div>
+                        <label for="add-renewal">Website Renewal Date</label>
+                        <input type="date" id="add-renewal">
+                    </div>
+                    <div>
+                        <label for="add-details">Project Description Brief</label>
+                        <textarea id="add-details" rows="2" placeholder="Brief description of project requirements and goals..."></textarea>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="margin-top:10px;">Create Profile &amp; Credentials</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- EDIT CLIENT MODAL -->
+    <div class="modal" id="edit-modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeEditModal()">
+                <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+            <h3 class="modal-title" id="edit-modal-title">Edit Client Details</h3>
+            <form id="edit-client-form" class="modal-form">
+                <input type="hidden" id="edit-client-id">
+                
+                <div class="form-row-2">
+                    <div>
+                        <label for="edit-name">Client Name</label>
+                        <input type="text" id="edit-name" required>
+                    </div>
+                    <div>
+                        <label for="edit-username">Login Username</label>
+                        <input type="text" id="edit-username" required>
+                    </div>
+                </div>
+
+                <div class="form-row-2">
+                    <div>
+                        <label for="edit-password">Login Password</label>
+                        <input type="text" id="edit-password" required>
+                    </div>
+                    <div>
+                        <label for="edit-service">Active Service</label>
+                        <input type="text" id="edit-service" required>
+                    </div>
+                </div>
+
+                <div class="form-row-2">
+                    <div>
+                        <label for="edit-contract">Contract Value (₹)</label>
+                        <input type="number" id="edit-contract" min="0" required>
+                    </div>
+                    <div>
+                        <label for="edit-paid">Paid Amount (₹)</label>
+                        <input type="number" id="edit-paid" min="0" required>
+                    </div>
+                </div>
+
+                <div class="form-row-2">
+                    <div>
+                        <label for="edit-progress">Progress (%)</label>
+                        <input type="number" id="edit-progress" min="0" max="100" required>
+                    </div>
+                    <div>
+                        <label for="edit-status">Status</label>
+                        <select id="edit-status">
+                            <option value="In Progress">In Progress</option>
+                            <option value="Completed">Completed</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row-2">
+                    <div>
+                        <label for="edit-renewal">Website Renewal Date</label>
+                        <input type="date" id="edit-renewal">
+                    </div>
+                    <div>
+                        <label for="edit-details">Project Description Brief</label>
+                        <textarea id="edit-details" rows="2" required></textarea>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="margin-top:10px;">Save Changes</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="container footer-content">
+            <span class="footer-logo">Shiraj<span>Life</span></span>
+            <span class="footer-copy">&copy; 2026 Shiraj. Stacked &amp; Compiled in Mumbai. All Rights Reserved.</span>
+        </div>
+    </footer>
+
+    <!-- SCRIPTS -->
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const header = document.getElementById('header');
+            window.addEventListener('scroll', () => {
+                header.classList.toggle('scrolled', window.scrollY > 24);
+            }, { passive: true });
+
+            // Mobile menu drawer
+            const mobileBtn = document.getElementById('mobile-menu-btn');
+            const mobileDrawer = document.getElementById('mobile-drawer');
+            const hamburgerSVG = `<svg viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>`;
+            const closeSVG = `<svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`;
+
+            mobileBtn.addEventListener('click', e => {
+                e.stopPropagation();
+                const isOpen = mobileDrawer.classList.toggle('open');
+                mobileBtn.innerHTML = isOpen ? closeSVG : hamburgerSVG;
+            });
+
+            // Theme toggle
+            const themeBtn = document.getElementById('theme-toggle');
+            if (themeBtn) {
+                themeBtn.addEventListener('click', () => {
+                    const current = document.documentElement.getAttribute('data-theme');
+                    const next = current === 'dark' ? 'light' : 'dark';
+                    document.documentElement.setAttribute('data-theme', next);
+                    localStorage.setItem('theme', next);
+                });
+            }
+
+            // --- ADMIN APPLICATION STATE & RENDERING ---
+            const tbody = document.getElementById("clients-tbody");
+            const feedbackFeed = document.getElementById("feedback-feed");
+            const searchInput = document.getElementById("search-input");
+
+            // Currencies formatter
+            const formatCurr = new Intl.NumberFormat('en-IN', {
+                style: 'currency',
+                currency: 'INR',
+                maximumFractionDigits: 0
+            });
+
+            let activeReplyClientId = null;
+
+            function loadAndCalculate() {
+                const clients = ShirajAuth.getClients();
+                
+                // 1. Calculate Metrics totals
+                let totalContract = 0;
+                let totalPaid = 0;
+                let totalBalance = 0;
+                
+                clients.forEach(c => {
+                    totalContract += c.totalContract;
+                    totalPaid += c.paidAmount;
+                    totalBalance += c.balanceAmount;
+                });
+
+                document.getElementById("metric-clients-count").textContent = clients.length;
+                document.getElementById("metric-contract-value").textContent = formatCurr.format(totalContract);
+                document.getElementById("metric-paid-value").textContent = formatCurr.format(totalPaid);
+                
+                const balEl = document.getElementById("metric-balance-value");
+                balEl.textContent = formatCurr.format(totalBalance);
+                if (totalBalance > 0) {
+                    balEl.style.color = "var(--finance-clr)";
+                } else {
+                    balEl.style.color = "var(--data-clr)";
+                }
+
+                // 2. Render Table Directory
+                renderTable(clients);
+
+                // 3. Render Combined Feedback Feed
+                renderFeedbackFeed(clients);
+            }
+
+            function renderTable(list) {
+                tbody.innerHTML = '';
+                if (list.length === 0) {
+                    tbody.innerHTML = `
+                        <tr>
+                            <td colspan="5" style="text-align:center; padding: 30px; color: var(--txt-2);">
+                                No clients found matching search.
+                            </td>
+                        </tr>
+                    `;
+                    return;
+                }
+
+                list.forEach(client => {
+                    const tr = document.createElement("tr");
+
+                    // Status dot styling
+                    const dotClass = client.status === "Completed" ? "active" : "pending";
+                    const formattedBalance = formatCurr.format(client.balanceAmount);
+
+                    const renewalStr = client.renewalDate
+                        ? new Date(client.renewalDate + 'T00:00:00').toLocaleDateString('en-IN', { day:'2-digit', month:'short', year:'numeric' })
+                        : '—';
+
+                    tr.innerHTML = `
+                        <td>
+                            <div class="client-profile-cell">
+                                <span class="client-cell-name">${escapeHTML(client.name)}</span>
+                                <span class="client-cell-meta">User: ${escapeHTML(client.username)} / PW: ${escapeHTML(client.password)}</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div style="font-weight: 500; color:var(--txt-0);">${escapeHTML(client.service)}</div>
+                            <div style="font-size:0.72rem; color:var(--txt-2); margin-top:3px;">Renewal: <strong style="color:var(--finance-clr);">${renewalStr}</strong></div>
+                        </td>
+                        <td>
+                            <div style="font-weight: 600; color: var(--txt-0);">${formatCurr.format(client.totalContract)}</div>
+                            <div style="font-size:0.75rem; color:var(--txt-2);">Paid: ${formatCurr.format(client.paidAmount)} / Due: <span style="font-weight:600; color:${client.balanceAmount > 0 ? 'var(--finance-clr)' : 'var(--data-clr)'}">${formattedBalance}</span></div>
+                        </td>
+                        <td>
+                            <div style="display:flex; align-items:center; gap:2px; font-weight:600; color:var(--txt-0);">
+                                <span class="status-dot ${dotClass}"></span>
+                                ${client.status} (${client.progress}%)
+                            </div>
+                            <div class="progress-micro-track">
+                                <div class="progress-micro-fill" style="width: ${client.progress}%;"></div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="actions-cell">
+                                <button type="button" class="action-btn view" onclick="viewClientPortal('${client.id}')" title="Preview this client's portal view">View Portal</button>
+                                <button type="button" class="action-btn edit" onclick="openEditModal('${client.id}')">Edit</button>
+                                <button type="button" class="action-btn delete" onclick="deleteClient('${client.id}')">Delete</button>
+                            </div>
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            }
+
+            function renderFeedbackFeed(clients) {
+                feedbackFeed.innerHTML = '';
+                
+                // Aggregate all messages that are client feedback (sender is NOT Shiraj)
+                let allFeedbacks = [];
+                clients.forEach(c => {
+                    if (c.messages) {
+                        c.messages.forEach(msg => {
+                            if (msg.sender !== "Shiraj") {
+                                allFeedbacks.push({
+                                    clientId: c.id,
+                                    clientName: c.name,
+                                    text: msg.text,
+                                    time: msg.time
+                                });
+                            }
+                        });
+                    }
+                });
+
+                // Sort by date/time desc (newest first)
+                allFeedbacks.sort((a,b) => b.time.localeCompare(a.time));
+
+                if (allFeedbacks.length === 0) {
+                    feedbackFeed.innerHTML = `
+                        <div style="text-align:center; color: var(--txt-2); font-size: 0.8rem; padding: var(--sp-md) 0;">
+                            No client messages received.
+                        </div>
+                    `;
+                    return;
+                }
+
+                allFeedbacks.forEach(fb => {
+                    const div = document.createElement("div");
+                    div.className = "feedback-item";
+                    div.onclick = () => selectClientForReply(fb.clientId, fb.clientName);
+                    
+                    div.innerHTML = `
+                        <div class="feedback-item-header">
+                            <span class="feedback-client-name">${escapeHTML(fb.clientName)}</span>
+                            <span class="feedback-time">${fb.time}</span>
+                        </div>
+                        <p class="feedback-text">"${escapeHTML(fb.text)}"</p>
+                        <div style="font-size: 0.68rem; color: var(--acc); font-weight: 700; align-self: flex-end; margin-top:2px;">Click to Reply</div>
+                    `;
+                    feedbackFeed.appendChild(div);
+                });
+            }
+
+            function selectClientForReply(id, name) {
+                activeReplyClientId = id;
+                const container = document.getElementById("reply-container");
+                const title = document.getElementById("reply-to-title");
+                title.textContent = `Reply to ${name}`;
+                container.style.display = "flex";
+                document.getElementById("reply-msg-text").focus();
+            }
+
+            // Quick reply form submit
+            document.getElementById("reply-form").addEventListener("submit", e => {
+                e.preventDefault();
+                if (!activeReplyClientId) return;
+
+                const textEl = document.getElementById("reply-msg-text");
+                const text = textEl.value.trim();
+                if (!text) return;
+
+                const clients = ShirajAuth.getClients();
+                const client = clients.find(c => c.id === activeReplyClientId);
+                if (client) {
+                    const now = new Date();
+                    const timestamp = now.toISOString().split('T')[0] + " " + now.toTimeString().split(' ')[0].substring(0, 5);
+
+                    if (!client.messages) client.messages = [];
+                    client.messages.push({
+                        sender: "Shiraj",
+                        text: text,
+                        time: timestamp
+                    });
+
+                    ShirajAuth.saveClients(clients);
+                    textEl.value = '';
+                    document.getElementById("reply-container").style.display = "none";
+                    loadAndCalculate();
+                    showToast(`Reply sent to ${client.name}!`, "success");
+                }
+            });
+
+            // Live Search filter
+            searchInput.addEventListener("input", () => {
+                const term = searchInput.value.toLowerCase().trim();
+                const clients = ShirajAuth.getClients();
+                const filtered = clients.filter(c => 
+                    c.name.toLowerCase().includes(term) || 
+                    c.service.toLowerCase().includes(term) ||
+                    c.username.toLowerCase().includes(term)
+                );
+                renderTable(filtered);
+            });
+
+            function escapeHTML(str) {
+                return str.replace(/[&<>'"]/g, 
+                    tag => ({
+                        '&': '&amp;',
+                        '<': '&lt;',
+                        '>': '&gt;',
+                        "'": '&#39;',
+                        '"': '&quot;'
+                    }[tag] || tag)
+                );
+            }
+
+            // --- FORM SUBMISSIONS & CRUD ACTIONS ---
+            
+            // 1. ADD CLIENT
+            document.getElementById("add-client-form").addEventListener("submit", async e => {
+                e.preventDefault();
+
+                const name = document.getElementById("add-name").value.trim();
+                const username = document.getElementById("add-username").value.trim().toLowerCase();
+                const password = document.getElementById("add-password").value.trim();
+                const service = document.getElementById("add-service").value.trim();
+                const contract = parseInt(document.getElementById("add-contract").value);
+                const paid = parseInt(document.getElementById("add-paid").value);
+                const progress = parseInt(document.getElementById("add-progress").value);
+                const status = document.getElementById("add-status").value;
+                const renewalDate = document.getElementById("add-renewal").value || "";
+                const details = document.getElementById("add-details").value.trim() || "No custom brief provided.";
+
+                const clients = ShirajAuth.getClients();
+                
+                // Duplicate check
+                if (!ShirajAuth.isFirebase && clients.some(c => c.username === username || c.id === username)) {
+                    showToast("A client with that username already exists.", "warning");
+                    return;
+                }
+
+                // Initial milestone template
+                const defaultTimeline = [
+                    { label: "Requirements Gathering", completed: progress >= 20 },
+                    { label: "UI Design Mockups", completed: progress >= 40 },
+                    { label: "Frontend Development", completed: progress >= 70 },
+                    { label: "Quality Checks", completed: progress >= 90 },
+                    { label: "Final Launch & Handover", completed: progress === 100 }
+                ];
+
+                const newClient = {
+                    id: username,
+                    name: name,
+                    username: username,
+                    password: password,
+                    service: service,
+                    totalContract: contract,
+                    paidAmount: paid,
+                    balanceAmount: Math.max(0, contract - paid),
+                    progress: progress,
+                    status: status,
+                    renewalDate: renewalDate,
+                    details: details,
+                    timeline: defaultTimeline,
+                    messages: [
+                        { sender: "Shiraj", text: `Welcome to your portal workspace, ${name}! Your project tracking is active.`, time: new Date().toISOString().split('T')[0] + " 12:00" }
+                    ]
+                };
+
+                // Add loading indicator to modal button
+                const btn = e.target.querySelector('button[type="submit"]');
+                const originalText = btn.textContent;
+                btn.disabled = true;
+                btn.textContent = "Creating Account...";
+
+                try {
+                    if (ShirajAuth.isFirebase) {
+                        const result = await ShirajAuth.registerNewClient(newClient);
+                        if (!result.success) {
+                            showToast("Failed to create client: " + result.message, "error");
+                            btn.disabled = false;
+                            btn.textContent = originalText;
+                            return;
+                        }
+                    } else {
+                        clients.push(newClient);
+                        ShirajAuth.saveClients(clients);
+                    }
+
+                    // Reset & Close
+                    document.getElementById("add-client-form").reset();
+                    closeAddModal();
+                    loadAndCalculate();
+                    showToast(`Client "${name}" created successfully!`, "success");
+                } catch (err) {
+                    showToast("An error occurred: " + err.message, "error");
+                } finally {
+                    btn.disabled = false;
+                    btn.textContent = originalText;
+                }
+            });
+
+            // 2. EDIT CLIENT SAVE
+            document.getElementById("edit-client-form").addEventListener("submit", e => {
+                e.preventDefault();
+
+                const id = document.getElementById("edit-client-id").value;
+                const name = document.getElementById("edit-name").value.trim();
+                const username = document.getElementById("edit-username").value.trim().toLowerCase();
+                const password = document.getElementById("edit-password").value.trim();
+                const service = document.getElementById("edit-service").value.trim();
+                const contract = parseInt(document.getElementById("edit-contract").value);
+                const paid = parseInt(document.getElementById("edit-paid").value);
+                const progress = parseInt(document.getElementById("edit-progress").value);
+                const status = document.getElementById("edit-status").value;
+                const renewalDate = document.getElementById("edit-renewal").value || "";
+                const details = document.getElementById("edit-details").value.trim();
+
+                const clients = ShirajAuth.getClients();
+                const idx = clients.findIndex(c => c.id === id);
+
+                if (idx !== -1) {
+                    // Username uniqueness check (if changed)
+                    if (clients[idx].username !== username && clients.some((c, i) => i !== idx && c.username === username)) {
+                        showToast("A client with that username already exists.", "warning");
+                        return;
+                    }
+
+                    // Dynamically toggle timelines based on progress
+                    const timeline = clients[idx].timeline || [];
+                    if (timeline.length > 0) {
+                        timeline[0].completed = progress >= 20;
+                        if (timeline.length > 1) timeline[1].completed = progress >= 40;
+                        if (timeline.length > 2) timeline[2].completed = progress >= 70;
+                        if (timeline.length > 3) timeline[3].completed = progress >= 90;
+                        if (timeline.length > 4) timeline[4].completed = progress === 100;
+                    }
+
+                    clients[idx] = {
+                        ...clients[idx],
+                        name: name,
+                        username: username,
+                        password: password,
+                        service: service,
+                        totalContract: contract,
+                        paidAmount: paid,
+                        balanceAmount: Math.max(0, contract - paid),
+                        progress: progress,
+                        status: status,
+                        renewalDate: renewalDate,
+                        details: details,
+                        timeline: timeline
+                    };
+
+                    ShirajAuth.saveClients(clients);
+                    closeEditModal();
+                    loadAndCalculate();
+                    showToast(`Changes saved for "${name}"!`, "success");
+                }
+            });
+
+            // Expose globally required helper functions for actions
+            // "View Portal" opens the client dashboard in a new tab with a preview param
+            // so the admin session stays intact
+            window.viewClientPortal = function(id) {
+                window.open(`client-dashboard.html?preview=${encodeURIComponent(id)}`, '_blank');
+            };
+
+            window.deleteClient = async function(id) {
+                const client = ShirajAuth.getClientById(id);
+                if (client) {
+                    if (confirm(`Are you absolutely sure you want to delete client ${client.name}? All dashboard metrics and chat messages will be wiped.`)) {
+                        if (ShirajAuth.isFirebase) {
+                            await ShirajAuth.deleteClientFirestore(id);
+                        } else {
+                            const clients = ShirajAuth.getClients();
+                            const filtered = clients.filter(c => c.id !== id);
+                            ShirajAuth.saveClients(filtered);
+                        }
+                        loadAndCalculate();
+                    }
+                }
+            };
+
+            window.openAddModal = function() {
+                document.getElementById("add-modal").classList.add("open");
+            };
+            window.closeAddModal = function() {
+                document.getElementById("add-modal").classList.remove("open");
+            };
+
+            window.openEditModal = function(id) {
+                const client = ShirajAuth.getClientById(id);
+                if (client) {
+                    document.getElementById("edit-client-id").value = client.id;
+                    document.getElementById("edit-name").value = client.name;
+                    document.getElementById("edit-username").value = client.username;
+                    document.getElementById("edit-password").value = client.password;
+                    document.getElementById("edit-service").value = client.service;
+                    document.getElementById("edit-contract").value = client.totalContract;
+                    document.getElementById("edit-paid").value = client.paidAmount;
+                    document.getElementById("edit-progress").value = client.progress;
+                    document.getElementById("edit-status").value = client.status;
+                    document.getElementById("edit-renewal").value = client.renewalDate || "";
+                    document.getElementById("edit-details").value = client.details;
+
+                    document.getElementById("edit-modal-title").textContent = `Edit Details for ${client.name}`;
+                    document.getElementById("edit-modal").classList.add("open");
+                }
+            };
+            window.closeEditModal = function() {
+                document.getElementById("edit-modal").classList.remove("open");
+            };
+
+            // Global storage listener (for updating counts dynamically in multiple open tabs)
+            window.addEventListener("storage", loadAndCalculate);
+
+            // Initial load
+            loadAndCalculate();
+        });
+    </script>
+</body>
+
+</html>
