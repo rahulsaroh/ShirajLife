@@ -1613,6 +1613,83 @@
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(132, 220, 0, 0.5);
         }
+
+        /* ==========================================
+           RESPONSIVE DESIGN (MOBILE & TABLET)
+           ========================================== */
+        .mobile-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(4px);
+            z-index: 90;
+        }
+        .mobile-overlay.active {
+            display: block;
+        }
+        .hamburger-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--txt-main);
+            cursor: pointer;
+            padding: 0.5rem;
+            margin-right: 0.5rem;
+        }
+
+        @media (max-width: 1024px) {
+            .sidebar {
+                transform: translateX(-100%);
+                width: 260px;
+            }
+            .sidebar.open {
+                transform: translateX(0);
+            }
+            .main-window {
+                margin-left: 0;
+                width: 100%;
+            }
+            .hamburger-btn {
+                display: block;
+            }
+            .grid-3-col, .grid-4-col {
+                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            }
+            .metrics-grid {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            .top-navbar {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 1rem;
+                padding: 1rem;
+            }
+            .nav-tabs {
+                overflow-x: auto;
+                padding-bottom: 0.5rem;
+            }
+            .card-header-row {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+            .grid-2-col {
+                grid-template-columns: 1fr;
+            }
+            .student-info-row {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+            .modal-content {
+                width: 95%;
+                margin: 2rem auto;
+            }
+        }
     </style>
 </head>
 
@@ -1674,11 +1751,17 @@
             </div>
         </aside>
         
+        <!-- MOBILE OVERLAY -->
+        <div class="mobile-overlay" id="mobile-overlay" onclick="toggleMobileSidebar()"></div>
+
         <!-- MAIN CONTENT AREA -->
         <main class="main-window">
             
             <!-- TOP NAVBAR -->
             <header class="top-navbar">
+                <button class="hamburger-btn" aria-label="Menu" onclick="toggleMobileSidebar()">
+                    <svg viewBox="0 0 24 24" style="width:24px;height:24px;stroke:currentColor;fill:none;stroke-width:2;"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                </button>
                 <div class="nav-tabs">
                     <button class="nav-tab active" onclick="switchOwnerNavTab('overview', this)">Overview</button>
                     <button class="nav-tab" onclick="switchOwnerNavTab('classes', this)">Classes</button>
@@ -6235,6 +6318,13 @@
             document.getElementById("trainer-rating-val").value = "5";
             document.getElementById("trainer-rating-comment").value = "";
             showToast("Rating submitted successfully! Thank you for your feedback.");
+        }
+
+        function toggleMobileSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            const overlay = document.getElementById('mobile-overlay');
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('active');
         }
 
         function viewTrainerClients(trainerId) {
