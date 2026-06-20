@@ -6,6 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>goJim | Gym Management B2B Dashboard</title>
     <meta name="description" content="Premium B2B gym management platform showcase. Support owner, trainers, and student workflows.">
+    <!-- Firebase App and Firestore SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -2634,6 +2637,63 @@
     </div>
 
     <!-- ==========================================
+         4.5a DIALOG MODAL: ROUTINE MAKER
+         ========================================== -->
+    <div class="modal-overlay" id="routine-maker-modal" style="backdrop-filter: blur(8px); display: none;">
+        <div class="modal-content" style="max-width: 600px; width: 90%; max-height: 90vh; overflow-y: auto;">
+            <div class="modal-title-row">
+                <h3 class="card-title" id="routine-maker-title">Create Workout Routine</h3>
+                <button class="modal-close-btn" onclick="closeModal('routine-maker-modal')">
+                    <svg viewBox="0 0 24 24" fill="none"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
+            </div>
+            <p style="color:var(--txt-muted); font-size:0.85rem; margin-bottom:1rem;">Construct a specialized fitness plan to push to the client's mobile app via Firebase.</p>
+            <form class="modal-form" id="routine-maker-form" onsubmit="saveRoutineMaker(event)">
+                <input type="hidden" id="routine-maker-student-id">
+                
+                <div class="form-group">
+                    <label class="form-label" for="routine-name">Routine Name</label>
+                    <input type="text" class="form-input-field" id="routine-name" placeholder="e.g. 6 Weeks to Abs" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="routine-description">Description</label>
+                    <textarea class="form-input-field" id="routine-description" rows="2" placeholder="Describe the goal and phases of this program..."></textarea>
+                </div>
+                
+                <div class="form-row-2" style="display: flex; gap: 0.5rem; margin-bottom: 12px;">
+                    <div class="form-group" style="flex:1;">
+                        <label class="form-label" for="routine-goal">Goal</label>
+                        <select class="form-select" id="routine-goal" style="width:100%;">
+                            <option value="Fat Loss">Fat Loss</option>
+                            <option value="Muscle Gain">Muscle Gain</option>
+                            <option value="Strength">Strength</option>
+                            <option value="Conditioning">Conditioning</option>
+                        </select>
+                    </div>
+                    <div class="form-group" style="flex:1;">
+                        <label class="form-label" for="routine-duration">Duration</label>
+                        <input type="text" class="form-input-field" id="routine-duration" placeholder="e.g. 6 weeks" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Workout Days & Exercises</label>
+                    <div id="routine-days-container" style="display:flex; flex-direction:column; gap:10px;">
+                        <!-- Days injected dynamically -->
+                    </div>
+                    <button type="button" class="btn-secondary" onclick="addRoutineDay()" style="margin-top:10px; width:100%; border:1px dashed var(--border); height:38px;">+ Add Workout Day</button>
+                </div>
+
+                <div class="form-row-2" style="margin-top: 1rem; display: flex; gap: 0.5rem;">
+                    <button class="btn-lime" type="submit" style="width:100%;">Save & Publish to Client</button>
+                    <button class="btn-secondary" type="button" onclick="closeModal('routine-maker-modal')" style="width:100%; border:1px solid var(--border); color:#fff; background:transparent;">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ==========================================
          4.6 DIALOG MODAL: GYM CLASS SCHEDULE
          ========================================== -->
     <div class="modal-overlay" id="schedule-modal" style="backdrop-filter: blur(8px);">
@@ -3342,11 +3402,32 @@
          5. CORE DATABASE & LOGIC SCRIPTS
          ========================================== -->
     <script>
+        // Firebase Config (Placeholder)
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY_HERE",
+            authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_PROJECT_ID.appspot.com",
+            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
+        
+        let db = null;
+        try {
+            if (firebaseConfig.apiKey !== "YOUR_API_KEY_HERE") {
+                firebase.initializeApp(firebaseConfig);
+                db = firebase.firestore();
+                console.log("Firebase initialized successfully!");
+            }
+        } catch (error) {
+            console.error("Firebase initialization failed:", error);
+        }
+
         // MOCK STATE SETUP
         const DEFAULT_BRANCHES = [
-            { id: "downtown", name: "Downtown Fitness Center", location: "New York, USA" },
-            { id: "west-end", name: "West End Strength Gym", location: "London, UK" },
-            { id: "east-side", name: "East Side HIIT Club", location: "Tokyo, Japan" }
+            { id: "downtown", name: "Downtown Fitness Center", location: "New York, USA", linkingCode: "GYM-9821" },
+            { id: "west-end", name: "West End Strength Gym", location: "London, UK", linkingCode: "GYM-4412" },
+            { id: "east-side", name: "East Side HIIT Club", location: "Tokyo, Japan", linkingCode: "GYM-3088" }
         ];
 
         const DEFAULT_TRAINERS = [
@@ -3824,7 +3905,7 @@
                         <div class="trainer-avatar">${initials}</div>
                         <div class="trainer-meta">
                             <h4 class="trainer-name">${trainer.name}</h4>
-                            <span class="trainer-sub">Personal Trainer</span>
+                            <span class="trainer-sub">Personal Trainer &bull; Code: <strong style="color:var(--lime);">${trainer.linkingCode || 'N/A'}</strong></span>
                         </div>
                     </div>
                     
@@ -3898,7 +3979,7 @@
                             <div class="member-avatar">${initials}</div>
                             <div class="member-details">
                                 <span class="member-name">${member.name}</span>
-                                <span class="member-email">${member.email}</span>
+                                <span class="member-email">${member.email} &bull; Code: <strong style="color:var(--lime);">${member.linkingCode || 'N/A'}</strong></span>
                             </div>
                         </div>
                     </td>
@@ -4381,6 +4462,9 @@
                     <td>
                         <button class="action-dot-btn" onclick="openStaffNotesModal('${client.id}')" style="background:rgba(6,182,212,0.15); color:var(--cyan); padding: 2px 6px; font-size:0.7rem; border-radius:4px;" title="Coach Handover Notes">
                             ✍️ Notes
+                        </button>
+                        <button class="action-dot-btn" onclick="openRoutineMakerModal('${client.id}')" style="background:rgba(168,85,247,0.15); color:var(--purple); padding: 2px 6px; font-size:0.7rem; border-radius:4px; margin-left:4px;" title="Assign Workout Routine">
+                            📋 Routine
                         </button>
                     </td>
                 `;
@@ -6031,6 +6115,143 @@
                 closeModal('staff-notes-modal');
                 showToast(`Handover notes updated for ${student.name}! ✍️`);
             }
+        }
+
+        let dayCounter = 0;
+        
+        function openRoutineMakerModal(studentId) {
+            const state = getDbState();
+            const student = state.students.find(s => s.id === studentId);
+            if (student) {
+                document.getElementById("routine-maker-student-id").value = studentId;
+                document.getElementById("routine-maker-title").textContent = `Create Routine for ${student.name}`;
+                document.getElementById("routine-name").value = "";
+                document.getElementById("routine-description").value = "";
+                document.getElementById("routine-duration").value = "6 weeks";
+                document.getElementById("routine-days-container").innerHTML = "";
+                dayCounter = 0;
+                addRoutineDay();
+                openModal('routine-maker-modal');
+            }
+        }
+
+        function addRoutineDay() {
+            const container = document.getElementById("routine-days-container");
+            const dayId = `day-${dayCounter}`;
+            const dayDiv = document.createElement("div");
+            dayDiv.id = dayId;
+            dayDiv.style = "background:rgba(255,255,255,0.05); padding:10px; border-radius:8px; border:1px solid var(--border); margin-bottom:5px;";
+            dayDiv.innerHTML = `
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                    <input type="text" class="form-input-field day-name-input" placeholder="e.g. Day 1 - Upper Body" style="width:70%; font-weight:bold;" required>
+                    <select class="form-select day-weekday-input" style="width:25%;">
+                        <option value="1">Monday</option>
+                        <option value="2">Tuesday</option>
+                        <option value="3">Wednesday</option>
+                        <option value="4">Thursday</option>
+                        <option value="5">Friday</option>
+                        <option value="6">Saturday</option>
+                        <option value="7">Sunday</option>
+                    </select>
+                </div>
+                <div class="exercise-list-container" style="display:flex; flex-direction:column; gap:5px;"></div>
+                <button type="button" class="btn-secondary" onclick="addExerciseToDay('${dayId}')" style="margin-top:8px; font-size:0.75rem; height:30px; border:1px dashed var(--border);">+ Add Exercise</button>
+            `;
+            container.appendChild(dayDiv);
+            addExerciseToDay(dayId);
+            dayCounter++;
+        }
+
+        function addExerciseToDay(dayId) {
+            const dayDiv = document.getElementById(dayId);
+            const container = dayDiv.querySelector(".exercise-list-container");
+            const exDiv = document.createElement("div");
+            exDiv.style = "display:grid; grid-template-columns: 2fr 1fr 1fr 1fr 2.5fr; gap:5px; align-items:center;";
+            exDiv.innerHTML = `
+                <input type="text" class="form-input-field ex-name" placeholder="Exercise Name" required style="font-size:0.75rem; padding:4px;">
+                <input type="number" class="form-input-field ex-sets" placeholder="Sets" value="3" required style="font-size:0.75rem; padding:4px;">
+                <input type="number" class="form-input-field ex-reps" placeholder="Reps" value="10" required style="font-size:0.75rem; padding:4px;">
+                <input type="number" class="form-input-field ex-weight" placeholder="Wt (kg)" value="10" required style="font-size:0.75rem; padding:4px;">
+                <input type="text" class="form-input-field ex-notes" placeholder="Notes (e.g. warm up first)" style="font-size:0.75rem; padding:4px;">
+            `;
+            container.appendChild(exDiv);
+        }
+
+        async function saveRoutineMaker(e) {
+            e.preventDefault();
+            const studentId = document.getElementById("routine-maker-student-id").value;
+            const routineName = document.getElementById("routine-name").value.trim();
+            const routineDesc = document.getElementById("routine-description").value.trim();
+            const routineGoal = document.getElementById("routine-goal").value;
+            const routineDuration = document.getElementById("routine-duration").value.trim();
+            
+            const daysData = [];
+            const dayDivs = document.querySelectorAll(".day-name-input");
+            
+            dayDivs.forEach((dayInput, index) => {
+                const parent = dayInput.closest("div").parentElement;
+                const weekday = parent.querySelector(".day-weekday-input").value;
+                const exerciseRows = parent.querySelectorAll(".exercise-list-container > div");
+                const exercises = [];
+                
+                exerciseRows.forEach((row, exIndex) => {
+                    const name = row.querySelector(".ex-name").value.trim();
+                    const sets = parseInt(row.querySelector(".ex-sets").value) || 3;
+                    const reps = parseInt(row.querySelector(".ex-reps").value) || 10;
+                    const weight = parseFloat(row.querySelector(".ex-weight").value) || 0;
+                    const notes = row.querySelector(".ex-notes").value.trim();
+                    
+                    const setsList = [];
+                    for(let s=0; s<sets; s++) {
+                        setsList.push({ reps: reps, weight: weight });
+                    }
+                    
+                    exercises.push({
+                        exerciseName: name,
+                        githubId: `${100 + exIndex}`,
+                        order: exIndex,
+                        setType: "straight",
+                        setsJson: JSON.stringify(setsList),
+                        restTime: 60,
+                        notes: notes
+                    });
+                });
+                
+                daysData.push({
+                    name: dayInput.value.trim(),
+                    order: index,
+                    weekday: parseInt(weekday),
+                    exercises: exercises
+                });
+            });
+
+            const routineObj = {
+                title: routineName,
+                description: routineDesc,
+                goal: routineGoal,
+                duration: routineDuration,
+                clientId: studentId,
+                days: daysData,
+                updatedAt: new Date().toISOString()
+            };
+
+            // Save to Firestore if available
+            if (db) {
+                try {
+                    const docRef = await db.collection("routines").add(routineObj);
+                    await db.collection("clients").doc(studentId).update({
+                        activePlanId: docRef.id
+                    });
+                    showToast("Routine published successfully to Firebase! 🚀");
+                } catch(err) {
+                    console.error("Failed to publish routine to Firebase:", err);
+                    showToast("Published locally, but Firebase sync failed.", "warning");
+                }
+            } else {
+                showToast("Routine saved locally! Setup Firebase config keys to sync to mobile app.", "info");
+            }
+            
+            closeModal('routine-maker-modal');
         }
 
         // ==========================================

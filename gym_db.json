@@ -1,21 +1,4 @@
 {
-    "branches": [
-        {
-            "id": "downtown",
-            "name": "Downtown Fitness Center",
-            "location": "New York, USA"
-        },
-        {
-            "id": "west-end",
-            "name": "West End Strength Gym",
-            "location": "London, UK"
-        },
-        {
-            "id": "east-side",
-            "name": "East Side HIIT Club",
-            "location": "Tokyo, Japan"
-        }
-    ],
     "trainers": [
         {
             "id": "none",
@@ -59,6 +42,17 @@
                 "HIIT"
             ],
             "branchId": "east-side"
+        },
+        {
+            "id": "ahaan-12",
+            "name": "Ahaan",
+            "clientsCount": 0,
+            "years": 3,
+            "yearsExperience": 3,
+            "tags": [
+                "strength"
+            ],
+            "branchId": "downtown"
         }
     ],
     "students": [
@@ -74,8 +68,17 @@
             "trainerId": "king",
             "isCheckedIn": false,
             "branchId": "downtown",
-            "weeklyCheckins": [5, 4, 3],
-            "subscription": {"autoDebit": true, "billingFailed": false, "gracePeriodDays": 3, "paymentMethod": "Stripe"},
+            "weeklyCheckins": [
+                5,
+                4,
+                3
+            ],
+            "subscription": {
+                "autoDebit": true,
+                "billingFailed": false,
+                "gracePeriodDays": 3,
+                "paymentMethod": "Stripe"
+            },
             "workoutCredits": 12
         },
         {
@@ -90,8 +93,17 @@
             "trainerId": "none",
             "isCheckedIn": true,
             "branchId": "west-end",
-            "weeklyCheckins": [4, 5, 5],
-            "subscription": {"autoDebit": true, "billingFailed": true, "gracePeriodDays": 0, "paymentMethod": "Razorpay"},
+            "weeklyCheckins": [
+                4,
+                5,
+                5
+            ],
+            "subscription": {
+                "autoDebit": true,
+                "billingFailed": true,
+                "gracePeriodDays": 0,
+                "paymentMethod": "Razorpay"
+            },
             "workoutCredits": 5
         },
         {
@@ -100,14 +112,23 @@
             "email": "albert.flores@yahoo.com",
             "expiredDate": "12/09/2026",
             "age": 28,
-            "status": "Active",
+            "status": "At-Risk",
             "tel": "505-555-0125",
             "lastVisited": "Today",
             "trainerId": "king",
             "isCheckedIn": false,
             "branchId": "downtown",
-            "weeklyCheckins": [3, 2, 0],
-            "subscription": {"autoDebit": true, "billingFailed": false, "gracePeriodDays": 3, "paymentMethod": "Stripe"},
+            "weeklyCheckins": [
+                3,
+                2,
+                0
+            ],
+            "subscription": {
+                "autoDebit": true,
+                "billingFailed": false,
+                "gracePeriodDays": 3,
+                "paymentMethod": "Stripe"
+            },
             "workoutCredits": 8
         },
         {
@@ -122,8 +143,17 @@
             "trainerId": "king",
             "isCheckedIn": true,
             "branchId": "downtown",
-            "weeklyCheckins": [5, 5, 5],
-            "subscription": {"autoDebit": true, "billingFailed": false, "gracePeriodDays": 3, "paymentMethod": "Stripe"},
+            "weeklyCheckins": [
+                5,
+                5,
+                5
+            ],
+            "subscription": {
+                "autoDebit": true,
+                "billingFailed": false,
+                "gracePeriodDays": 3,
+                "paymentMethod": "Stripe"
+            },
             "workoutCredits": 10
         },
         {
@@ -132,15 +162,37 @@
             "email": "robert.fox@gmail.com",
             "expiredDate": "30/08/2026",
             "age": 29,
-            "status": "Active",
+            "status": "At-Risk",
             "tel": "704-555-0182",
             "lastVisited": "Yesterday",
-            "trainerId": "none",
+            "trainerId": "king",
             "isCheckedIn": false,
             "branchId": "west-end",
-            "weeklyCheckins": [2, 1, 0],
-            "subscription": {"autoDebit": false, "billingFailed": true, "gracePeriodDays": 0, "paymentMethod": "Cash"},
+            "weeklyCheckins": [
+                2,
+                1,
+                0
+            ],
+            "subscription": {
+                "autoDebit": false,
+                "billingFailed": true,
+                "gracePeriodDays": 0,
+                "paymentMethod": "Cash"
+            },
             "workoutCredits": 0
+        },
+        {
+            "id": "rahul-65",
+            "name": "Rahul",
+            "email": "rahulsaroh007@gmail.com",
+            "expiredDate": "08/12/2026",
+            "age": 25,
+            "status": "Active",
+            "tel": "7715962857",
+            "lastVisited": "Today",
+            "trainerId": "ahaan-12",
+            "isCheckedIn": false,
+            "branchId": "downtown"
         }
     ],
     "advice": [
@@ -224,6 +276,23 @@
             ]
         }
     ],
+    "branches": [
+        {
+            "id": "downtown",
+            "name": "Downtown Fitness Center",
+            "location": "New York, USA"
+        },
+        {
+            "id": "west-end",
+            "name": "West End Strength Gym",
+            "location": "London, UK"
+        },
+        {
+            "id": "east-side",
+            "name": "East Side HIIT Club",
+            "location": "Tokyo, Japan"
+        }
+    ],
     "leads": [
         {
             "id": "lead-1",
@@ -255,10 +324,38 @@
         }
     ],
     "proShopInventory": [
-        {"id": "whey-1", "name": "Whey Protein Isolate 1kg", "price": 45.00, "stock": 10, "reorderThreshold": 3, "branchId": "downtown"},
-        {"id": "pre-1", "name": "Pre-Workout C4 30srv", "price": 35.00, "stock": 2, "reorderThreshold": 4, "branchId": "downtown"},
-        {"id": "water-1", "name": "Energy Hydration Drink 500ml", "price": 3.00, "stock": 25, "reorderThreshold": 5, "branchId": "west-end"},
-        {"id": "shaker-1", "name": "goJim Steel Shaker", "price": 15.00, "stock": 8, "reorderThreshold": 2, "branchId": "east-side"}
+        {
+            "id": "whey-1",
+            "name": "Whey Protein Isolate 1kg",
+            "price": 45,
+            "stock": 10,
+            "reorderThreshold": 3,
+            "branchId": "downtown"
+        },
+        {
+            "id": "pre-1",
+            "name": "Pre-Workout C4 30srv",
+            "price": 35,
+            "stock": 2,
+            "reorderThreshold": 4,
+            "branchId": "downtown"
+        },
+        {
+            "id": "water-1",
+            "name": "Energy Hydration Drink 500ml",
+            "price": 3,
+            "stock": 25,
+            "reorderThreshold": 5,
+            "branchId": "west-end"
+        },
+        {
+            "id": "shaker-1",
+            "name": "goJim Steel Shaker",
+            "price": 15,
+            "stock": 8,
+            "reorderThreshold": 2,
+            "branchId": "east-side"
+        }
     ],
     "checklists": [
         {
@@ -267,33 +364,190 @@
             "shift": "Morning",
             "completedBy": "King Zarips",
             "items": [
-                {"task": "Sanitize dumbbells and weight plates", "done": true, "time": "08:15 AM", "photo": "sanitized_weights.png"},
-                {"task": "Check locker rooms hygiene standards", "done": true, "time": "08:30 AM", "photo": "locker_hygiene.png"},
-                {"task": "Verify water stations filters and refill cups", "done": true, "time": "08:45 AM", "photo": "water_station.png"},
-                {"task": "Inspect cardio machinery emergency stop clips", "done": false, "time": "", "photo": ""}
+                {
+                    "task": "Sanitize dumbbells and weight plates",
+                    "done": true,
+                    "time": "08:15 AM",
+                    "photo": "sanitized_weights.png"
+                },
+                {
+                    "task": "Check locker rooms hygiene standards",
+                    "done": true,
+                    "time": "08:30 AM",
+                    "photo": "locker_hygiene.png"
+                },
+                {
+                    "task": "Verify water stations filters and refill cups",
+                    "done": true,
+                    "time": "08:45 AM",
+                    "photo": "water_station.png"
+                },
+                {
+                    "task": "Inspect cardio machinery emergency stop clips",
+                    "done": false,
+                    "time": "",
+                    "photo": ""
+                }
             ],
             "branchId": "downtown"
         }
     ],
     "trainerAvailability": [
-        {"trainerId": "king", "slots": ["08:00 AM", "10:00 AM", "04:00 PM"], "bookings": [{"slot": "08:00 AM", "studentId": "bessie", "bookedAt": "2026-06-18"}]},
-        {"trainerId": "lerry", "slots": ["09:00 AM", "11:00 AM", "05:00 PM"], "bookings": []},
-        {"trainerId": "sarah", "slots": ["08:00 AM", "10:00 AM", "06:00 PM"], "bookings": [{"slot": "06:00 PM", "studentId": "eleanor", "bookedAt": "2026-06-18"}]}
+        {
+            "trainerId": "king",
+            "slots": [
+                "08:00 AM",
+                "10:00 AM",
+                "04:00 PM"
+            ],
+            "bookings": [
+                {
+                    "slot": "08:00 AM",
+                    "studentId": "bessie",
+                    "bookedAt": "2026-06-18"
+                }
+            ]
+        },
+        {
+            "trainerId": "lerry",
+            "slots": [
+                "09:00 AM",
+                "11:00 AM",
+                "05:00 PM"
+            ],
+            "bookings": []
+        },
+        {
+            "trainerId": "sarah",
+            "slots": [
+                "08:00 AM",
+                "10:00 AM",
+                "06:00 PM"
+            ],
+            "bookings": [
+                {
+                    "slot": "06:00 PM",
+                    "studentId": "eleanor",
+                    "bookedAt": "2026-06-18"
+                }
+            ]
+        }
     ],
     "zones": [
-        {"id": "rack-1", "name": "Olympic Squat Rack A", "capacity": 1, "status": "Reserved", "activeBooking": {"studentId": "jane", "until": "12:30 PM"}, "waitlist": [{"studentId": "bessie", "timestamp": "11:45 AM"}, {"studentId": "albert", "timestamp": "11:50 AM"}], "branchId": "downtown"},
-        {"id": "cable-1", "name": "Dual Cable Column 1", "capacity": 1, "status": "Available", "activeBooking": null, "waitlist": [], "branchId": "downtown"},
-        {"id": "platform-1", "name": "Deadlift Lifting Platform", "capacity": 1, "status": "Available", "activeBooking": null, "waitlist": [], "branchId": "west-end"}
+        {
+            "id": "rack-1",
+            "name": "Olympic Squat Rack A",
+            "capacity": 1,
+            "status": "Reserved",
+            "activeBooking": {
+                "studentId": "jane",
+                "until": "12:30 PM"
+            },
+            "waitlist": [
+                {
+                    "studentId": "bessie",
+                    "timestamp": "11:45 AM"
+                },
+                {
+                    "studentId": "albert",
+                    "timestamp": "11:50 AM"
+                }
+            ],
+            "branchId": "downtown"
+        },
+        {
+            "id": "cable-1",
+            "name": "Dual Cable Column 1",
+            "capacity": 1,
+            "status": "Available",
+            "activeBooking": null,
+            "waitlist": [],
+            "branchId": "downtown"
+        },
+        {
+            "id": "platform-1",
+            "name": "Deadlift Lifting Platform",
+            "capacity": 1,
+            "status": "Available",
+            "activeBooking": null,
+            "waitlist": [],
+            "branchId": "west-end"
+        }
     ],
     "workoutLogs": [
         {
             "studentId": "bessie",
             "date": "2026-06-18",
             "exercises": [
-                {"name": "Barbell Squat", "sets": [{"reps": 8, "weight": 80}, {"reps": 6, "weight": 90}, {"reps": 4, "weight": 100}]},
-                {"name": "Bench Press", "sets": [{"reps": 10, "weight": 60}, {"reps": 8, "weight": 70}, {"reps": 6, "weight": 80}]}
+                {
+                    "name": "Barbell Squat",
+                    "sets": [
+                        {
+                            "reps": 8,
+                            "weight": 80
+                        },
+                        {
+                            "reps": 6,
+                            "weight": 90
+                        },
+                        {
+                            "reps": 4,
+                            "weight": 100
+                        }
+                    ]
+                },
+                {
+                    "name": "Bench Press",
+                    "sets": [
+                        {
+                            "reps": 10,
+                            "weight": 60
+                        },
+                        {
+                            "reps": 8,
+                            "weight": 70
+                        },
+                        {
+                            "reps": 6,
+                            "weight": 80
+                        }
+                    ]
+                }
             ],
-            "bodyComposition": {"weight": 72.5, "fatPct": 14.5}
+            "bodyComposition": {
+                "weight": 72.5,
+                "fatPct": 14.5
+            }
+        }
+    ],
+    "announcements": [
+        {
+            "id": "ann-1",
+            "author": "Owner",
+            "text": "New dumbbells arriving on Downtown branch this Friday!",
+            "date": "2026-06-18"
+        },
+        {
+            "id": "ann-2",
+            "author": "Owner",
+            "text": "Cleanliness drive: hourly logs must be uploaded with photo checks.",
+            "date": "2026-06-18"
+        }
+    ],
+    "socialSchedule": [
+        {
+            "id": "post-1",
+            "platform": "Instagram",
+            "caption": "Transform your routine with goJim strength programs! \ud83d\udcaa",
+            "date": "2026-06-20",
+            "status": "Scheduled"
+        },
+        {
+            "id": "post-2",
+            "platform": "Facebook",
+            "caption": "Unlock your PRs today at goJim branches. \u26a1",
+            "date": "2026-06-22",
+            "status": "Draft"
         }
     ]
 }

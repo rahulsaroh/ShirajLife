@@ -23,31 +23,31 @@ DEFAULT_DATA = {
         {
             "id": "bessie", "name": "Bessie Cooper", "email": "bessiecop@hotmail.com", "expiredDate": "08/05/2026", "age": 24, "status": "Active", "tel": "277-555-0119", "lastVisited": "Yesterday", "trainerId": "king", "isCheckedIn": False, "branchId": "downtown",
             "weeklyCheckins": [5, 4, 3],
-            "subscription": {"autoDebit": true, "billingFailed": false, "gracePeriodDays": 3, "paymentMethod": "Stripe"},
+            "subscription": {"autoDebit": True, "billingFailed": False, "gracePeriodDays": 3, "paymentMethod": "Stripe"},
             "workoutCredits": 12, "totalWorkouts": 99, "referralsCount": 2, "staffNotes": "Prefers barbell squats; slight shoulder stiffness."
         },
         {
             "id": "eleanor", "name": "Eleanor Pena", "email": "eleanor.pena@icloud.com", "expiredDate": "12/07/2026", "age": 24, "status": "In Active", "tel": "290-902-4829", "lastVisited": "Today", "trainerId": "none", "isCheckedIn": True, "branchId": "west-end",
             "weeklyCheckins": [4, 5, 5],
-            "subscription": {"autoDebit": true, "billingFailed": true, "gracePeriodDays": 0, "paymentMethod": "Razorpay"},
+            "subscription": {"autoDebit": True, "billingFailed": True, "gracePeriodDays": 0, "paymentMethod": "Razorpay"},
             "workoutCredits": 5, "totalWorkouts": 45, "referralsCount": 0, "staffNotes": "Recovering from ankle strain. Avoid heavy dynamic jumping."
         },
         {
             "id": "albert", "name": "Albert Flores", "email": "albert.flores@yahoo.com", "expiredDate": "12/09/2026", "age": 28, "status": "Active", "tel": "505-555-0125", "lastVisited": "Today", "trainerId": "king", "isCheckedIn": False, "branchId": "downtown",
             "weeklyCheckins": [3, 0, 0],
-            "subscription": {"autoDebit": true, "billingFailed": false, "gracePeriodDays": 3, "paymentMethod": "Stripe"},
+            "subscription": {"autoDebit": True, "billingFailed": False, "gracePeriodDays": 3, "paymentMethod": "Stripe"},
             "workoutCredits": 8, "totalWorkouts": 78, "referralsCount": 1, "staffNotes": "Focus on progressive loading. Absent warning triggered."
         },
         {
             "id": "jane", "name": "Jane Cooper", "email": "jane.cooper@gmail.com", "expiredDate": "15/07/2026", "age": 22, "status": "Active", "tel": "302-555-0199", "lastVisited": "Yesterday", "trainerId": "king", "isCheckedIn": True, "branchId": "downtown",
             "weeklyCheckins": [5, 5, 5],
-            "subscription": {"autoDebit": true, "billingFailed": false, "gracePeriodDays": 3, "paymentMethod": "Stripe"},
+            "subscription": {"autoDebit": True, "billingFailed": False, "gracePeriodDays": 3, "paymentMethod": "Stripe"},
             "workoutCredits": 10, "totalWorkouts": 120, "referralsCount": 4, "staffNotes": "Prep for half-marathon; emphasize hamstring and calf foam roll."
         },
         {
             "id": "robert", "name": "Robert Fox", "email": "robert.fox@gmail.com", "expiredDate": "30/08/2026", "age": 29, "status": "Active", "tel": "704-555-0182", "lastVisited": "Yesterday", "trainerId": "none", "isCheckedIn": False, "branchId": "west-end",
             "weeklyCheckins": [2, 1, 0],
-            "subscription": {"autoDebit": false, "billingFailed": true, "gracePeriodDays": 0, "paymentMethod": "Cash"},
+            "subscription": {"autoDebit": False, "billingFailed": True, "gracePeriodDays": 0, "paymentMethod": "Cash"},
             "workoutCredits": 0, "totalWorkouts": 12, "referralsCount": 0, "staffNotes": "General fitness, target fat loss. Failed auto-debit block."
         }
     ],
@@ -81,10 +81,10 @@ DEFAULT_DATA = {
             "shift": "Morning",
             "completedBy": "King Zarips",
             "items": [
-                {"task": "Sanitize dumbbells and weight plates", "done": true, "time": "08:15 AM", "photo": "sanitized_weights.png"},
-                {"task": "Check locker rooms hygiene standards", "done": true, "time": "08:30 AM", "photo": "locker_hygiene.png"},
-                {"task": "Verify water stations filters and refill cups", "done": true, "time": "08:45 AM", "photo": "water_station.png"},
-                {"task": "Inspect cardio machinery emergency stop clips", "done": false, "time": "", "photo": ""}
+                {"task": "Sanitize dumbbells and weight plates", "done": True, "time": "08:15 AM", "photo": "sanitized_weights.png"},
+                {"task": "Check locker rooms hygiene standards", "done": True, "time": "08:30 AM", "photo": "locker_hygiene.png"},
+                {"task": "Verify water stations filters and refill cups", "done": True, "time": "08:45 AM", "photo": "water_station.png"},
+                {"task": "Inspect cardio machinery emergency stop clips", "done": False, "time": "", "photo": ""}
             ],
             "branchId": "downtown"
         }
@@ -96,8 +96,8 @@ DEFAULT_DATA = {
     ],
     "zones": [
         {"id": "rack-1", "name": "Olympic Squat Rack A", "capacity": 1, "status": "Reserved", "activeBooking": {"studentId": "jane", "until": "12:30 PM"}, "waitlist": [{"studentId": "bessie", "timestamp": "11:45 AM"}, {"studentId": "albert", "timestamp": "11:50 AM"}], "branchId": "downtown"},
-        {"id": "cable-1", "name": "Dual Cable Column 1", "capacity": 1, "status": "Available", "activeBooking": null, "waitlist": [], "branchId": "downtown"},
-        {"id": "platform-1", "name": "Deadlift Lifting Platform", "capacity": 1, "status": "Available", "activeBooking": null, "waitlist": [], "branchId": "west-end"}
+        {"id": "cable-1", "name": "Dual Cable Column 1", "capacity": 1, "status": "Available", "activeBooking": None, "waitlist": [], "branchId": "downtown"},
+        {"id": "platform-1", "name": "Deadlift Lifting Platform", "capacity": 1, "status": "Available", "activeBooking": None, "waitlist": [], "branchId": "west-end"}
     ],
     "workoutLogs": [
         {
