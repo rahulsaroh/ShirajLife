@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>goJim User Guide</title>
+<style>
+  body { font-family: sans-serif; line-height: 1.6; padding: 40px; color: #333; }
+  h1, h2, h3 { color: #111; border-bottom: 1px solid #ddd; padding-bottom: 5px; }
+  img { max-width: 100%; height: auto; border: 1px solid #ccc; box-shadow: 0 4px 6px rgba(0,0,0,0.1); border-radius: 8px; margin: 20px 0; }
+  .note { background: #f9f9f9; padding: 15px; border-left: 4px solid #4CAF50; margin-bottom: 20px; font-size: 0.9em; }
+</style>
+</head>
+<body>
+<h1>goJim B2B Dashboard User Guide</h1>
+<p>Welcome to the <strong>goJim Premium Gym Management Dashboard</strong>! This comprehensive tool allows you to seamlessly manage your entire gym operations, from member tracking to trainer assignments and CRM.</p>
+
+<h2>1. Executive SaaS Business KPIs</h2>
+<p>The dashboard includes a powerful section for real-time unit economics analysis to help owners evaluate marketing performance and customer value.</p>
+<img src="saas_kpis.png" alt="Executive SaaS KPIs" />
+<h3>Key Metrics Explained:</h3>
+<ul>
+<li><strong>Marketing Ad Spend & New Members Closed:</strong> Use the interactive sliders to input your monthly marketing spend and the number of new members acquired.</li>
+<li><strong>Customer Acquisition Cost (CAC):</strong> Calculated automatically by dividing the total Marketing Ad Spend by the number of New Members Closed. This shows how much it costs to acquire a single customer.</li>
+<li><strong>Lifetime Value (LTV):</strong> The total predicted revenue a member will generate during their relationship with your gym. 
+  <div class="note"><strong>Note on LTV:</strong> Currently, the LTV is calculated based on a fixed unit baseline formula: <em>Average Monthly Membership (₹115) × Average Retention Span (6.0 Months)</em>. Because this relies on your gym's historical baseline averages rather than dynamic monthly inputs, the LTV remains constant at ₹690.00 while the CAC fluctuates.</div>
+</li>
+<li><strong>LTV to CAC Ratio:</strong> This ratio determines the health of your marketing. A ratio of 3.0x or higher indicates excellent health (you are earning 3x what you spend to acquire a member).</li>
+<li><strong>Retention Cohorts Matrix:</strong> Tracks the percentage of members retained over subsequent months. High drop-off months are flagged to alert you to retention issues.</li>
+</ul>
+
+<h2>2. Role Switching</h2>
+<p>At the bottom of the left sidebar, you will find a <strong>Role Switcher</strong> widget. This allows you to view the dashboard from different perspectives based on your staff permissions:</p>
+<ul>
+<li><strong>Gym Owner</strong>: Full access to all top-level tabs.</li>
+<li><strong>Trainer</strong>: Restricted view tailored to managing clients.</li>
+<li><strong>Student/Member</strong>: Restricted view to view plans and rate trainers.</li>
+</ul>
+
+<h2>3. Gym Owner View</h2>
+<h3>3.1 Overview Dashboard</h3>
+<p>The default screen upon logging in. Here you will find Quick Actions, Key Metrics, and the Activity Log.</p>
+
+<h3>3.2 Leads CRM</h3>
+<p>Track potential new members through a Kanban-style pipeline (New Leads -> Trial Booked -> Trial Done -> Converted).</p>
+
+<h2>4. Trainer Management</h2>
+<p>Click on <strong>Add Trainer Profile</strong> to onboard a new staff member. On the Trainer's card, click the assigned students number to view a detailed client list.</p>
+
+<h2>5. Front Desk Kiosk Mode</h2>
+<p>The <strong>Kiosk Mode</strong> button launches a self-service check-in screen where members can type their phone number to check in.</p>
+</body>
+</html>

@@ -5971,15 +5971,15 @@
             const spend = parseInt(document.getElementById("kpi-marketing-spend").value) || 1000;
             const closed = parseInt(document.getElementById("kpi-closed-leads").value) || 10;
 
-            document.getElementById("kpi-marketing-spend-lbl").textContent = `$${spend.toLocaleString()}`;
+            document.getElementById("kpi-marketing-spend-lbl").textContent = `₹${spend.toLocaleString()}`;
             document.getElementById("kpi-closed-leads-lbl").textContent = closed;
 
-            const cac = spend / closed;
+            const cac = closed > 0 ? (spend / closed) : 0;
             const ltv = 115 * 6.0; // Base: ₹115 per month average membership * 6.0 months average retention span = ₹690 LTV
-            const ratio = ltv / cac;
+            const ratio = cac > 0 ? (ltv / cac) : 0;
 
-            document.getElementById("kpi-cac-value").textContent = `$${cac.toFixed(2)}`;
-            document.getElementById("kpi-ltv-value").textContent = `$${ltv.toFixed(2)}`;
+            document.getElementById("kpi-cac-value").textContent = `₹${cac.toFixed(2)}`;
+            document.getElementById("kpi-ltv-value").textContent = `₹${ltv.toFixed(2)}`;
 
             let healthStr = "Unhealthy Ratio";
             if (ratio >= 3.0) healthStr = "Excellent Health (LTV > 3x CAC)";
