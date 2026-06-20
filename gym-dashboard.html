@@ -2226,6 +2226,7 @@
                                 <span class="welcome-subtitle">My Personal Coach</span>
                                 <h3 class="card-title" id="student-assigned-coach-name">Loading...</h3>
                                 <p style="color:var(--txt-muted); font-size:0.82rem; margin-top:2px;">Contact details sent to registered phone</p>
+                                <button class="action-btn" onclick="openRateTrainerModal()" style="margin-top: 8px; font-size: 0.75rem; padding: 4px 10px; border-radius: 4px; background: rgba(163,230,85,0.1); color: var(--lime); border: 1px solid var(--lime); cursor: pointer;">⭐️ Rate Trainer</button>
                             </div>
                             <div class="user-avatar" id="student-coach-avatar" style="width:55px;height:55px;font-size:1.1rem;background:linear-gradient(135deg, var(--lime), var(--orange));">C</div>
                         </div>
@@ -2880,6 +2881,47 @@
                 <textarea class="form-textarea" id="notes-text-field" placeholder="e.g. Recovering from hamstring pull. Emphasize low intensity recovery drills..." style="min-height:120px;" required></textarea>
             </div>
             <button class="btn-lime" onclick="saveStaffNotes()" style="width:100%; padding:0.6rem; font-weight:bold; cursor:pointer;">Save Handover Instructions ✍?</button>
+        </div>
+    </div>
+
+    <!-- ==========================================
+         DIALOG MODAL: RATE TRAINER
+         ========================================== -->
+    <div class="modal-overlay" id="rate-trainer-modal" style="backdrop-filter: blur(8px); z-index: 99990;">
+        <div class="modal-content" style="max-width: 420px; text-align:left;">
+            <div class="modal-title-row">
+                <h3 class="card-title">Rate Your Trainer</h3>
+                <button class="modal-close-btn" onclick="closeModal('rate-trainer-modal')">
+                    <svg viewBox="0 0 24 24" fill="none" style="width:18px;height:18px;stroke:currentColor;stroke-width:2;"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
+            </div>
+            <p style="color:var(--txt-muted); font-size:0.82rem; margin-bottom:1rem;">Provide your rating out of 5 and add comments for your assigned trainer.</p>
+            <div class="form-group" style="margin-bottom:1.25rem;">
+                <label class="form-label" style="font-size:0.75rem;">Rating (1 to 5)</label>
+                <input type="number" min="1" max="5" id="trainer-rating-val" class="form-input" value="5" required>
+            </div>
+            <div class="form-group" style="margin-bottom:1.25rem;">
+                <label class="form-label" style="font-size:0.75rem;">Comments</label>
+                <textarea class="form-textarea" id="trainer-rating-comment" placeholder="e.g. Great sessions, very motivating..." style="min-height:80px;" required></textarea>
+            </div>
+            <button class="btn-lime" onclick="submitTrainerRating()" style="width:100%; padding:0.6rem; font-weight:bold; cursor:pointer;">Submit Rating ⭐️</button>
+        </div>
+    </div>
+
+    <!-- ==========================================
+         DIALOG MODAL: TRAINER CLIENTS
+         ========================================== -->
+    <div class="modal-overlay" id="trainer-clients-modal" style="backdrop-filter: blur(8px); z-index: 99990;">
+        <div class="modal-content" style="max-width: 500px; text-align:left;">
+            <div class="modal-title-row">
+                <h3 class="card-title">Assigned Students</h3>
+                <button class="modal-close-btn" onclick="closeModal('trainer-clients-modal')">
+                    <svg viewBox="0 0 24 24" fill="none" style="width:18px;height:18px;stroke:currentColor;stroke-width:2;"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
+            </div>
+            <div id="trainer-clients-list" style="max-height: 400px; overflow-y: auto; display:flex; flex-direction:column; gap:0.5rem; margin-top: 1rem;">
+                <!-- Populate dynamically -->
+            </div>
         </div>
     </div>
 
@@ -3674,7 +3716,7 @@
                     </div>
                     
                     <div class="trainer-info-stats">
-                        <div class="trainer-info-item">
+                        <div class="trainer-info-item" style="cursor: pointer;" onclick="viewTrainerClients('${trainer.id}')" title="Click to view assigned students">
                             <span class="trainer-info-val">${clients}+</span>
                             <span class="trainer-info-lbl">Clients</span>
                         </div>
@@ -6161,6 +6203,57 @@
                     liveText.textContent = `4 PM (LIVE: ${pct}% - ${checkedIn}/${total})`;
                 }
             }
+        function openRateTrainerModal() {
+            const state = getDbState();
+            const studentId = document.getElementById("student-select-view").value;
+            const student = state.students.find(s => s.id === studentId);
+            if (!student || student.trainerId === 'none') {
+                showToast("You are not assigned to a personal trainer yet.", "error");
+                return;
+            }
+            openModal('rate-trainer-modal');
+        }
+
+        function submitTrainerRating() {
+            const rating = document.getElementById("trainer-rating-val").value;
+            const comment = document.getElementById("trainer-rating-comment").value;
+            if (!rating || !comment) {
+                showToast("Please provide both rating and comment.", "error");
+                return;
+            }
+            closeModal('rate-trainer-modal');
+            document.getElementById("trainer-rating-val").value = "5";
+            document.getElementById("trainer-rating-comment").value = "";
+            showToast("Rating submitted successfully! Thank you for your feedback.");
+        }
+
+        function viewTrainerClients(trainerId) {
+            const state = getDbState();
+            const clientsList = state.students.filter(s => s.trainerId === trainerId);
+            const container = document.getElementById("trainer-clients-list");
+            
+            if (clientsList.length === 0) {
+                container.innerHTML = `<div style="text-align:center; padding: 1rem; color:var(--txt-dim);">No students assigned to this trainer.</div>`;
+            } else {
+                container.innerHTML = clientsList.map(s => {
+                    const initials = s.name.split(" ").map(n => n[0]).join("");
+                    return `
+                        <div style="display:flex; align-items:center; gap:1rem; padding:0.75rem; background:var(--bg-lighter); border-radius:var(--radius-sm);">
+                            <div class="member-avatar" style="width:35px; height:35px; font-size:0.8rem; flex-shrink:0; display:flex; align-items:center; justify-content:center; background:var(--lime); color:#000; border-radius:50%;">${initials}</div>
+                            <div style="flex:1;">
+                                <div style="font-weight:600; font-size:0.9rem;">${s.name}</div>
+                                <div style="font-size:0.75rem; color:var(--txt-muted);">${s.email} • Age: ${s.age}</div>
+                            </div>
+                            <div>
+                                <span class="status-pill ${s.status === 'Active' ? 'active' : 'inactive'}">${s.status}</span>
+                            </div>
+                        </div>
+                    `;
+                }).join("");
+            }
+            
+            openModal('trainer-clients-modal');
+        }
         };
     </script>
 </body>
