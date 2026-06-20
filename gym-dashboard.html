@@ -1671,6 +1671,15 @@
             .nav-tabs {
                 overflow-x: auto;
                 padding-bottom: 0.5rem;
+                flex-wrap: nowrap;
+                white-space: nowrap;
+                -webkit-overflow-scrolling: touch;
+            }
+            .nav-tabs::-webkit-scrollbar {
+                display: none;
+            }
+            .nav-tab {
+                flex-shrink: 0;
             }
             .card-header-row {
                 flex-direction: column;
