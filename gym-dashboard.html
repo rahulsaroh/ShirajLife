@@ -1994,11 +1994,11 @@
                                         <div class="tooltip-title" id="tooltip-month">April</div>
                                         <div class="tooltip-row">
                                             <span style="color:var(--txt-muted);">Revenue:</span>
-                                            <span id="tooltip-rev" style="color:var(--lime);font-weight:700;">$564</span>
+                                            <span id="tooltip-rev" style="color:var(--lime);font-weight:700;">₹564</span>
                                         </div>
                                         <div class="tooltip-row">
                                             <span style="color:var(--txt-muted);">Expense:</span>
-                                            <span id="tooltip-exp" style="color:var(--purple);font-weight:700;">$180</span>
+                                            <span id="tooltip-exp" style="color:var(--purple);font-weight:700;">₹180</span>
                                         </div>
                                     </div>
                                 </div>
@@ -2033,7 +2033,7 @@
                                         <h4 style="font-family:var(--font-display); font-size:0.85rem; font-weight:bold; color:var(--lime); margin-bottom:0.25rem;">Unit Economics</h4>
                                         <div style="display:flex; justify-content:space-between; font-size:0.8rem;">
                                             <span>Marketing Ad Spend:</span>
-                                            <span style="font-family:var(--font-mono); font-weight:bold; color:#fff;" id="kpi-marketing-spend-lbl">$1,000</span>
+                                            <span style="font-family:var(--font-mono); font-weight:bold; color:#fff;" id="kpi-marketing-spend-lbl">₹1,000</span>
                                         </div>
                                         <input type="range" id="kpi-marketing-spend" min="100" max="5000" step="100" value="1000" oninput="recalculateSaaSKPIs()" style="accent-color:var(--lime); width:100%;">
                                         
@@ -2046,11 +2046,11 @@
                                         <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.5rem; border-top:1px solid var(--card-border); padding-top:0.75rem; margin-top:0.5rem; text-align:center;">
                                             <div style="background:rgba(255,255,255,0.02); padding:0.5rem; border-radius:4px;">
                                                 <div style="font-size:0.65rem; color:var(--txt-muted);">ACQUISITION COST (CAC)</div>
-                                                <div id="kpi-cac-value" style="font-size:1.1rem; font-weight:bold; color:var(--orange); font-family:var(--font-mono);">$100.00</div>
+                                                <div id="kpi-cac-value" style="font-size:1.1rem; font-weight:bold; color:var(--orange); font-family:var(--font-mono);">₹100.00</div>
                                             </div>
                                             <div style="background:rgba(255,255,255,0.02); padding:0.5rem; border-radius:4px;">
                                                 <div style="font-size:0.65rem; color:var(--txt-muted);">LIFETIME VALUE (LTV)</div>
-                                                <div id="kpi-ltv-value" style="font-size:1.1rem; font-weight:bold; color:var(--lime); font-family:var(--font-mono);">$690.00</div>
+                                                <div id="kpi-ltv-value" style="font-size:1.1rem; font-weight:bold; color:var(--lime); font-family:var(--font-mono);">₹690.00</div>
                                             </div>
                                         </div>
                                         <div style="text-align:center; font-size:0.8rem; font-weight:bold; margin-top:0.25rem; color:var(--lime);" id="kpi-ratio-value">
@@ -3239,7 +3239,7 @@
                     
                     <div style="display:flex; justify-content:space-between; font-weight:bold; font-size:0.9rem; border-top:1px solid var(--card-border); padding-top:8px;">
                         <span>Total:</span>
-                        <span id="pos-cart-total" style="color:var(--lime); font-family:var(--font-mono);">$0.00</span>
+                        <span id="pos-cart-total" style="color:var(--lime); font-family:var(--font-mono);">₹0.00</span>
                     </div>
                     <button class="btn-lime" onclick="processPOSCheckout()" style="width:100%; padding:0.6rem; font-size:0.85rem; font-weight:bold;">Charge Member & Checkout 💳</button>
                 </div>
@@ -4821,10 +4821,10 @@
 
         // Solve Problem 3: Render transactions ledger dynamically
         const DEFAULT_TRANSACTIONS = [
-            { member: "Bessie Cooper", email: "bessiecop@hotmail.com", date: "Today, 10:15 AM", tier: "Platinum Club", amount: "$149.00", status: "Paid" },
-            { member: "Eleanor Pena", email: "eleanor.pena@icloud.com", date: "Today, 09:30 AM", tier: "Gold Premium", amount: "$99.00", status: "Paid" },
-            { member: "Albert Flores", email: "albert.flores@yahoo.com", date: "Yesterday, 04:45 PM", tier: "Platinum Club", amount: "$149.00", status: "Paid" },
-            { member: "Jane Cooper", email: "jane.cooper@gmail.com", date: "15 Jun 2026", tier: "Silver Standard", amount: "$49.00", status: "Paid" }
+            { member: "Bessie Cooper", email: "bessiecop@hotmail.com", date: "Today, 10:15 AM", tier: "Platinum Club", amount: "₹149.00", status: "Paid" },
+            { member: "Eleanor Pena", email: "eleanor.pena@icloud.com", date: "Today, 09:30 AM", tier: "Gold Premium", amount: "₹99.00", status: "Paid" },
+            { member: "Albert Flores", email: "albert.flores@yahoo.com", date: "Yesterday, 04:45 PM", tier: "Platinum Club", amount: "₹149.00", status: "Paid" },
+            { member: "Jane Cooper", email: "jane.cooper@gmail.com", date: "15 Jun 2026", tier: "Silver Standard", amount: "₹49.00", status: "Paid" }
         ];
 
         function getTransactions() {
@@ -5222,7 +5222,7 @@
             container.innerHTML = "";
             if (posCart.length === 0) {
                 container.innerHTML = `<span style="color:var(--txt-muted); font-size:0.75rem;">Cart is empty.</span>`;
-                totalEl.textContent = "$0.00";
+                totalEl.textContent = "₹0.00";
                 return;
             }
 
@@ -5975,7 +5975,7 @@
             document.getElementById("kpi-closed-leads-lbl").textContent = closed;
 
             const cac = spend / closed;
-            const ltv = 115 * 6.0; // Base: $115 per month average membership * 6.0 months average retention span = $690 LTV
+            const ltv = 115 * 6.0; // Base: ₹115 per month average membership * 6.0 months average retention span = ₹690 LTV
             const ratio = ltv / cac;
 
             document.getElementById("kpi-cac-value").textContent = `$${cac.toFixed(2)}`;
