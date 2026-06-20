@@ -2509,6 +2509,11 @@
                     </select>
                 </div>
                 
+                <div class="form-group" style="margin-top: 1rem;">
+                    <label class="form-label" for="add-notes">Custom Notes</label>
+                    <textarea class="form-textarea" id="add-notes" placeholder="e.g. Any health conditions or specific goals..." style="min-height: 80px;"></textarea>
+                </div>
+                
                 <button class="btn-lime" type="submit" style="margin-top: 0.5rem;">Create Membership Profile</button>
             </form>
         </div>
@@ -4072,6 +4077,7 @@
             const trainerId = document.getElementById("add-trainer-select").value;
             const status = document.getElementById("add-status").value;
             const branchId = document.getElementById("add-member-branch-select").value;
+            const notes = document.getElementById("add-notes") ? document.getElementById("add-notes").value.trim() : "";
 
             // Simple ID generator
             const newId = name.toLowerCase().split(" ").join("-") + "-" + Math.round(Math.random()*100);
@@ -4087,7 +4093,8 @@
                 lastVisited: "Today",
                 trainerId: trainerId,
                 isCheckedIn: false,
-                branchId: branchId
+                branchId: branchId,
+                staffNotes: notes
             };
 
             state.students.push(newMember);
@@ -4097,6 +4104,7 @@
             document.getElementById("add-name").value = "";
             document.getElementById("add-email").value = "";
             document.getElementById("add-tel").value = "";
+            if (document.getElementById("add-notes")) document.getElementById("add-notes").value = "";
             
             closeModal('member-modal');
             showToast(`New client ${name} enrolled successfully!`);
