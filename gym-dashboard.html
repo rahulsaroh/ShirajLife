@@ -2811,20 +2811,36 @@
             <p style="color:var(--txt-muted); font-size:0.85rem; margin-bottom:1rem;">Capture local inquiries and progress prospects from initial contact to paid membership.</p>
             
             <!-- Quick Add Lead Form -->
-            <form id="quick-add-lead-form" onsubmit="addLeadSubmit(event)" style="background: rgba(0,0,0,0.2); border: 1px solid var(--card-border); padding: 1rem; border-radius: var(--radius-md); margin-bottom: 1.5rem; display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: flex-end;">
-                <div class="form-group" style="flex: 1; min-width: 150px; margin-bottom:0;">
+            <form id="quick-add-lead-form" onsubmit="addLeadSubmit(event)" style="background: rgba(0,0,0,0.2); border: 1px solid var(--card-border); padding: 1rem; border-radius: var(--radius-md); margin-bottom: 1.5rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 0.75rem; align-items: end;">
+                <div class="form-group" style="margin-bottom:0;">
                     <label class="form-label" style="font-size:0.75rem; margin-bottom:4px;">Lead Name</label>
                     <input type="text" class="form-input-field" id="lead-name" placeholder="e.g. Rahul Singh" required style="padding: 0.4rem; font-size: 0.85rem;">
                 </div>
-                <div class="form-group" style="flex: 1; min-width: 150px; margin-bottom:0;">
-                    <label class="form-label" style="font-size:0.75rem; margin-bottom:4px;">Email</label>
-                    <input type="email" class="form-input-field" id="lead-email" placeholder="e.g. rahul@example.com" required style="padding: 0.4rem; font-size: 0.85rem;">
+                <div class="form-group" style="margin-bottom:0;">
+                    <label class="form-label" style="font-size:0.75rem; margin-bottom:4px;">Email (Optional)</label>
+                    <input type="email" class="form-input-field" id="lead-email" placeholder="e.g. rahul@example.com" style="padding: 0.4rem; font-size: 0.85rem;">
                 </div>
-                <div class="form-group" style="flex: 1; min-width: 150px; margin-bottom:0;">
+                <div class="form-group" style="margin-bottom:0;">
                     <label class="form-label" style="font-size:0.75rem; margin-bottom:4px;">Telephone</label>
                     <input type="tel" class="form-input-field" id="lead-tel" placeholder="e.g. 9876543210" required style="padding: 0.4rem; font-size: 0.85rem;">
                 </div>
-                <button class="btn-lime" type="submit" style="padding: 0.5rem 1.2rem; font-size: 0.85rem; font-weight: bold; margin-bottom: 2px;">Capture Lead</button>
+                <div class="form-group" style="margin-bottom:0;">
+                    <label class="form-label" style="font-size:0.75rem; margin-bottom:4px;">Date of Enquiry</label>
+                    <input type="date" class="form-input-field" id="lead-enq-date" style="padding: 0.4rem; font-size: 0.85rem;" required>
+                </div>
+                <div class="form-group" style="margin-bottom:0;">
+                    <label class="form-label" style="font-size:0.75rem; margin-bottom:4px;">Booked Trial Date</label>
+                    <input type="date" class="form-input-field" id="lead-trial-date" style="padding: 0.4rem; font-size: 0.85rem;">
+                </div>
+                <div class="form-group" style="margin-bottom:0;">
+                    <label class="form-label" style="font-size:0.75rem; margin-bottom:4px;">Trial Done Date</label>
+                    <input type="date" class="form-input-field" id="lead-trial-done-date" style="padding: 0.4rem; font-size: 0.85rem;">
+                </div>
+                <div class="form-group" style="margin-bottom:0;">
+                    <label class="form-label" style="font-size:0.75rem; margin-bottom:4px;">Converted to Member</label>
+                    <input type="date" class="form-input-field" id="lead-convert-date" style="padding: 0.4rem; font-size: 0.85rem;">
+                </div>
+                <button class="btn-lime" type="submit" style="padding: 0.4rem 1.2rem; font-size: 0.85rem; font-weight: bold; margin-bottom: 0px; height: 35px;">Capture Lead</button>
             </form>
 
             <!-- Kanban Pipeline Layout -->
@@ -4882,8 +4898,14 @@
                             <strong style="color:var(--txt-main); font-size:0.8rem;">${lead.name}</strong>
                             <button onclick="deleteLead('${lead.id}')" style="background:transparent; border:none; color:var(--red); font-size:0.7rem; cursor:pointer; padding:2px;">❌</button>
                         </div>
-                        <span style="font-size:0.65rem; color:var(--txt-muted);">${lead.email}</span>
+                        ${lead.email ? `<span style="font-size:0.65rem; color:var(--txt-muted);">${lead.email}</span>` : ''}
                         <span style="font-size:0.65rem; color:var(--txt-muted); font-family:var(--font-mono);">${lead.tel}</span>
+                        <div style="margin-top: 6px; font-size: 0.65rem; color: var(--txt-muted); display: grid; grid-template-columns: 1fr; gap: 2px;">
+                            ${lead.enqDate ? `<div><strong>Enquiry:</strong> ${lead.enqDate}</div>` : ''}
+                            ${lead.trialDate ? `<div><strong>Trial:</strong> ${lead.trialDate}</div>` : ''}
+                            ${lead.trialDoneDate ? `<div><strong>Trial Done:</strong> ${lead.trialDoneDate}</div>` : ''}
+                            ${lead.convertDate ? `<div><strong>Converted:</strong> ${lead.convertDate}</div>` : ''}
+                        </div>
                         <div style="margin-top:0.4rem; display:flex; flex-direction:column; gap:4px;">
                             ${nextActionHtml}
                         </div>
@@ -4901,13 +4923,21 @@
             const name = document.getElementById("lead-name").value.trim();
             const email = document.getElementById("lead-email").value.trim();
             const tel = document.getElementById("lead-tel").value.trim();
+            const enqDate = document.getElementById("lead-enq-date").value;
+            const trialDate = document.getElementById("lead-trial-date").value;
+            const trialDoneDate = document.getElementById("lead-trial-done-date").value;
+            const convertDate = document.getElementById("lead-convert-date").value;
 
             const newLead = {
                 id: "lead-" + Date.now(),
                 name: name,
                 email: email,
                 tel: tel,
-                stage: "new"
+                stage: "new",
+                enqDate: enqDate,
+                trialDate: trialDate,
+                trialDoneDate: trialDoneDate,
+                convertDate: convertDate
             };
 
             state.leads.push(newLead);
@@ -4916,6 +4946,10 @@
             document.getElementById("lead-name").value = "";
             document.getElementById("lead-email").value = "";
             document.getElementById("lead-tel").value = "";
+            document.getElementById("lead-enq-date").value = "";
+            document.getElementById("lead-trial-date").value = "";
+            document.getElementById("lead-trial-done-date").value = "";
+            document.getElementById("lead-convert-date").value = "";
 
             renderLeadsCRM();
             showToast(`New inquiry lead ${name} captured in pipeline!`);
