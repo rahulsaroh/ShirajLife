@@ -1,0 +1,28 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Helper to check user's assigned gym matches the document's gymId
+    function isGymMember(gymId) {
+      return request.auth != null && (
+        resource.data.gymId == gymId || 
+        request.resource.data.gymId == gymId
+      );
+    }
+
+    match /gyms/{gymId} {
+      allow read, write: if true; // Public registry lookup for codes
+    }
+
+    match /trainers/{trainerId} {
+      allow read, write: if true; // Registry lookup
+    }
+
+    match /clients/{clientId} {
+      allow read, write: if true; // Registry lookup
+    }
+
+    match /routines/{routineId} {
+      allow read, write: if request.auth != null || resource.data.clientId != null;
+    }
+  }
+}

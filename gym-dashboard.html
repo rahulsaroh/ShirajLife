@@ -2693,6 +2693,23 @@
         </div>
     </div>
 
+    <!-- QR Code Popup Modal -->
+    <div class="modal-overlay" id="qr-modal" style="backdrop-filter: blur(8px); display: none;">
+        <div class="modal-content" style="max-width: 300px; text-align: center;">
+            <div class="modal-title-row">
+                <h3 class="card-title">Linking QR Code</h3>
+                <button class="modal-close-btn" onclick="closeModal('qr-modal')">
+                    <svg viewBox="0 0 24 24" fill="none"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
+            </div>
+            <p style="color:var(--txt-muted); font-size:0.8rem; margin-bottom:1rem;">Scan this code with the AI Gym Mentor mobile app to link instantly!</p>
+            <div style="background:#fff; padding:10px; border-radius:8px; display:inline-block; margin-bottom:10px;">
+                <img id="qr-modal-image" src="" alt="QR Code" style="width:150px; height:150px; display:block;" />
+            </div>
+            <div id="qr-modal-code" style="font-weight:bold; font-family:var(--font-mono); color:var(--lime); font-size:1.1rem; margin-top:5px;"></div>
+        </div>
+    </div>
+
     <!-- ==========================================
          4.6 DIALOG MODAL: GYM CLASS SCHEDULE
          ========================================== -->
@@ -3635,6 +3652,7 @@
 
             // Load initial view
             switchRole('owner');
+            startFirestoreListeners();
 
             // Set up local storage dynamic re-render on changes
             window.addEventListener('storage', () => {
@@ -3905,7 +3923,7 @@
                         <div class="trainer-avatar">${initials}</div>
                         <div class="trainer-meta">
                             <h4 class="trainer-name">${trainer.name}</h4>
-                            <span class="trainer-sub">Personal Trainer &bull; Code: <strong style="color:var(--lime);">${trainer.linkingCode || 'N/A'}</strong></span>
+                            <span class="trainer-sub">Personal Trainer &bull; Code: <strong style="color:var(--lime);">${trainer.linkingCode || 'N/A'}</strong> <button class="action-dot-btn" onclick="showQrModal('${trainer.linkingCode || ''}')" style="padding:1px 6px; font-size:0.65rem; background:rgba(255,255,255,0.1); border-radius:4px; margin-left:4px; cursor:pointer; color:var(--lime);">QR 📱</button></span>
                         </div>
                     </div>
                     
@@ -3979,7 +3997,7 @@
                             <div class="member-avatar">${initials}</div>
                             <div class="member-details">
                                 <span class="member-name">${member.name}</span>
-                                <span class="member-email">${member.email} &bull; Code: <strong style="color:var(--lime);">${member.linkingCode || 'N/A'}</strong></span>
+                                <span class="member-email">${member.email} &bull; Code: <strong style="color:var(--lime);">${member.linkingCode || 'N/A'}</strong> <button class="action-dot-btn" onclick="showQrModal('${member.linkingCode || ''}')" style="padding:1px 6px; font-size:0.65rem; background:rgba(255,255,255,0.1); border-radius:4px; margin-left:4px; cursor:pointer; color:var(--lime);">QR 📱</button></span>
                             </div>
                         </div>
                     </td>
@@ -4113,6 +4131,90 @@
             if (id === 'schedule-modal' || id === 'transactions-modal' || id === 'settings-modal' || id === 'machinery-modal') {
                 switchOwnerNavTab('overview');
             }
+        }
+
+        function showQrModal(code) {
+            if (!code) return;
+            document.getElementById("qr-modal-image").src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${code}`;
+            document.getElementById("qr-modal-code").textContent = code;
+            openModal("qr-modal");
+        }
+
+        function startFirestoreListeners() {
+            if (!db) return;
+            console.log("Starting Firestore real-time listeners...");
+            
+            // Listen for Client changes (e.g. status, ratings, comments)
+            db.collection('clients').onSnapshot(snapshot => {
+                const state = getDbState();
+                let hasChanges = false;
+                snapshot.docChanges().forEach(change => {
+                    const data = change.doc.data();
+                    const studentId = change.doc.id;
+                    let studentIndex = state.students.findIndex(s => s.id === studentId);
+                    
+                    if (change.type === "added" || change.type === "modified") {
+                        const mappedStudent = {
+                            id: studentId,
+                            name: data.name || "Unknown Client",
+                            email: data.email || "",
+                            linkingCode: data.linkingCode,
+                            branchId: data.gymId || "downtown",
+                            trainerId: data.trainerId || "",
+                            status: data.status || "Active",
+                            tel: data.tel || ""
+                        };
+                        
+                        if (studentIndex > -1) {
+                            state.students[studentIndex] = { ...state.students[studentIndex], ...mappedStudent };
+                        } else {
+                            state.students.push(mappedStudent);
+                        }
+                        hasChanges = true;
+                    }
+                });
+                
+                if (hasChanges) {
+                    saveDbState(state);
+                    rebuildWorkspaceViews();
+                }
+            });
+
+            // Listen for Trainer changes (e.g. ratings)
+            db.collection('trainers').onSnapshot(snapshot => {
+                const state = getDbState();
+                let hasChanges = false;
+                snapshot.docChanges().forEach(change => {
+                    const data = change.doc.data();
+                    const trainerId = change.doc.id;
+                    let trainerIndex = state.trainers.findIndex(t => t.id === trainerId);
+                    
+                    if (change.type === "added" || change.type === "modified") {
+                        const mappedTrainer = {
+                            id: trainerId,
+                            name: data.name || "Unknown Trainer",
+                            specialty: data.specialization || "General Training",
+                            linkingCode: data.linkingCode,
+                            branchId: data.gymId || "downtown",
+                            rating: data.rating || 5.0,
+                            reviewsCount: data.reviewsCount || 0,
+                            tags: data.tags || ["General"]
+                        };
+                        
+                        if (trainerIndex > -1) {
+                            state.trainers[trainerIndex] = { ...state.trainers[trainerIndex], ...mappedTrainer };
+                        } else {
+                            state.trainers.push(mappedTrainer);
+                        }
+                        hasChanges = true;
+                    }
+                });
+                
+                if (hasChanges) {
+                    saveDbState(state);
+                    rebuildWorkspaceViews();
+                }
+            });
         }
 
         function addTrainerSubmit(e) {
