@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 import 'package:flutter/foundation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'models.dart';
 
 class GymAppState extends ChangeNotifier {
@@ -14,6 +16,58 @@ class GymAppState extends ChangeNotifier {
     Stream.periodic(const Duration(seconds: 5)).listen((_) {
       fetchStateFromServer();
     });
+    
+    // Load offline cached routine, then fetch updates from Firestore in the background
+    loadCachedRoutine().then((_) {
+      syncActiveRoutinesFromFirestore();
+    });
+  }
+
+  // Cached active training routine of linked client
+  Map<String, dynamic>? activeClientRoutine;
+
+  Future<void> loadCachedRoutine() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final routineJson = prefs.getString('cachedRoutine');
+      if (routineJson != null) {
+        activeClientRoutine = jsonDecode(routineJson);
+        notifyListeners();
+      }
+    } catch (e) {
+      debugPrint('Error loading cached routine: $e');
+    }
+  }
+
+  Future<void> syncActiveRoutinesFromFirestore() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final clientId = prefs.getString('linkedClientId');
+      if (clientId == null || clientId.isEmpty) {
+        debugPrint('Sync: No linked client account found.');
+        return;
+      }
+
+      debugPrint('Sync: Fetching routine for clientId $clientId from Firestore...');
+      final query = await FirebaseFirestore.instance
+          .collection('routines')
+          .where('clientId', isEqualTo: clientId)
+          .limit(1)
+          .get();
+
+      if (query.docs.isNotEmpty) {
+        final routineDoc = query.docs.first;
+        final routineData = routineDoc.data();
+        activeClientRoutine = routineData;
+        await prefs.setString('cachedRoutine', jsonEncode(routineData));
+        notifyListeners();
+        debugPrint('Sync: Successfully synced active client routine from Firestore.');
+      } else {
+        debugPrint('Sync: No active routine found on Firestore for client.');
+      }
+    } catch (e) {
+      debugPrint('Sync Error: $e');
+    }
   }
 
   late List<Branch> branches;

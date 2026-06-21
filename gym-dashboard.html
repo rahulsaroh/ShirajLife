@@ -1744,6 +1744,10 @@
                         <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
                         Schedule
                     </li>
+                    <li class="menu-item" onclick="processSignOut()" style="color:var(--red); border-top: 1px solid var(--card-border); margin-top: 10px;">
+                        <svg viewBox="0 0 24 24" style="stroke:var(--red);"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                        Sign Out
+                    </li>
                 </ul>
             </nav>
             
@@ -2615,22 +2619,34 @@
     </div>
 
     <!-- ==========================================
-         4.5 DIALOG MODAL: OWNER PASSCODE
+         4.5 DIALOG MODAL: UNIFIED SECURE LOGIN
          ========================================== -->
     <div class="modal-overlay" id="passcode-modal" style="backdrop-filter: blur(8px);">
-        <div class="modal-content" style="max-width: 320px;">
+        <div class="modal-content" style="max-width: 340px;">
             <div class="modal-title-row">
-                <h3 class="card-title">Enter Owner Passcode</h3>
+                <h3 class="card-title">Portal Secure Login</h3>
             </div>
-            <p style="color:var(--txt-muted); font-size:0.85rem; margin-bottom:1rem;">Access to administrative metrics is restricted.</p>
-            <form class="modal-form" onsubmit="submitOwnerPasscode(event)">
-                <div class="form-group">
-                    <label class="form-label" for="owner-passcode-field">Passcode</label>
-                    <input type="password" class="form-input-field" id="owner-passcode-field" placeholder="••••••••" required>
+            <p style="color:var(--txt-muted); font-size:0.8rem; margin-bottom:1rem;">Authenticate with your credentials to access B2B console dashboards.</p>
+            <form class="modal-form" onsubmit="submitUnifiedLogin(event)">
+                <div class="form-group" style="margin-bottom:0.75rem;">
+                    <label class="form-label" for="login-role-field">Select Role</label>
+                    <select class="form-select" id="login-role-field" required style="width:100%; height:38px; background:rgba(0,0,0,0.4); border:1px solid var(--card-border); padding:0.5rem; border-radius:var(--radius-sm); font-size:0.85rem;">
+                        <option value="owner">💪 Gym Owner / Admin</option>
+                        <option value="trainer">🏋️ Personal Trainer</option>
+                        <option value="student">👤 Gym Client / Member</option>
+                    </select>
+                </div>
+                <div class="form-group" style="margin-bottom:0.75rem;">
+                    <label class="form-label" for="login-email-field">Email Address</label>
+                    <input type="email" class="form-input-field" id="login-email-field" placeholder="name@example.com" required style="width:100%; padding:0.5rem; font-size:0.85rem;">
+                </div>
+                <div class="form-group" style="margin-bottom:1rem;">
+                    <label class="form-label" for="login-password-field">Password</label>
+                    <input type="password" class="form-input-field" id="login-password-field" placeholder="••••••••" required style="width:100%; padding:0.5rem; font-size:0.85rem;">
                 </div>
                 <div class="form-row-2" style="margin-top: 0.5rem; display: flex; gap: 0.5rem;">
-                    <button class="btn-lime" type="submit" style="width:100%;">Verify Access</button>
-                    <button class="btn-secondary" type="button" onclick="cancelOwnerPasscode()" style="width:100%; border:1px solid var(--border); color:#fff; background:transparent;">Cancel</button>
+                    <button class="btn-lime" type="submit" style="width:100%; font-weight:bold; height:38px;">Sign In ⚡</button>
+                    <button class="btn-secondary" type="button" onclick="cancelOwnerPasscode()" style="width:100%; border:1px solid var(--border); color:#fff; background:transparent; height:38px; cursor:pointer;">Cancel</button>
                 </div>
             </form>
         </div>
@@ -3419,23 +3435,20 @@
          5. CORE DATABASE & LOGIC SCRIPTS
          ========================================== -->
     <script>
-        // Firebase Config (Placeholder)
+        // Firebase Config
         const firebaseConfig = {
-            apiKey: "YOUR_API_KEY_HERE",
-            authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-            projectId: "YOUR_PROJECT_ID",
-            storageBucket: "YOUR_PROJECT_ID.appspot.com",
-            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-            appId: "YOUR_APP_ID"
+            apiKey: "AIzaSyBOZmI-6zELnwTbczBp7o0ir8d9yBENSRk",
+            authDomain: "my-gym-mentor-ai.firebaseapp.com",
+            projectId: "my-gym-mentor-ai",
+            storageBucket: "my-gym-mentor-ai.firebasestorage.app",
+            messagingSenderId: "722261149177"
         };
         
         let db = null;
         try {
-            if (firebaseConfig.apiKey !== "YOUR_API_KEY_HERE") {
-                firebase.initializeApp(firebaseConfig);
-                db = firebase.firestore();
-                console.log("Firebase initialized successfully!");
-            }
+            firebase.initializeApp(firebaseConfig);
+            db = firebase.firestore();
+            console.log("Firebase initialized successfully!");
         } catch (error) {
             console.error("Firebase initialization failed:", error);
         }
@@ -3650,8 +3663,20 @@
             getClasses();
             getTransactions();
 
-            // Load initial view
-            switchRole('owner');
+            // Load initial view based on active session
+            const authUserStr = localStorage.getItem('gojim_auth_user');
+            let initialRole = 'owner';
+            if (authUserStr) {
+                try {
+                    const user = JSON.parse(authUserStr);
+                    if (user && user.role) {
+                        initialRole = user.role === 'client' ? 'student' : user.role;
+                    }
+                } catch(e) {
+                    console.error("Error parsing auth user on load", e);
+                }
+            }
+            switchRole(initialRole);
             startFirestoreListeners();
 
             // Set up local storage dynamic re-render on changes
@@ -3735,25 +3760,40 @@
             }
         }
 
-        // --- ROLE SWITCHER LOGIC ---
+        // --- ROLE SWITCHER LOGIC & SECURE AUTHENTICATION ---
         let currentActiveRole = 'owner';
         let previousActiveRole = 'student';
         let currentActiveBranch = 'all';
 
         function switchRole(roleKey) {
-            if (roleKey === 'owner') {
-                const authenticated = localStorage.getItem('gojim_owner_authenticated') === 'true';
-                if (!authenticated) {
-                    document.getElementById('owner-passcode-field').value = '';
-                    openModal('passcode-modal');
-                    // Reset role switcher active states to currentActiveRole
-                    document.getElementById("role-btn-owner").classList.toggle("active", currentActiveRole === 'owner');
-                    document.getElementById("role-btn-trainer").classList.toggle("active", currentActiveRole === 'trainer');
-                    document.getElementById("role-btn-student").classList.toggle("active", currentActiveRole === 'student');
-                    return;
+            // Check authentication for the requested role
+            const authUserStr = localStorage.getItem('gojim_auth_user');
+            let authenticated = false;
+            let expectedDbRole = roleKey === 'student' ? 'client' : roleKey;
+            
+            if (authUserStr) {
+                try {
+                    const user = JSON.parse(authUserStr);
+                    if (user && user.role === expectedDbRole) {
+                        authenticated = true;
+                    }
+                } catch(e) {
+                    console.error("Error parsing auth user", e);
                 }
-            } else {
-                localStorage.setItem('gojim_owner_authenticated', 'false');
+            }
+
+            if (!authenticated) {
+                // Not authenticated for this role. Show Unified Login Modal.
+                document.getElementById('login-email-field').value = '';
+                document.getElementById('login-password-field').value = '';
+                document.getElementById('login-role-field').value = roleKey; // Pre-select role
+                openModal('passcode-modal');
+                
+                // Reset role switcher active states to currentActiveRole
+                document.getElementById("role-btn-owner").classList.toggle("active", currentActiveRole === 'owner');
+                document.getElementById("role-btn-trainer").classList.toggle("active", currentActiveRole === 'trainer');
+                document.getElementById("role-btn-student").classList.toggle("active", currentActiveRole === 'student');
+                return;
             }
 
             previousActiveRole = currentActiveRole === 'owner' ? previousActiveRole : currentActiveRole;
@@ -3763,7 +3803,6 @@
             document.getElementById("role-btn-owner").classList.toggle("active", roleKey === 'owner');
             document.getElementById("role-btn-trainer").classList.toggle("active", roleKey === 'trainer');
             document.getElementById("role-btn-student").classList.toggle("active", roleKey === 'student');
-
 
             // Hide/Show main segments
             document.getElementById("section-owner").classList.toggle("active", roleKey === 'owner');
@@ -3775,28 +3814,250 @@
                 branchSelector.style.display = roleKey === 'owner' ? 'block' : 'none';
             }
 
+            // Apply restrictions & custom details based on session
+            applySessionRestrictions();
+
             // Rebuild relevant components
             rebuildWorkspaceViews();
             
             showToast(`Switched view context to: ${roleKey.toUpperCase()}`);
         }
 
-        function submitOwnerPasscode(e) {
+        function submitUnifiedLogin(e) {
             e.preventDefault();
-            const passcode = document.getElementById('owner-passcode-field').value;
-            const correctPasscode = localStorage.getItem('gojim_owner_passcode') || 'owner123';
-            if (passcode === correctPasscode) {
-                localStorage.setItem('gojim_owner_authenticated', 'true');
-                closeModal('passcode-modal');
-                switchRole('owner');
+            const role = document.getElementById('login-role-field').value;
+            const email = document.getElementById('login-email-field').value.trim().toLowerCase();
+            const password = document.getElementById('login-password-field').value.trim();
+
+            if (db) {
+                db.collection('users').doc(email).get().then(doc => {
+                    if (doc.exists) {
+                        const userData = doc.data();
+                        if (userData.password === password) {
+                            // Check role matching (remember mapping student to client)
+                            const matchedRole = (userData.role === 'client' && role === 'student') || (userData.role === role);
+                            if (matchedRole) {
+                                const sessionUser = {
+                                    email: email,
+                                    role: userData.role, // 'owner', 'trainer', 'client'
+                                    name: userData.name || userData.email,
+                                    linkedId: userData.linkedId || ""
+                                };
+                                localStorage.setItem('gojim_auth_user', JSON.stringify(sessionUser));
+                                closeModal('passcode-modal');
+                                currentActiveRole = role; // set active role
+                                switchRole(role);
+                                showToast(`Signed in successfully as ${userData.name || email}!`);
+                                return;
+                            } else {
+                                showToast(`Access denied. Role mismatch for this account.`, 'error');
+                            }
+                        } else {
+                            showToast('Incorrect password. Please try again.', 'error');
+                        }
+                    } else {
+                        // Document doesn't exist, try local/mock fallback
+                        handleLocalMockFallback(email, password, role);
+                    }
+                }).catch(err => {
+                    console.error("Firestore auth error:", err);
+                    // Firestore search failed (e.g. offline), try local fallback
+                    handleLocalMockFallback(email, password, role);
+                });
             } else {
-                showToast('Incorrect passcode. Access denied.', 'error');
+                // Firebase is not connected, use local fallback
+                handleLocalMockFallback(email, password, role);
+            }
+        }
+
+        function handleLocalMockFallback(email, password, role) {
+            let success = false;
+            let name = "";
+            let linkedId = "";
+            let dbRole = role === 'student' ? 'client' : role;
+            
+            if (dbRole === 'owner') {
+                if (email === 'owner@gojim.com' && password === 'owner123') {
+                    success = true;
+                    name = "Mock Owner";
+                    linkedId = "downtown"; // Default branch
+                }
+            } else if (dbRole === 'trainer') {
+                if (email === 'trainer@gojim.com' && password === 'trainer123') {
+                    success = true;
+                    name = "King Zarips";
+                    linkedId = "king"; // Match mock trainer ID
+                }
+            } else if (dbRole === 'client') {
+                if ((email === 'client@gojim.com' || email === 'student@gojim.com') && password === 'client123') {
+                    success = true;
+                    name = "Bessie Cooper";
+                    linkedId = "bessie"; // Match mock student ID
+                }
+            }
+            
+            if (success) {
+                const sessionUser = {
+                    email: email,
+                    role: dbRole,
+                    name: name,
+                    linkedId: linkedId
+                };
+                localStorage.setItem('gojim_auth_user', JSON.stringify(sessionUser));
+                closeModal('passcode-modal');
+                currentActiveRole = role;
+                switchRole(role);
+                showToast(`Signed in successfully via offline mode as ${name}!`);
+            } else {
+                showToast('Authentication failed. Check your email, password, and selected role.', 'error');
             }
         }
 
         function cancelOwnerPasscode() {
             closeModal('passcode-modal');
-            switchRole(previousActiveRole);
+            const authUserStr = localStorage.getItem('gojim_auth_user');
+            if (!authUserStr) {
+                // If they are not logged in at all and cancel, send them back to the showcase page
+                window.location.href = "ironpulse-gym.html";
+            } else {
+                // Revert
+                switchRole(currentActiveRole);
+            }
+        }
+
+        function applySessionRestrictions() {
+            const authUserStr = localStorage.getItem('gojim_auth_user');
+            if (!authUserStr) return;
+            
+            let user;
+            try {
+                user = JSON.parse(authUserStr);
+            } catch(e) {
+                console.error(e);
+                return;
+            }
+
+            const state = getDbState();
+            
+            if (user.role === 'owner') {
+                // Restore selectors
+                const selectEl = document.getElementById("owner-branch-selector");
+                if (selectEl) {
+                    if (user.linkedId && user.linkedId !== 'all') {
+                        // Check if the linkedId (gym ID) matches a branch
+                        selectEl.value = user.linkedId;
+                        selectEl.disabled = true;
+                        currentActiveBranch = user.linkedId;
+                    } else {
+                        selectEl.disabled = false;
+                    }
+                }
+                
+                // Set logo brand & initials
+                const initials = (user.name || "Gym Owner").split(" ").map(n => n[0]).join("").substring(0, 2).toUpperCase();
+                const avatar = document.getElementById("navbar-avatar");
+                if (avatar) avatar.textContent = initials;
+
+                // If firestore is available, fetch the gym name
+                if (db && user.linkedId && user.linkedId !== 'all') {
+                    db.collection('gyms').doc(user.linkedId).get().then(doc => {
+                        if (doc.exists) {
+                            const data = doc.data();
+                            const gymName = data.name || "goJim";
+                            const logoBrand = document.getElementById("logo-brand-name");
+                            if (logoBrand) logoBrand.textContent = gymName;
+                            const welcomeSubtitle = document.getElementById("welcome-subtitle-gym-name");
+                            if (welcomeSubtitle) welcomeSubtitle.textContent = gymName + " Management";
+                        }
+                    }).catch(err => console.error("Error fetching gym name:", err));
+                } else {
+                    const logoBrand = document.getElementById("logo-brand-name");
+                    if (logoBrand) logoBrand.textContent = user.name || "goJim";
+                    const welcomeSubtitle = document.getElementById("welcome-subtitle-gym-name");
+                    if (welcomeSubtitle) welcomeSubtitle.textContent = (user.name || "goJim") + " Management";
+                }
+            } else if (user.role === 'trainer') {
+                // Lock trainer selector to the logged in trainer
+                const select = document.getElementById("trainer-select-view");
+                if (select) {
+                    let trainerExists = state.trainers.some(t => t.id === user.linkedId);
+                    if (!trainerExists && user.linkedId) {
+                        state.trainers.push({
+                            id: user.linkedId,
+                            name: user.name || "Personal Trainer",
+                            clientsCount: 0,
+                            years: 3,
+                            tags: ["Personal Trainer"],
+                            branchId: "downtown"
+                        });
+                        saveDbState(state);
+                        populateTrainerSelect(state);
+                    }
+                    select.value = user.linkedId || "";
+                    select.disabled = true;
+                }
+                loadTrainerWorkspace();
+            } else if (user.role === 'client') {
+                // Lock student selector to the logged in client/member
+                const select = document.getElementById("student-select-view");
+                if (select) {
+                    let studentExists = state.students.some(s => s.id === user.linkedId);
+                    if (!studentExists && user.linkedId) {
+                        state.students.push({
+                            id: user.linkedId,
+                            name: user.name || "Gym Member",
+                            email: user.email || "",
+                            expiredDate: "12/12/2026",
+                            age: 25,
+                            status: "Active",
+                            tel: "555-0199",
+                            lastVisited: "Today",
+                            trainerId: "none",
+                            isCheckedIn: false,
+                            branchId: "downtown",
+                            streakCount: 0,
+                            benchPressPr: 0,
+                            squatPr: 0,
+                            bodyWeight: 70,
+                            weeklyCheckins: [0, 0, 0],
+                            subscription: {"autoDebit": true, "billingFailed": false, "gracePeriodDays": 3, "paymentMethod": "Stripe"},
+                            workoutCredits: 10,
+                            totalWorkouts: 0,
+                            referralsCount: 0,
+                            staffNotes: "Self-registered new member via web/app."
+                        });
+                        saveDbState(state);
+                        populateStudentSelect(state);
+                    }
+                    select.value = user.linkedId || "";
+                    select.disabled = true;
+                }
+                loadStudentWorkspace();
+            }
+        }
+
+        function processSignOut() {
+            localStorage.removeItem('gojim_auth_user');
+            
+            // Re-enable selectors
+            const branchSelect = document.getElementById("owner-branch-selector");
+            if (branchSelect) branchSelect.disabled = false;
+            const trainerSelect = document.getElementById("trainer-select-view");
+            if (trainerSelect) trainerSelect.disabled = false;
+            const studentSelect = document.getElementById("student-select-view");
+            if (studentSelect) studentSelect.disabled = false;
+            
+            // Reset gym name / brand text
+            const logoBrand = document.getElementById("logo-brand-name");
+            if (logoBrand) logoBrand.textContent = "goJim";
+            const welcomeSubtitle = document.getElementById("welcome-subtitle-gym-name");
+            if (welcomeSubtitle) welcomeSubtitle.textContent = "goJim Management";
+            
+            showToast("Successfully signed out of portal.");
+            
+            // Switch back to owner and trigger login
+            currentActiveRole = 'owner';
+            switchRole('owner');
         }
 
         // Rebuild Workspace rendering based on localStorage values

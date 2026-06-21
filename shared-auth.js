@@ -89,14 +89,14 @@
     };
 
     // 2. FIREBASE INTEGRATION SETUP
-    // User will paste their credentials here. If they are placeholder values, fallback to localStorage.
+    // Configured for the my-gym-mentor-ai project shared with the mobile app
     const firebaseConfig = {
-        apiKey: "YOUR_API_KEY_HERE",
-        authDomain: "YOUR_AUTH_DOMAIN_HERE",
-        projectId: "YOUR_PROJECT_ID_HERE",
-        storageBucket: "YOUR_STORAGE_BUCKET_HERE",
-        messagingSenderId: "YOUR_MESSAGING_SENDER_ID_HERE",
-        appId: "YOUR_APP_ID_HERE"
+        apiKey: "AIzaSyBOZmI-6zELnwTbczBp7o0ir8d9yBENSRk",
+        authDomain: "my-gym-mentor-ai.firebaseapp.com",
+        projectId: "my-gym-mentor-ai",
+        storageBucket: "my-gym-mentor-ai.firebasestorage.app",
+        messagingSenderId: "722261149177",
+        appId: "YOUR_WEB_APP_ID_HERE" // Provide your web app ID if you create a Web App in the console
     };
 
     const isFirebaseConfigured = firebaseConfig && 

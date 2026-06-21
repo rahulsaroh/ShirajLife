@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:convert';
 import '../models.dart';
 import '../state.dart';
 
@@ -15,7 +16,10 @@ class _StudentDashboardScreenState extends State<StudentDashboardScreen> {
   String? _aiReportText;
   bool _generatingReport = false;
 
-  // Custom mock routine tracker
+  int _selectedDayIndex = 0;
+  final Set<String> _completedSets = {};
+
+  // Custom mock routine tracker (fallback)
   final List<Map<String, dynamic>> _routineItems = [
     {"title": "Barbell Back Squats (4 Sets x 8 Reps)", "done": false},
     {"title": "Romanian Deadlifts (3 Sets x 10 Reps)", "done": false},
@@ -267,80 +271,272 @@ class _StudentDashboardScreenState extends State<StudentDashboardScreen> {
                           border: Border.all(color: borderColor),
                           borderRadius: BorderRadius.circular(24),
                         ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text(
-                              "Active Strength Routine",
-                              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
-                            ),
-                            const Text(
-                              "Check off sets completed in this session",
-                              style: TextStyle(fontSize: 11, color: Color(0xFF5C626E)),
-                            ),
-                            const SizedBox(height: 20),
-                            ListView.separated(
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                              itemCount: _routineItems.length,
-                              separatorBuilder: (context, index) => const SizedBox(height: 10),
-                              itemBuilder: (context, index) {
-                                final item = _routineItems[index];
-                                final isDone = item["done"];
-                                
-                                return GestureDetector(
-                                  onTap: () {
-                                    setState(() {
-                                      item["done"] = !isDone;
-                                    });
-                                    if (!isDone) {
-                                      ScaffoldMessenger.of(context).showSnackBar(
-                                        const SnackBar(
-                                          content: Text("Set completed! Progressive load logged."),
-                                          duration: Duration(milliseconds: 1500),
+                        child: _state.activeClientRoutine == null
+                            ? Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Text(
+                                    "Active Strength Routine (Offline Demo)",
+                                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
+                                  ),
+                                  const Text(
+                                    "Check off sets completed in this session",
+                                    style: TextStyle(fontSize: 11, color: Color(0xFF5C626E)),
+                                  ),
+                                  const SizedBox(height: 20),
+                                  ListView.separated(
+                                    shrinkWrap: true,
+                                    physics: const NeverScrollableScrollPhysics(),
+                                    itemCount: _routineItems.length,
+                                    separatorBuilder: (context, index) => const SizedBox(height: 10),
+                                    itemBuilder: (context, index) {
+                                      final item = _routineItems[index];
+                                      final isDone = item["done"];
+                                      
+                                      return GestureDetector(
+                                        onTap: () {
+                                          setState(() {
+                                            item["done"] = !isDone;
+                                          });
+                                          if (!isDone) {
+                                            ScaffoldMessenger.of(context).showSnackBar(
+                                              const SnackBar(
+                                                content: Text("Set completed! Progressive load logged."),
+                                                duration: Duration(milliseconds: 1500),
+                                              ),
+                                            );
+                                          }
+                                        },
+                                        child: Container(
+                                          padding: const EdgeInsets.all(16),
+                                          decoration: BoxDecoration(
+                                            color: isDone ? const Color(0x06A3E635) : Colors.black.withOpacity(0.15),
+                                            border: Border.all(color: isDone ? limeColor.withOpacity(0.3) : borderColor),
+                                            borderRadius: BorderRadius.circular(12),
+                                          ),
+                                          child: Row(
+                                            children: [
+                                              Container(
+                                                width: 18,
+                                                height: 18,
+                                                decoration: BoxDecoration(
+                                                  color: isDone ? limeColor : Colors.transparent,
+                                                  border: Border.all(color: isDone ? limeColor : const Color(0xFF5C626E), width: 1.5),
+                                                  borderRadius: BorderRadius.circular(4),
+                                                ),
+                                                child: isDone ? const Icon(Icons.check, color: Colors.black, size: 12) : null,
+                                              ),
+                                              const SizedBox(width: 12),
+                                              Expanded(
+                                                child: Text(
+                                                  item["title"],
+                                                  style: TextStyle(
+                                                    fontSize: 12.5,
+                                                    fontWeight: FontWeight.w600,
+                                                    color: isDone ? const Color(0xFF8E94A0) : Colors.white,
+                                                    decoration: isDone ? TextDecoration.lineThrough : null,
+                                                  ),
+                                                ),
+                                              )
+                                            ],
+                                          ),
                                         ),
                                       );
-                                    }
-                                  },
-                                  child: Container(
-                                    padding: const EdgeInsets.all(16),
-                                    decoration: BoxDecoration(
-                                      color: isDone ? const Color(0x06A3E635) : Colors.black.withOpacity(0.15),
-                                      border: Border.all(color: isDone ? limeColor.withOpacity(0.3) : borderColor),
-                                      borderRadius: BorderRadius.circular(12),
-                                    ),
-                                    child: Row(
-                                      children: [
-                                        Container(
-                                          width: 18,
-                                          height: 18,
-                                          decoration: BoxDecoration(
-                                            color: isDone ? limeColor : Colors.transparent,
-                                            border: Border.all(color: isDone ? limeColor : const Color(0xFF5C626E), width: 1.5),
-                                            borderRadius: BorderRadius.circular(4),
-                                          ),
-                                          child: isDone ? const Icon(Icons.check, color: Colors.black, size: 12) : null,
-                                        ),
-                                        const SizedBox(width: 12),
-                                        Expanded(
-                                          child: Text(
-                                            item["title"],
-                                            style: TextStyle(
-                                              fontSize: 12.5,
-                                              fontWeight: FontWeight.w600,
-                                              color: isDone ? const Color(0xFF8E94A0) : Colors.white,
-                                              decoration: isDone ? TextDecoration.lineThrough : null,
+                                    },
+                                  )
+                                ],
+                              )
+                            : Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              _state.activeClientRoutine!['title'] ?? 'Trainer Routine',
+                                              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
                                             ),
-                                          ),
-                                        )
-                                      ],
-                                    ),
+                                            Text(
+                                              _state.activeClientRoutine!['description'] ?? 'Assigned by trainer',
+                                              style: const TextStyle(fontSize: 11, color: Color(0xFF5C626E)),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      const Icon(Icons.fitness_center, color: limeColor, size: 20),
+                                    ],
                                   ),
-                                );
-                              },
-                            )
-                          ],
-                        ),
+                                  const SizedBox(height: 16),
+                                  // Days tabs switcher
+                                  if ((_state.activeClientRoutine!['days'] as List<dynamic>? ?? []).isNotEmpty) ...[
+                                    SingleChildScrollView(
+                                      scrollDirection: Axis.horizontal,
+                                      child: Row(
+                                        children: (_state.activeClientRoutine!['days'] as List<dynamic>).asMap().entries.map((entry) {
+                                          final index = entry.key;
+                                          final day = entry.value;
+                                          final isSelected = _selectedDayIndex == index;
+                                          return GestureDetector(
+                                            onTap: () {
+                                              setState(() {
+                                                _selectedDayIndex = index;
+                                              });
+                                            },
+                                            child: Container(
+                                              margin: const EdgeInsets.only(right: 8),
+                                              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                                              decoration: BoxDecoration(
+                                                color: isSelected ? limeColor : Colors.black.withOpacity(0.2),
+                                                border: Border.all(color: isSelected ? limeColor : borderColor),
+                                                borderRadius: BorderRadius.circular(20),
+                                              ),
+                                              child: Text(
+                                                day['name'] ?? 'Day ${index + 1}',
+                                                style: TextStyle(
+                                                  fontSize: 11,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: isSelected ? Colors.black : Colors.white70,
+                                                ),
+                                              ),
+                                            ),
+                                          );
+                                        }).toList(),
+                                      ),
+                                    ),
+                                    const SizedBox(height: 16),
+                                  ],
+                                  // Exercises list for selected day
+                                  (() {
+                                    final days = _state.activeClientRoutine!['days'] as List<dynamic>? ?? [];
+                                    if (days.isEmpty || _selectedDayIndex >= days.length) {
+                                      return const Text("No days configured in this routine.", style: TextStyle(fontSize: 12, color: Color(0xFF5C626E)));
+                                    }
+                                    final day = days[_selectedDayIndex];
+                                    final exercises = day['exercises'] as List<dynamic>? ?? [];
+                                    if (exercises.isEmpty) {
+                                      return const Text("No exercises assigned for this day.", style: TextStyle(fontSize: 12, color: Color(0xFF5C626E)));
+                                    }
+                                    
+                                    return ListView.separated(
+                                      shrinkWrap: true,
+                                      physics: const NeverScrollableScrollPhysics(),
+                                      itemCount: exercises.length,
+                                      separatorBuilder: (context, index) => const SizedBox(height: 10),
+                                      itemBuilder: (context, exIndex) {
+                                        final ex = exercises[exIndex];
+                                        final String name = ex['exerciseName'] ?? 'Exercise';
+                                        final int rest = ex['restTime'] ?? 90;
+                                        final String? notes = ex['notes'];
+                                        final dynamic setsData = ex['setsJson'];
+                                        List<dynamic> sets = [];
+                                        if (setsData is String) {
+                                          try {
+                                            sets = jsonDecode(setsData);
+                                          } catch (_) {}
+                                        } else if (setsData is List) {
+                                          sets = setsData;
+                                        }
+                                        
+                                        return Container(
+                                          padding: const EdgeInsets.all(14),
+                                          decoration: BoxDecoration(
+                                            color: Colors.black.withOpacity(0.15),
+                                            border: Border.all(color: borderColor),
+                                            borderRadius: BorderRadius.circular(12),
+                                          ),
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Row(
+                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                children: [
+                                                  Text(
+                                                    name,
+                                                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: Colors.white),
+                                                  ),
+                                                  Text(
+                                                    "Rest: ${rest}s",
+                                                    style: const TextStyle(fontSize: 10, color: limeColor, fontWeight: FontWeight.bold),
+                                                  ),
+                                                ],
+                                              ),
+                                              if (notes != null && notes.isNotEmpty) ...[
+                                                const SizedBox(height: 4),
+                                                Text(
+                                                  "Notes: $notes",
+                                                  style: const TextStyle(fontSize: 11, color: Color(0xFF8E94A0), fontStyle: FontStyle.italic),
+                                                ),
+                                              ],
+                                              const SizedBox(height: 10),
+                                              // Render each set inside this exercise
+                                              Wrap(
+                                                spacing: 8,
+                                                runSpacing: 8,
+                                                children: List.generate(sets.length, (setIndex) {
+                                                  final setObj = sets[setIndex];
+                                                  final int reps = setObj['reps'] ?? 10;
+                                                  final dynamic weight = setObj['weight'] ?? 0;
+                                                  final String setKey = "${_selectedDayIndex}_${exIndex}_$setIndex";
+                                                  final isSetDone = _completedSets.contains(setKey);
+                                                  
+                                                  return GestureDetector(
+                                                    onTap: () {
+                                                      setState(() {
+                                                        if (isSetDone) {
+                                                          _completedSets.remove(setKey);
+                                                        } else {
+                                                          _completedSets.add(setKey);
+                                                          ScaffoldMessenger.of(context).showSnackBar(
+                                                            SnackBar(
+                                                              content: Text("Completed Set ${setIndex + 1} of $name!"),
+                                                              duration: const Duration(milliseconds: 1000),
+                                                            ),
+                                                          );
+                                                        }
+                                                      });
+                                                    },
+                                                    child: Container(
+                                                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                                                      decoration: BoxDecoration(
+                                                        color: isSetDone ? limeColor.withOpacity(0.1) : Colors.black.withOpacity(0.3),
+                                                        border: Border.all(
+                                                          color: isSetDone ? limeColor : borderColor,
+                                                        ),
+                                                        borderRadius: BorderRadius.circular(8),
+                                                      ),
+                                                      child: Row(
+                                                        mainAxisSize: MainAxisSize.min,
+                                                        children: [
+                                                          Text(
+                                                            "S${setIndex + 1}: ${reps}x${weight}kg",
+                                                            style: TextStyle(
+                                                              fontSize: 11,
+                                                              fontWeight: FontWeight.bold,
+                                                              color: isSetDone ? limeColor : Colors.white70,
+                                                            ),
+                                                          ),
+                                                          if (isSetDone) ...[
+                                                            const SizedBox(width: 4),
+                                                            const Icon(Icons.check, color: limeColor, size: 10),
+                                                          ],
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  );
+                                                }),
+                                              ),
+                                            ],
+                                          ),
+                                        );
+                                      },
+                                    );
+                                  })(),
+                                ],
+                              ),
                       ),
                       const SizedBox(height: 20),
                       _buildWorkoutLoggerCard(context, currentStudent, limeColor, cardBg, borderColor),

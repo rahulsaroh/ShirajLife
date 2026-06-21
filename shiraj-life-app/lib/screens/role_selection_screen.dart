@@ -1,10 +1,40 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'owner_dashboard.dart';
 import 'trainer_dashboard.dart';
 import 'student_dashboard.dart';
+import 'gym_link_dialog.dart';
 
-class RoleSelectionScreen extends StatelessWidget {
+class RoleSelectionScreen extends StatefulWidget {
   const RoleSelectionScreen({Key? key}) : super(key: key);
+
+  @override
+  State<RoleSelectionScreen> createState() => _RoleSelectionScreenState();
+}
+
+class _RoleSelectionScreenState extends State<RoleSelectionScreen> {
+  String? _linkedGymName;
+  String? _linkedTrainerName;
+  String? _linkedClientName;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadLinkingStatus();
+  }
+
+  Future<void> _loadLinkingStatus() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      setState(() {
+        _linkedGymName = prefs.getString('linkedGymName');
+        _linkedTrainerName = prefs.getString('linkedTrainerName');
+        _linkedClientName = prefs.getString('linkedClientName');
+      });
+    } catch (e) {
+      // SharedPreferences load failed
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -13,6 +43,29 @@ class RoleSelectionScreen extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: darkBg,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        actions: [
+          TextButton.icon(
+            icon: const Icon(Icons.link, color: limeColor),
+            label: Text(
+              _linkedClientName != null || _linkedGymName != null || _linkedTrainerName != null
+                  ? 'Linked'
+                  : 'Link Account',
+              style: const TextStyle(color: limeColor, fontWeight: FontWeight.bold),
+            ),
+            onPressed: () async {
+              await showDialog(
+                context: context,
+                builder: (context) => const GymLinkDialog(),
+              );
+              _loadLinkingStatus();
+            },
+          ),
+          const SizedBox(width: 8),
+        ],
+      ),
       body: Container(
         decoration: const BoxDecoration(
           gradient: RadialGradient(
@@ -26,7 +79,7 @@ class RoleSelectionScreen extends StatelessWidget {
         ),
         child: Center(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 32.0),
+            padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
             child: ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: 440),
               child: Column(
@@ -82,7 +135,7 @@ class RoleSelectionScreen extends StatelessWidget {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 48),
+                  const SizedBox(height: 32),
 
                   const Text(
                     "Select Portal Role",
@@ -104,7 +157,42 @@ class RoleSelectionScreen extends StatelessWidget {
                       fontWeight: FontWeight.w500,
                     ),
                   ),
-                  const SizedBox(height: 24),
+                  const SizedBox(height: 16),
+
+                  // Display Linking Status if linked
+                  if (_linkedClientName != null || _linkedGymName != null || _linkedTrainerName != null) ...[
+                    Container(
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF14171D),
+                        border: Border.all(color: const Color(0xFF22262F)),
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Row(
+                            children: [
+                              Icon(Icons.check_circle, color: limeColor, size: 16),
+                              SizedBox(width: 8),
+                              Text(
+                                "Linked Ecosystem Details",
+                                style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 13),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 8),
+                          if (_linkedClientName != null)
+                            Text("• Client Member: $_linkedClientName", style: const TextStyle(color: limeColor, fontSize: 12)),
+                          if (_linkedGymName != null)
+                            Text("• Gym Branch: $_linkedGymName", style: const TextStyle(color: Colors.cyan, fontSize: 12)),
+                          if (_linkedTrainerName != null)
+                            Text("• Trainer Coach: $_linkedTrainerName", style: const TextStyle(color: Color(0xFFA855F7), fontSize: 12)),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                  ],
 
                   // Owner Role Button Card
                   _buildRoleCard(

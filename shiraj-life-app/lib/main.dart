@@ -1,7 +1,15 @@
 import 'package:flutter/material.dart';
 import 'screens/role_selection_screen.dart';
+import 'package:firebase_core/firebase_core.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  try {
+    await Firebase.initializeApp();
+    debugPrint('BOOT: Firebase Initialized Successfully');
+  } catch (e) {
+    debugPrint('BOOT: Firebase initialization failed: $e');
+  }
   runApp(const GymManagementApp());
 }
 
