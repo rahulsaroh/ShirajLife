@@ -6,8 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>goJim | Gym Management B2B Dashboard</title>
     <meta name="description" content="Premium B2B gym management platform showcase. Support owner, trainers, and student workflows.">
-    <!-- Firebase App and Firestore SDKs -->
+    <!-- Firebase App, Auth, and Firestore SDKs -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
     
     <!-- Fonts -->
@@ -1487,6 +1488,83 @@
             gap: 1rem;
         }
 
+        /* Unified Auth Modal Tabs & Buttons */
+        .auth-tabs {
+            display: flex;
+            border-bottom: 1px solid var(--card-border);
+            margin-bottom: 1.25rem;
+            gap: 1rem;
+        }
+
+        .auth-tab-btn {
+            background: none;
+            border: none;
+            border-bottom: 2px solid transparent;
+            color: var(--txt-muted);
+            font-size: 0.95rem;
+            font-weight: 700;
+            padding: 0.5rem 0;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .auth-tab-btn.active {
+            color: var(--lime);
+            border-bottom-color: var(--lime);
+        }
+
+        .btn-google {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: transparent;
+            border: 1px solid var(--card-border);
+            color: var(--txt-main);
+            padding: 0.75rem;
+            border-radius: var(--radius-sm);
+            font-size: 0.85rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 0.75rem;
+            transition: var(--transition);
+            width: 100%;
+        }
+
+        .btn-google:hover {
+            background: rgba(255,255,255,0.05);
+            border-color: rgba(255,255,255,0.15);
+        }
+
+        .btn-google img {
+            width: 18px;
+            height: 18px;
+        }
+
+        .auth-divider {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            color: var(--txt-dim);
+            font-size: 0.75rem;
+            margin: 0.75rem 0;
+        }
+
+        .auth-divider::before,
+        .auth-divider::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid var(--card-border);
+        }
+
+        .auth-divider:not(:empty)::before {
+            margin-right: .5em;
+        }
+
+        .auth-divider:not(:empty)::after {
+            margin-left: .5em;
+        }
+
         /* Toast notifications container */
         .toast-container {
             position: fixed;
@@ -2622,33 +2700,109 @@
          4.5 DIALOG MODAL: UNIFIED SECURE LOGIN
          ========================================== -->
     <div class="modal-overlay" id="passcode-modal" style="backdrop-filter: blur(8px);">
-        <div class="modal-content" style="max-width: 340px;">
-            <div class="modal-title-row">
-                <h3 class="card-title">Portal Secure Login</h3>
+        <div class="modal-content" style="max-width: 380px;">
+            <div class="modal-title-row" style="margin-bottom: 1rem;">
+                <h3 class="card-title" id="auth-modal-title">Portal Secure Login</h3>
             </div>
-            <p style="color:var(--txt-muted); font-size:0.8rem; margin-bottom:1rem;">Authenticate with your credentials to access B2B console dashboards.</p>
-            <form class="modal-form" onsubmit="submitUnifiedLogin(event)">
-                <div class="form-group" style="margin-bottom:0.75rem;">
-                    <label class="form-label" for="login-role-field">Select Role</label>
-                    <select class="form-select" id="login-role-field" required style="width:100%; height:38px; background:rgba(0,0,0,0.4); border:1px solid var(--card-border); padding:0.5rem; border-radius:var(--radius-sm); font-size:0.85rem;">
-                        <option value="owner">💪 Gym Owner / Admin</option>
-                        <option value="trainer">🏋️ Personal Trainer</option>
-                        <option value="student">👤 Gym Client / Member</option>
-                    </select>
-                </div>
-                <div class="form-group" style="margin-bottom:0.75rem;">
-                    <label class="form-label" for="login-email-field">Email Address</label>
-                    <input type="email" class="form-input-field" id="login-email-field" placeholder="name@example.com" required style="width:100%; padding:0.5rem; font-size:0.85rem;">
-                </div>
-                <div class="form-group" style="margin-bottom:1rem;">
-                    <label class="form-label" for="login-password-field">Password</label>
-                    <input type="password" class="form-input-field" id="login-password-field" placeholder="••••••••" required style="width:100%; padding:0.5rem; font-size:0.85rem;">
-                </div>
-                <div class="form-row-2" style="margin-top: 0.5rem; display: flex; gap: 0.5rem;">
-                    <button class="btn-lime" type="submit" style="width:100%; font-weight:bold; height:38px;">Sign In ⚡</button>
-                    <button class="btn-secondary" type="button" onclick="cancelOwnerPasscode()" style="width:100%; border:1px solid var(--border); color:#fff; background:transparent; height:38px; cursor:pointer;">Cancel</button>
-                </div>
-            </form>
+            
+            <!-- Auth Tabs -->
+            <div class="auth-tabs">
+                <button type="button" class="auth-tab-btn active" id="tab-btn-signin" onclick="switchAuthTab('signin')">Sign In</button>
+                <button type="button" class="auth-tab-btn" id="tab-btn-signup" onclick="switchAuthTab('signup')">Sign Up</button>
+            </div>
+
+            <!-- Sign In Form -->
+            <div id="auth-signin-container">
+                <p style="color:var(--txt-muted); font-size:0.8rem; margin-bottom:1rem;">Authenticate with your credentials to access B2B console dashboards.</p>
+                <form class="modal-form" onsubmit="submitUnifiedLogin(event)">
+                    <div class="form-group" style="margin-bottom:0.75rem;">
+                        <label class="form-label" for="login-role-field">Select Role</label>
+                        <select class="form-select" id="login-role-field" required style="width:100%; height:38px; background:rgba(0,0,0,0.4); border:1px solid var(--card-border); padding:0.5rem; border-radius:var(--radius-sm); font-size:0.85rem;">
+                            <option value="owner">💪 Gym Owner / Admin</option>
+                            <option value="trainer">🏋️ Personal Trainer</option>
+                            <option value="student">👤 Gym Client / Member</option>
+                        </select>
+                    </div>
+                    <div class="form-group" style="margin-bottom:0.75rem;">
+                        <label class="form-label" for="login-email-field">Email Address</label>
+                        <input type="email" class="form-input-field" id="login-email-field" placeholder="name@example.com" required style="width:100%; padding:0.5rem; font-size:0.85rem;">
+                    </div>
+                    <div class="form-group" style="margin-bottom:1rem;">
+                        <label class="form-label" for="login-password-field">Password</label>
+                        <input type="password" class="form-input-field" id="login-password-field" placeholder="••••••••" required style="width:100%; padding:0.5rem; font-size:0.85rem;">
+                    </div>
+                    <div class="form-row-2" style="margin-top: 0.5rem; display: flex; gap: 0.5rem;">
+                        <button class="btn-lime" type="submit" style="width:100%; font-weight:bold; height:38px;">Sign In ⚡</button>
+                        <button class="btn-secondary" type="button" onclick="cancelOwnerPasscode()" style="width:100%; border:1px solid var(--border); color:#fff; background:transparent; height:38px; cursor:pointer;">Cancel</button>
+                    </div>
+                </form>
+                
+                <div class="auth-divider">or</div>
+                <button type="button" class="btn-google" onclick="signInWithGooglePopup('signin')">
+                    <img src="https://cdn1.iconfinder.com/data/icons/google-s-logo/150/Google_Icons-09-512.png" alt="Google">
+                    Continue with Google
+                </button>
+            </div>
+
+            <!-- Sign Up Form -->
+            <div id="auth-signup-container" style="display: none;">
+                <p style="color:var(--txt-muted); font-size:0.8rem; margin-bottom:1rem;">Register a new portal account for you or your business.</p>
+                <form class="modal-form" onsubmit="submitUnifiedSignUp(event)">
+                    <div class="form-group" style="margin-bottom:0.75rem;">
+                        <label class="form-label" for="signup-role-field">Portal Role</label>
+                        <select class="form-select" id="signup-role-field" required onchange="handleSignupRoleChange(this.value)" style="width:100%; height:38px; background:rgba(0,0,0,0.4); border:1px solid var(--card-border); padding:0.5rem; border-radius:var(--radius-sm); font-size:0.85rem;">
+                            <option value="owner">💪 Gym Owner / Admin</option>
+                            <option value="trainer">🏋️ Personal Trainer</option>
+                            <option value="student">👤 Gym Client / Member</option>
+                        </select>
+                    </div>
+                    <div class="form-group" style="margin-bottom:0.75rem;">
+                        <label class="form-label" for="signup-name-field">Full Name</label>
+                        <input type="text" class="form-input-field" id="signup-name-field" placeholder="John Doe" required style="width:100%; padding:0.5rem; font-size:0.85rem;">
+                    </div>
+                    <div class="form-group" style="margin-bottom:0.75rem;">
+                        <label class="form-label" for="signup-email-field">Email Address</label>
+                        <input type="email" class="form-input-field" id="signup-email-field" placeholder="name@example.com" required style="width:100%; padding:0.5rem; font-size:0.85rem;">
+                    </div>
+                    <div class="form-group" style="margin-bottom:0.75rem;">
+                        <label class="form-label" for="signup-password-field">Password</label>
+                        <input type="password" class="form-input-field" id="signup-password-field" placeholder="••••••••" required style="width:100%; padding:0.5rem; font-size:0.85rem;">
+                    </div>
+
+                    <!-- Role specific inputs -->
+                    <div id="signup-owner-fields" style="display: block;">
+                        <div class="form-group" style="margin-bottom:0.75rem;">
+                            <label class="form-label" for="signup-gym-name">Gym Name</label>
+                            <input type="text" class="form-input-field" id="signup-gym-name" placeholder="e.g. Iron Pulse Gym" style="width:100%; padding:0.5rem; font-size:0.85rem;">
+                        </div>
+                        <div class="form-group" style="margin-bottom:0.75rem;">
+                            <label class="form-label" for="signup-gym-location">Gym Location</label>
+                            <input type="text" class="form-input-field" id="signup-gym-location" placeholder="e.g. Mumbai, India" style="width:100%; padding:0.5rem; font-size:0.85rem;">
+                        </div>
+                    </div>
+                    <div id="signup-linkcode-fields" style="display: none;">
+                        <div class="form-group" style="margin-bottom:0.75rem;">
+                            <label class="form-label" for="signup-link-code">Linking Code</label>
+                            <input type="text" class="form-input-field" id="signup-link-code" placeholder="e.g. GYM-9821" style="width:100%; padding:0.5rem; font-size:0.85rem;">
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-bottom:1rem;">
+                        <label class="form-label" for="signup-partner-code">Referral / Partner Code (Optional)</label>
+                        <input type="text" class="form-input-field" id="signup-partner-code" placeholder="e.g. FITPRO" style="width:100%; padding:0.5rem; font-size:0.85rem;">
+                    </div>
+
+                    <div class="form-row-2" style="margin-top: 0.5rem; display: flex; gap: 0.5rem;">
+                        <button class="btn-lime" type="submit" style="width:100%; font-weight:bold; height:38px;">Sign Up ⚡</button>
+                        <button class="btn-secondary" type="button" onclick="cancelOwnerPasscode()" style="width:100%; border:1px solid var(--border); color:#fff; background:transparent; height:38px; cursor:pointer;">Cancel</button>
+                    </div>
+                </form>
+                
+                <div class="auth-divider">or</div>
+                <button type="button" class="btn-google" onclick="signInWithGooglePopup('signup')">
+                    <img src="https://cdn1.iconfinder.com/data/icons/google-s-logo/150/Google_Icons-09-512.png" alt="Google">
+                    Sign Up with Google
+                </button>
+            </div>
         </div>
     </div>
 
@@ -3867,6 +4021,301 @@
             } else {
                 // Firebase is not connected, use local fallback
                 handleLocalMockFallback(email, password, role);
+            }
+        }
+
+        function switchAuthTab(tab) {
+            const btnSignin = document.getElementById('tab-btn-signin');
+            const btnSignup = document.getElementById('tab-btn-signup');
+            const containerSignin = document.getElementById('auth-signin-container');
+            const containerSignup = document.getElementById('auth-signup-container');
+
+            if (tab === 'signin') {
+                btnSignin.classList.add('active');
+                btnSignup.classList.remove('active');
+                containerSignin.style.display = 'block';
+                containerSignup.style.display = 'none';
+                document.getElementById('auth-modal-title').textContent = 'Portal Secure Login';
+            } else {
+                btnSignin.classList.remove('active');
+                btnSignup.classList.add('active');
+                containerSignin.style.display = 'none';
+                containerSignup.style.display = 'block';
+                document.getElementById('auth-modal-title').textContent = 'Create Portal Account';
+            }
+        }
+
+        function handleSignupRoleChange(role) {
+            const ownerFields = document.getElementById('signup-owner-fields');
+            const linkcodeFields = document.getElementById('signup-linkcode-fields');
+            const gymNameInput = document.getElementById('signup-gym-name');
+            const gymLocationInput = document.getElementById('signup-gym-location');
+            const linkCodeInput = document.getElementById('signup-link-code');
+
+            if (role === 'owner') {
+                ownerFields.style.display = 'block';
+                linkcodeFields.style.display = 'none';
+                if (gymNameInput) gymNameInput.required = true;
+                if (gymLocationInput) gymLocationInput.required = true;
+                if (linkCodeInput) linkCodeInput.required = false;
+            } else {
+                ownerFields.style.display = 'none';
+                linkcodeFields.style.display = 'block';
+                if (gymNameInput) gymNameInput.required = false;
+                if (gymLocationInput) gymLocationInput.required = false;
+                if (linkCodeInput) linkCodeInput.required = true;
+            }
+        }
+
+        function submitUnifiedSignUp(e) {
+            e.preventDefault();
+            const role = document.getElementById('signup-role-field').value;
+            const name = document.getElementById('signup-name-field').value.trim();
+            const email = document.getElementById('signup-email-field').value.trim().toLowerCase();
+            const password = document.getElementById('signup-password-field').value.trim();
+            const partnerCode = document.getElementById('signup-partner-code').value.trim().toUpperCase();
+
+            if (!db) {
+                showToast("Firebase database connection is offline. Cannot register.", "error");
+                return;
+            }
+
+            // Check if user already exists
+            db.collection('users').doc(email).get().then(async (doc) => {
+                if (doc.exists) {
+                    showToast("User with this email already exists.", "error");
+                    return;
+                }
+
+                if (role === 'owner') {
+                    const gymName = document.getElementById('signup-gym-name').value.trim();
+                    const gymLocation = document.getElementById('signup-gym-location').value.trim();
+                    
+                    const codeNum = Math.floor(1000 + Math.random() * 9000);
+                    const linkingCode = 'GYM-' + codeNum;
+
+                    // 1. Create Gym in /gyms
+                    const gymRef = db.collection('gyms').doc();
+                    const gymData = {
+                        id: gymRef.id,
+                        name: gymName,
+                        location: gymLocation,
+                        linkingCode: linkingCode
+                    };
+                    if (partnerCode) {
+                        gymData.referredByPartnerCode = partnerCode;
+                    }
+                    await gymRef.set(gymData);
+
+                    // 2. Mirror registered gym to ShirajLife /clients collection
+                    const clientUsername = gymName.replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
+                    const clientData = {
+                        id: gymRef.id,
+                        name: gymName,
+                        username: clientUsername ? clientUsername : 'gym_' + gymRef.id.substring(0, 4),
+                        password: 'gym123_' + gymRef.id.substring(0, 4),
+                        service: 'Gym Mentor SaaS Onboarding',
+                        totalContract: 0.0,
+                        paidAmount: 0.0,
+                        balanceAmount: 0.0,
+                        progress: 20,
+                        status: 'In Progress',
+                        renewalDate: '',
+                        details: `B2B SaaS Onboarding. Location: ${gymLocation}. Linking Code: ${linkingCode}.`,
+                        timeline: [
+                            {label: 'Requirements Gathering', completed: true},
+                            {label: 'UI Design Mockups', completed: false},
+                            {label: 'Frontend Development', completed: false},
+                            {label: 'Quality Checks', completed: false},
+                            {label: 'Final Launch & Handover', completed: false}
+                        ],
+                        messages: [
+                            {
+                                sender: 'Shiraj',
+                                text: 'Welcome to Gym Mentor! Your SaaS workspace provisioning is in progress.',
+                                time: new Date().toISOString().substring(0, 16).replace('T', ' ')
+                            }
+                        ]
+                    };
+                    await db.collection('clients').doc(gymRef.id).set(clientData);
+
+                    // 3. Create User in /users
+                    await db.collection('users').doc(email).set({
+                        email: email,
+                        password: password,
+                        role: 'owner',
+                        name: name ? name : gymName,
+                        linkedId: gymRef.id
+                    });
+
+                    showToast("Gym registered successfully!", "success");
+                    
+                    // Log in
+                    const sessionUser = {
+                        email: email,
+                        role: 'owner',
+                        name: name ? name : gymName,
+                        linkedId: gymRef.id
+                    };
+                    localStorage.setItem('gojim_auth_user', JSON.stringify(sessionUser));
+                    localStorage.setItem('gojim_gym_name', gymName);
+                    closeModal('passcode-modal');
+                    currentActiveRole = 'owner';
+                    switchRole('owner');
+                    
+                } else if (role === 'trainer') {
+                    const linkingCode = document.getElementById('signup-link-code').value.trim().toUpperCase();
+                    
+                    // Check if linking code is valid by querying gyms
+                    const gymSnap = await db.collection('gyms').where('linkingCode', '==', linkingCode).get();
+                    if (gymSnap.empty) {
+                        showToast("Invalid Gym Linking Code. Please verify.", "error");
+                        return;
+                    }
+                    const gymDoc = gymSnap.docs[0];
+
+                    // 1. Create Trainer in /trainers
+                    const trainerRef = db.collection('trainers').doc();
+                    await trainerRef.set({
+                        id: trainerRef.id,
+                        name: name,
+                        email: email,
+                        linkingCode: linkingCode,
+                        clientsCount: 0,
+                        yearsExperience: 3,
+                        tags: ['General Training'],
+                        branchId: gymDoc.id
+                    });
+
+                    // 2. Create User in /users
+                    await db.collection('users').doc(email).set({
+                        email: email,
+                        password: password,
+                        role: 'trainer',
+                        name: name,
+                        linkedId: trainerRef.id
+                    });
+
+                    showToast("Trainer registered successfully!", "success");
+                    
+                    // Log in
+                    const sessionUser = {
+                        email: email,
+                        role: 'trainer',
+                        name: name,
+                        linkedId: trainerRef.id
+                    };
+                    localStorage.setItem('gojim_auth_user', JSON.stringify(sessionUser));
+                    closeModal('passcode-modal');
+                    currentActiveRole = 'trainer';
+                    switchRole('trainer');
+
+                } else if (role === 'student') {
+                    const linkingCode = document.getElementById('signup-link-code').value.trim().toUpperCase();
+                    
+                    // Check if linking code is valid
+                    const gymSnap = await db.collection('gyms').where('linkingCode', '==', linkingCode).get();
+                    if (gymSnap.empty) {
+                        showToast("Invalid Gym Linking Code. Please verify.", "error");
+                        return;
+                    }
+                    const gymDoc = gymSnap.docs[0];
+
+                    // 1. Create Client in /clients
+                    const clientRef = db.collection('clients').doc();
+                    await clientRef.set({
+                        id: clientRef.id,
+                        name: name,
+                        email: email,
+                        linkingCode: linkingCode,
+                        gymId: gymDoc.id,
+                        trainerId: 'none',
+                        status: 'Active',
+                        tel: '',
+                        lastVisited: 'Today',
+                        isCheckedIn: false
+                    });
+
+                    // 2. Create User in /users
+                    await db.collection('users').doc(email).set({
+                        email: email,
+                        password: password,
+                        role: 'client',
+                        name: name,
+                        linkedId: clientRef.id
+                    });
+
+                    showToast("Member registered successfully!", "success");
+
+                    // Log in
+                    const sessionUser = {
+                        email: email,
+                        role: 'client',
+                        name: name,
+                        linkedId: clientRef.id
+                    };
+                    localStorage.setItem('gojim_auth_user', JSON.stringify(sessionUser));
+                    closeModal('passcode-modal');
+                    currentActiveRole = 'student';
+                    switchRole('student');
+                }
+            }).catch(err => {
+                console.error("Sign up error:", err);
+                showToast("An error occurred during registration. Please try again.", "error");
+            });
+        }
+
+        async function signInWithGooglePopup(authMode) {
+            if (typeof firebase === 'undefined' || !firebase.auth) {
+                showToast("Firebase Auth SDK not loaded.", "error");
+                return;
+            }
+            
+            const provider = new firebase.auth.GoogleAuthProvider();
+            try {
+                const result = await firebase.auth().signInWithPopup(provider);
+                const user = result.user;
+                const email = user.email.toLowerCase();
+                const displayName = user.displayName || "";
+
+                const doc = await db.collection('users').doc(email).get();
+                if (doc.exists) {
+                    // Log in
+                    const userData = doc.data();
+                    const role = userData.role;
+                    const linkedId = userData.linkedId || "";
+                    
+                    const sessionUser = {
+                        email: email,
+                        role: role,
+                        name: userData.name || displayName || email,
+                        linkedId: linkedId
+                    };
+                    
+                    localStorage.setItem('gojim_auth_user', JSON.stringify(sessionUser));
+                    if (role === 'owner') {
+                        // Fetch gym name
+                        const gymDoc = await db.collection('gyms').doc(linkedId).get();
+                        if (gymDoc.exists) {
+                            localStorage.setItem('gojim_gym_name', gymDoc.data().name);
+                        }
+                    }
+                    
+                    closeModal('passcode-modal');
+                    const webRole = role === 'client' ? 'student' : role;
+                    currentActiveRole = webRole;
+                    switchRole(webRole);
+                    showToast(`Signed in successfully as ${userData.name || email}!`);
+                } else {
+                    // Pre-fill Sign Up and switch tab
+                    switchAuthTab('signup');
+                    document.getElementById('signup-email-field').value = email;
+                    document.getElementById('signup-name-field').value = displayName;
+                    showToast("Google account linked. Select role and complete registration.", "info");
+                }
+            } catch (err) {
+                console.error("Google login failed:", err);
+                showToast("Google Sign-In failed: " + err.message, "error");
             }
         }
 
