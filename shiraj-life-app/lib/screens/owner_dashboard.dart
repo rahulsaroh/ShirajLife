@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import '../models.dart';
 import '../state.dart';
 
@@ -95,7 +96,9 @@ class _OwnerDashboardScreenState extends State<OwnerDashboardScreen> {
           ),
           IconButton(
             icon: const Icon(Icons.logout, color: Colors.redAccent),
-            onPressed: () => Navigator.pop(context),
+            onPressed: () async {
+              await FirebaseAuth.instance.signOut();
+            },
           ),
         ],
       ),

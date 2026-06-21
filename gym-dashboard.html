@@ -2512,7 +2512,7 @@
                             <h3 class="card-title">🔗 Refer-a-Friend Kiosk</h3>
                             <p class="card-subtitle" style="margin-bottom:0.75rem;">Share invite code. When they register on the front-desk kiosk, you earn 1 free PT credit!</p>
                             <div style="background:rgba(0,0,0,0.25); border:1px solid var(--card-border); border-radius:var(--radius-sm); padding:0.6rem; margin-bottom:0.8rem; font-family:var(--font-mono); font-size:0.75rem; word-break:break-all; display:flex; justify-content:space-between; align-items:center;">
-                                <span id="student-referral-link-text">http://localhost:8000/gym-dashboard.html?ref=bessie</span>
+                                <span id="student-referral-link-text">Generating invite link...</span>
                                 <button class="action-dot-btn" onclick="copyReferralLink()" style="color:var(--lime); padding:2px 6px; cursor:pointer; background:none; border:none;">Copy</button>
                             </div>
                             <div style="display:flex; justify-content:space-between; font-size:0.82rem; font-weight:bold;">
@@ -3595,12 +3595,15 @@
             authDomain: "my-gym-mentor-ai.firebaseapp.com",
             projectId: "my-gym-mentor-ai",
             storageBucket: "my-gym-mentor-ai.firebasestorage.app",
-            messagingSenderId: "722261149177"
+            messagingSenderId: "722261149177",
+            appId: "1:722261149177:web:2f8b548b0a5fdca81211bc"
         };
         
         let db = null;
         try {
-            firebase.initializeApp(firebaseConfig);
+            if (!firebase.apps.length) {
+                firebase.initializeApp(firebaseConfig);
+            }
             db = firebase.firestore();
             console.log("Firebase initialized successfully!");
         } catch (error) {
@@ -3699,17 +3702,41 @@
         // Retrieve state
         function getDbState() {
             if (!localStorage.getItem('gojim_trainers')) {
-                localStorage.setItem('gojim_trainers', JSON.stringify(DEFAULT_TRAINERS));
-                localStorage.setItem('gojim_students', JSON.stringify(DEFAULT_STUDENTS));
-                localStorage.setItem('gojim_advice', JSON.stringify(DEFAULT_ADVICE));
-                localStorage.setItem('gojim_equipment', JSON.stringify(DEFAULT_EQUIPMENT));
-                localStorage.setItem('gojim_branches', JSON.stringify(DEFAULT_BRANCHES));
-                localStorage.setItem('gojim_leads', JSON.stringify(DEFAULT_LEADS));
-                localStorage.setItem('gojim_proshop', JSON.stringify(DEFAULT_PRO_SHOP));
-                localStorage.setItem('gojim_checklists', JSON.stringify(DEFAULT_CHECKLISTS));
-                localStorage.setItem('gojim_availability', JSON.stringify(DEFAULT_TRAINER_AVAILABILITY));
-                localStorage.setItem('gojim_zones', JSON.stringify(DEFAULT_ZONES));
-                localStorage.setItem('gojim_workoutlogs', JSON.stringify(DEFAULT_WORKOUT_LOGS));
+                const authUserStr = localStorage.getItem('gojim_auth_user');
+                let isDemo = true;
+                if (authUserStr) {
+                    try {
+                        const user = JSON.parse(authUserStr);
+                        if (user && user.email !== 'owner@gojim.com' && user.email !== 'trainer@gojim.com' && user.email !== 'client@gojim.com' && user.email !== 'student@gojim.com') {
+                            isDemo = false;
+                        }
+                    } catch(e) {}
+                }
+                if (isDemo) {
+                    localStorage.setItem('gojim_trainers', JSON.stringify(DEFAULT_TRAINERS));
+                    localStorage.setItem('gojim_students', JSON.stringify(DEFAULT_STUDENTS));
+                    localStorage.setItem('gojim_advice', JSON.stringify(DEFAULT_ADVICE));
+                    localStorage.setItem('gojim_equipment', JSON.stringify(DEFAULT_EQUIPMENT));
+                    localStorage.setItem('gojim_branches', JSON.stringify(DEFAULT_BRANCHES));
+                    localStorage.setItem('gojim_leads', JSON.stringify(DEFAULT_LEADS));
+                    localStorage.setItem('gojim_proshop', JSON.stringify(DEFAULT_PRO_SHOP));
+                    localStorage.setItem('gojim_checklists', JSON.stringify(DEFAULT_CHECKLISTS));
+                    localStorage.setItem('gojim_availability', JSON.stringify(DEFAULT_TRAINER_AVAILABILITY));
+                    localStorage.setItem('gojim_zones', JSON.stringify(DEFAULT_ZONES));
+                    localStorage.setItem('gojim_workoutlogs', JSON.stringify(DEFAULT_WORKOUT_LOGS));
+                } else {
+                    localStorage.setItem('gojim_trainers', JSON.stringify([]));
+                    localStorage.setItem('gojim_students', JSON.stringify([]));
+                    localStorage.setItem('gojim_advice', JSON.stringify([]));
+                    localStorage.setItem('gojim_equipment', JSON.stringify([]));
+                    localStorage.setItem('gojim_branches', JSON.stringify(DEFAULT_BRANCHES));
+                    localStorage.setItem('gojim_leads', JSON.stringify([]));
+                    localStorage.setItem('gojim_proshop', JSON.stringify([]));
+                    localStorage.setItem('gojim_checklists', JSON.stringify([]));
+                    localStorage.setItem('gojim_availability', JSON.stringify([]));
+                    localStorage.setItem('gojim_zones', JSON.stringify([]));
+                    localStorage.setItem('gojim_workoutlogs', JSON.stringify([]));
+                }
             }
             if (!localStorage.getItem('gojim_proshop')) {
                 localStorage.setItem('gojim_proshop', JSON.stringify(DEFAULT_PRO_SHOP));
@@ -3754,38 +3781,12 @@
             localStorage.setItem('gojim_zones', JSON.stringify(state.zones));
             localStorage.setItem('gojim_workoutlogs', JSON.stringify(state.workoutLogs));
 
-            // Sync with backend server
-            fetch('http://localhost:8000/data', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(state)
-            }).then(response => {
-                if (!response.ok) console.error("Server sync failed.");
-            }).catch(err => {
-                console.warn("Sync Server is offline. Working in local storage fallback.", err);
-            });
-
             window.dispatchEvent(new Event('storage'));
         }
 
-        // Fetch latest data from server
+        // Fetch latest data from server (No-op fallback for Firestore listeners)
         function fetchServerState() {
-            fetch('http://localhost:8000/data')
-                .then(res => res.json())
-                .then(data => {
-                    if (data.trainers && data.students && data.advice && data.equipment && data.branches && data.leads) {
-                        localStorage.setItem('gojim_trainers', JSON.stringify(data.trainers));
-                        localStorage.setItem('gojim_students', JSON.stringify(data.students));
-                        localStorage.setItem('gojim_advice', JSON.stringify(data.advice));
-                        localStorage.setItem('gojim_equipment', JSON.stringify(data.equipment));
-                        localStorage.setItem('gojim_branches', JSON.stringify(data.branches));
-                        localStorage.setItem('gojim_leads', JSON.stringify(data.leads));
-                        rebuildWorkspaceViews();
-                    }
-                })
-                .catch(err => {
-                    console.warn("Sync Server offline. Falling back to local storage.", err);
-                });
+            rebuildWorkspaceViews();
         }
 
         // --- APP WORKSPACE INITIALIZATION ---
@@ -3977,50 +3978,76 @@
             showToast(`Switched view context to: ${roleKey.toUpperCase()}`);
         }
 
-        function submitUnifiedLogin(e) {
+        async function submitUnifiedLogin(e) {
             e.preventDefault();
             const role = document.getElementById('login-role-field').value;
             const email = document.getElementById('login-email-field').value.trim().toLowerCase();
             const password = document.getElementById('login-password-field').value.trim();
 
-            if (db) {
-                db.collection('users').doc(email).get().then(doc => {
-                    if (doc.exists) {
-                        const userData = doc.data();
-                        if (userData.password === password) {
-                            // Check role matching (remember mapping student to client)
-                            const matchedRole = (userData.role === 'client' && role === 'student') || (userData.role === role);
-                            if (matchedRole) {
-                                const sessionUser = {
-                                    email: email,
-                                    role: userData.role, // 'owner', 'trainer', 'client'
-                                    name: userData.name || userData.email,
-                                    linkedId: userData.linkedId || ""
-                                };
-                                localStorage.setItem('gojim_auth_user', JSON.stringify(sessionUser));
-                                closeModal('passcode-modal');
-                                currentActiveRole = role; // set active role
-                                switchRole(role);
-                                showToast(`Signed in successfully as ${userData.name || email}!`);
-                                return;
-                            } else {
-                                showToast(`Access denied. Role mismatch for this account.`, 'error');
-                            }
-                        } else {
-                            showToast('Incorrect password. Please try again.', 'error');
-                        }
-                    } else {
-                        // Document doesn't exist, try local/mock fallback
-                        handleLocalMockFallback(email, password, role);
-                    }
-                }).catch(err => {
-                    console.error("Firestore auth error:", err);
-                    // Firestore search failed (e.g. offline), try local fallback
-                    handleLocalMockFallback(email, password, role);
-                });
-            } else {
-                // Firebase is not connected, use local fallback
+            if (!db || typeof firebase === 'undefined' || !firebase.auth) {
+                // Firebase is not connected or offline, use local fallback
                 handleLocalMockFallback(email, password, role);
+                return;
+            }
+
+            try {
+                const userCredential = await firebase.auth().signInWithEmailAndPassword(email, password);
+                const user = userCredential.user;
+                
+                // Fetch profile metadata
+                let doc = await db.collection('users').doc(user.uid).get();
+                let userData = null;
+                
+                if (doc.exists) {
+                    userData = doc.data();
+                } else {
+                    // Legacy migration fallback
+                    const legacyDoc = await db.collection('users').doc(email).get();
+                    if (legacyDoc.exists) {
+                        userData = legacyDoc.data();
+                        // Migrate legacy record to user.uid document
+                        await db.collection('users').doc(user.uid).set({
+                            email: email,
+                            role: userData.role,
+                            name: userData.name || email,
+                            linkedId: userData.linkedId || "",
+                            clientId: userData.linkedId || ""
+                        });
+                        // Delete legacy plaintext credentials
+                        await db.collection('users').doc(email).delete().catch(console.error);
+                    }
+                }
+
+                if (userData) {
+                    const matchedRole = (userData.role === 'client' && role === 'student') || (userData.role === role);
+                    if (matchedRole) {
+                        const sessionUser = {
+                            email: email,
+                            role: userData.role,
+                            name: userData.name || email,
+                            linkedId: userData.linkedId || userData.clientId || ""
+                        };
+                        localStorage.setItem('gojim_auth_user', JSON.stringify(sessionUser));
+                        closeModal('passcode-modal');
+                        currentActiveRole = role;
+                        switchRole(role);
+                        showToast(`Signed in successfully as ${sessionUser.name}!`);
+                    } else {
+                        showToast(`Access denied. Role mismatch for this account.`, 'error');
+                        await firebase.auth().signOut();
+                    }
+                } else {
+                    showToast(`User profile metadata not found. Please register.`, 'error');
+                    await firebase.auth().signOut();
+                }
+            } catch (err) {
+                console.error("Firebase auth login error:", err);
+                if (err.code === "auth/user-not-found" || err.code === "auth/wrong-password") {
+                    showToast("Authentication failed: Invalid credentials.", "error");
+                } else {
+                    // Try fallback if Firebase servers are blocked or unavailable
+                    handleLocalMockFallback(email, password, role);
+                }
             }
         }
 
@@ -4067,7 +4094,7 @@
             }
         }
 
-        function submitUnifiedSignUp(e) {
+        async function submitUnifiedSignUp(e) {
             e.preventDefault();
             const role = document.getElementById('signup-role-field').value;
             const name = document.getElementById('signup-name-field').value.trim();
@@ -4075,16 +4102,20 @@
             const password = document.getElementById('signup-password-field').value.trim();
             const partnerCode = document.getElementById('signup-partner-code').value.trim().toUpperCase();
 
-            if (!db) {
+            if (!db || typeof firebase === 'undefined' || !firebase.auth) {
                 showToast("Firebase database connection is offline. Cannot register.", "error");
                 return;
             }
 
-            // Check if user already exists
-            db.collection('users').doc(email).get().then(async (doc) => {
-                if (doc.exists) {
-                    showToast("User with this email already exists.", "error");
-                    return;
+            try {
+                // Determine UID: create auth user if not already signed in via Google
+                let uid;
+                const currentUser = firebase.auth().currentUser;
+                if (currentUser && currentUser.email.toLowerCase() === email) {
+                    uid = currentUser.uid;
+                } else {
+                    const userCredential = await firebase.auth().createUserWithEmailAndPassword(email, password);
+                    uid = userCredential.user.uid;
                 }
 
                 if (role === 'owner') {
@@ -4139,18 +4170,17 @@
                     };
                     await db.collection('clients').doc(gymRef.id).set(clientData);
 
-                    // 3. Create User in /users
-                    await db.collection('users').doc(email).set({
+                    // 3. Create User in /users (NO Plaintext Password)
+                    await db.collection('users').doc(uid).set({
                         email: email,
-                        password: password,
                         role: 'owner',
                         name: name ? name : gymName,
-                        linkedId: gymRef.id
+                        linkedId: gymRef.id,
+                        clientId: gymRef.id
                     });
 
                     showToast("Gym registered successfully!", "success");
                     
-                    // Log in
                     const sessionUser = {
                         email: email,
                         role: 'owner',
@@ -4166,7 +4196,7 @@
                 } else if (role === 'trainer') {
                     const linkingCode = document.getElementById('signup-link-code').value.trim().toUpperCase();
                     
-                    // Check if linking code is valid by querying gyms
+                    // Verify linking code
                     const gymSnap = await db.collection('gyms').where('linkingCode', '==', linkingCode).get();
                     if (gymSnap.empty) {
                         showToast("Invalid Gym Linking Code. Please verify.", "error");
@@ -4184,21 +4214,21 @@
                         clientsCount: 0,
                         yearsExperience: 3,
                         tags: ['General Training'],
-                        branchId: gymDoc.id
+                        branchId: gymDoc.id,
+                        gymId: gymDoc.id
                     });
 
-                    // 2. Create User in /users
-                    await db.collection('users').doc(email).set({
+                    // 2. Create User in /users (NO Plaintext Password)
+                    await db.collection('users').doc(uid).set({
                         email: email,
-                        password: password,
                         role: 'trainer',
                         name: name,
-                        linkedId: trainerRef.id
+                        linkedId: trainerRef.id,
+                        clientId: trainerRef.id
                     });
 
                     showToast("Trainer registered successfully!", "success");
                     
-                    // Log in
                     const sessionUser = {
                         email: email,
                         role: 'trainer',
@@ -4213,7 +4243,7 @@
                 } else if (role === 'student') {
                     const linkingCode = document.getElementById('signup-link-code').value.trim().toUpperCase();
                     
-                    // Check if linking code is valid
+                    // Verify linking code
                     const gymSnap = await db.collection('gyms').where('linkingCode', '==', linkingCode).get();
                     if (gymSnap.empty) {
                         showToast("Invalid Gym Linking Code. Please verify.", "error");
@@ -4236,18 +4266,17 @@
                         isCheckedIn: false
                     });
 
-                    // 2. Create User in /users
-                    await db.collection('users').doc(email).set({
+                    // 2. Create User in /users (NO Plaintext Password)
+                    await db.collection('users').doc(uid).set({
                         email: email,
-                        password: password,
                         role: 'client',
                         name: name,
-                        linkedId: clientRef.id
+                        linkedId: clientRef.id,
+                        clientId: clientRef.id
                     });
 
                     showToast("Member registered successfully!", "success");
 
-                    // Log in
                     const sessionUser = {
                         email: email,
                         role: 'client',
@@ -4259,10 +4288,10 @@
                     currentActiveRole = 'student';
                     switchRole('student');
                 }
-            }).catch(err => {
+            } catch (err) {
                 console.error("Sign up error:", err);
-                showToast("An error occurred during registration. Please try again.", "error");
-            });
+                showToast("Registration failed: " + err.message, "error");
+            }
         }
 
         async function signInWithGooglePopup(authMode) {
@@ -4278,12 +4307,33 @@
                 const email = user.email.toLowerCase();
                 const displayName = user.displayName || "";
 
-                const doc = await db.collection('users').doc(email).get();
+                // Find user profile by user.uid
+                let doc = await db.collection('users').doc(user.uid).get();
+                let userData = null;
+
                 if (doc.exists) {
-                    // Log in
-                    const userData = doc.data();
+                    userData = doc.data();
+                } else {
+                    // Check legacy by email
+                    const legacyDoc = await db.collection('users').doc(email).get();
+                    if (legacyDoc.exists) {
+                        userData = legacyDoc.data();
+                        // Migrate legacy record
+                        await db.collection('users').doc(user.uid).set({
+                            email: email,
+                            role: userData.role,
+                            name: userData.name || displayName || email,
+                            linkedId: userData.linkedId || "",
+                            clientId: userData.linkedId || ""
+                        });
+                        // Delete legacy document
+                        await db.collection('users').doc(email).delete().catch(console.error);
+                    }
+                }
+
+                if (userData) {
                     const role = userData.role;
-                    const linkedId = userData.linkedId || "";
+                    const linkedId = userData.linkedId || userData.clientId || "";
                     
                     const sessionUser = {
                         email: email,
@@ -4294,7 +4344,6 @@
                     
                     localStorage.setItem('gojim_auth_user', JSON.stringify(sessionUser));
                     if (role === 'owner') {
-                        // Fetch gym name
                         const gymDoc = await db.collection('gyms').doc(linkedId).get();
                         if (gymDoc.exists) {
                             localStorage.setItem('gojim_gym_name', gymDoc.data().name);
@@ -4305,7 +4354,7 @@
                     const webRole = role === 'client' ? 'student' : role;
                     currentActiveRole = webRole;
                     switchRole(webRole);
-                    showToast(`Signed in successfully as ${userData.name || email}!`);
+                    showToast(`Signed in successfully as ${sessionUser.name}!`);
                 } else {
                     // Pre-fill Sign Up and switch tab
                     switchAuthTab('signup');
@@ -4329,19 +4378,19 @@
                 if (email === 'owner@gojim.com' && password === 'owner123') {
                     success = true;
                     name = "Mock Owner";
-                    linkedId = "downtown"; // Default branch
+                    linkedId = "downtown";
                 }
             } else if (dbRole === 'trainer') {
                 if (email === 'trainer@gojim.com' && password === 'trainer123') {
                     success = true;
                     name = "King Zarips";
-                    linkedId = "king"; // Match mock trainer ID
+                    linkedId = "king";
                 }
             } else if (dbRole === 'client') {
                 if ((email === 'client@gojim.com' || email === 'student@gojim.com') && password === 'client123') {
                     success = true;
                     name = "Bessie Cooper";
-                    linkedId = "bessie"; // Match mock student ID
+                    linkedId = "bessie";
                 }
             }
             
@@ -4358,7 +4407,7 @@
                 switchRole(role);
                 showToast(`Signed in successfully via offline mode as ${name}!`);
             } else {
-                showToast('Authentication failed. Check your email, password, and selected role.', 'error');
+                showToast('Authentication failed. Check your credentials and selected role.', 'error');
             }
         }
 
@@ -4486,6 +4535,9 @@
         }
 
         function processSignOut() {
+            if (typeof firebase !== 'undefined' && firebase.auth) {
+                firebase.auth().signOut().catch(console.error);
+            }
             localStorage.removeItem('gojim_auth_user');
             
             // Re-enable selectors
@@ -4854,7 +4906,7 @@
             if (!db) return;
             console.log("Starting Firestore real-time listeners...");
             
-            // Listen for Client changes (e.g. status, ratings, comments)
+            // Listen for Client changes (e.g. status, ratings, comments, deletions)
             db.collection('clients').onSnapshot(snapshot => {
                 const state = getDbState();
                 let hasChanges = false;
@@ -4881,6 +4933,11 @@
                             state.students.push(mappedStudent);
                         }
                         hasChanges = true;
+                    } else if (change.type === "removed") {
+                        if (studentIndex > -1) {
+                            state.students.splice(studentIndex, 1);
+                            hasChanges = true;
+                        }
                     }
                 });
                 
@@ -4890,7 +4947,7 @@
                 }
             });
 
-            // Listen for Trainer changes (e.g. ratings)
+            // Listen for Trainer changes (e.g. ratings, deletions)
             db.collection('trainers').onSnapshot(snapshot => {
                 const state = getDbState();
                 let hasChanges = false;
@@ -4905,7 +4962,7 @@
                             name: data.name || "Unknown Trainer",
                             specialty: data.specialization || "General Training",
                             linkingCode: data.linkingCode,
-                            branchId: data.gymId || "downtown",
+                            branchId: data.gymId || data.branchId || "downtown",
                             rating: data.rating || 5.0,
                             reviewsCount: data.reviewsCount || 0,
                             tags: data.tags || ["General"]
@@ -4917,6 +4974,11 @@
                             state.trainers.push(mappedTrainer);
                         }
                         hasChanges = true;
+                    } else if (change.type === "removed") {
+                        if (trainerIndex > -1) {
+                            state.trainers.splice(trainerIndex, 1);
+                            hasChanges = true;
+                        }
                     }
                 });
                 
@@ -4925,9 +4987,87 @@
                     rebuildWorkspaceViews();
                 }
             });
+
+            // Listen for Equipment changes
+            db.collection('equipment').onSnapshot(snapshot => {
+                const state = getDbState();
+                let hasChanges = false;
+                snapshot.docChanges().forEach(change => {
+                    const data = change.doc.data();
+                    const equipId = change.doc.id;
+                    let equipIndex = state.equipment.findIndex(e => e.id === equipId);
+
+                    if (change.type === "added" || change.type === "modified") {
+                        const mappedEquip = {
+                            id: equipId,
+                            name: data.name || "Unknown Equipment",
+                            category: data.category || "General",
+                            status: data.status || "Operational",
+                            lastMaintenance: data.lastMaintenance || "",
+                            branchId: data.branchId || "downtown"
+                        };
+                        if (equipIndex > -1) {
+                            state.equipment[equipIndex] = { ...state.equipment[equipIndex], ...mappedEquip };
+                        } else {
+                            state.equipment.push(mappedEquip);
+                        }
+                        hasChanges = true;
+                    } else if (change.type === "removed") {
+                        if (equipIndex > -1) {
+                            state.equipment.splice(equipIndex, 1);
+                            hasChanges = true;
+                        }
+                    }
+                });
+
+                if (hasChanges) {
+                    saveDbState(state);
+                    rebuildWorkspaceViews();
+                }
+            });
+
+            // Listen for Advice history changes
+            db.collection('advice').onSnapshot(snapshot => {
+                const state = getDbState();
+                let hasChanges = false;
+                snapshot.docChanges().forEach(change => {
+                    const data = change.doc.data();
+                    const adviceId = change.doc.id;
+                    let adviceIndex = state.advice.findIndex(a => a.id === adviceId);
+
+                    if (change.type === "added" || change.type === "modified") {
+                        const mappedAdvice = {
+                            id: adviceId,
+                            studentId: data.studentId || "",
+                            coachId: data.coachId || "",
+                            coachName: data.coachName || "Coach",
+                            text: data.text || "",
+                            category: data.category || "General",
+                            time: data.time || "",
+                            branchId: data.branchId || "downtown"
+                        };
+                        if (adviceIndex > -1) {
+                            state.advice[adviceIndex] = mappedAdvice;
+                        } else {
+                            state.advice.unshift(mappedAdvice); // Insert newest at top
+                        }
+                        hasChanges = true;
+                    } else if (change.type === "removed") {
+                        if (adviceIndex > -1) {
+                            state.advice.splice(adviceIndex, 1);
+                            hasChanges = true;
+                        }
+                    }
+                });
+
+                if (hasChanges) {
+                    saveDbState(state);
+                    rebuildWorkspaceViews();
+                }
+            });
         }
 
-        function addTrainerSubmit(e) {
+        async function addTrainerSubmit(e) {
             e.preventDefault();
             const state = getDbState();
             
@@ -4937,7 +5077,6 @@
             const tags = tagsStr.split(",").map(t => t.trim()).filter(t => t.length > 0);
             const branchId = document.getElementById("trainer-add-branch-select").value;
             
-            // Generate simple unique ID
             const newId = name.toLowerCase().replace(/\s+/g, "-") + "-" + Math.round(Math.random()*100);
             
             const newTrainer = {
@@ -4947,20 +5086,30 @@
                 years: years,
                 yearsExperience: years,
                 tags: tags,
-                branchId: branchId
+                branchId: branchId,
+                gymId: branchId
             };
             
-            state.trainers.push(newTrainer);
-            saveDbState(state);
+            if (db) {
+                try {
+                    await db.collection('trainers').doc(newId).set(newTrainer);
+                    showToast(`Trainer ${name} added successfully!`, 'success');
+                } catch (err) {
+                    console.error("Firestore trainer write error:", err);
+                    state.trainers.push(newTrainer);
+                    saveDbState(state);
+                }
+            } else {
+                state.trainers.push(newTrainer);
+                saveDbState(state);
+            }
             
-            // Clean inputs
             document.getElementById("trainer-add-name").value = "";
             document.getElementById("trainer-add-years").value = "3";
             document.getElementById("trainer-add-tags").value = "";
             
             closeModal('add-trainer-modal');
             rebuildWorkspaceViews();
-            showToast(`Trainer ${name} added successfully!`);
         }
 
         function removeTrainerSubmit(e) {

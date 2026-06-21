@@ -1,28 +1,49 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Helper to check user's assigned gym matches the document's gymId
-    function isGymMember(gymId) {
-      return request.auth != null && (
-        resource.data.gymId == gymId || 
-        request.resource.data.gymId == gymId
-      );
+    // Helper: Is the request authenticated
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    // Helper: Is the user reading/writing their own metadata doc
+    function isOwnerOfUserRecord(userId) {
+      return isAuthenticated() && (request.auth.uid == userId || request.auth.token.email == userId);
+    }
+
+    match /users/{userId} {
+      allow read, write: if isOwnerOfUserRecord(userId);
     }
 
     match /gyms/{gymId} {
-      allow read, write: if true; // Public registry lookup for codes
+      allow read: if true; // Public registry lookup for linking codes during signup
+      allow write: if isAuthenticated(); // Allow registered owners to create gyms
     }
 
     match /trainers/{trainerId} {
-      allow read, write: if true; // Registry lookup
+      allow read: if true; // Allowed for clients to look up their assigned trainer
+      allow write: if isAuthenticated(); // Allowed for registered trainers/owners
     }
 
     match /clients/{clientId} {
-      allow read, write: if true; // Registry lookup
+      allow read: if true; // Allowed for check-in scans and trainer lookup
+      allow write: if isAuthenticated(); // Allowed for registered clients/owners
     }
 
     match /routines/{routineId} {
-      allow read, write: if request.auth != null || resource.data.clientId != null;
+      allow read, write: if isAuthenticated() || (resource != null && resource.data.clientId != null);
+    }
+
+    match /advice/{adviceId} {
+      allow read, write: if isAuthenticated();
+    }
+
+    match /equipment/{equipmentId} {
+      allow read, write: if isAuthenticated();
+    }
+    
+    match /partners/{partnerId} {
+      allow read, write: if isAuthenticated();
     }
   }
 }

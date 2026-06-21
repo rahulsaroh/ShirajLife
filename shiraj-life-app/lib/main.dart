@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'screens/role_selection_screen.dart';
+import 'screens/auth_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 void main() async {
@@ -48,7 +48,7 @@ class GymManagementApp extends StatelessWidget {
           bodyMedium: TextStyle(fontFamily: 'Plus Jakarta Sans', color: Color(0xFF8E94A0)),
         ),
       ),
-      home: const RoleSelectionScreen(),
+      home: const AuthWrapper(),
     );
   }
 }

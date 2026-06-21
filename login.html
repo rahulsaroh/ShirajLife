@@ -457,7 +457,11 @@
             // Check if already logged in and redirect accordingly
             const user = ShirajAuth.getCurrentUser();
             if (user) {
-                window.location.href = user.role === 'admin' ? 'admin-dashboard.html' : 'client-dashboard.html';
+                if (user.role === 'owner' || user.role === 'trainer' || user.role === 'client') {
+                    window.location.href = 'gym-dashboard.html';
+                } else {
+                    window.location.href = user.role === 'admin' ? 'admin-dashboard.html' : 'client-dashboard.html';
+                }
                 return;
             }
 
@@ -535,7 +539,11 @@
                         const result = await ShirajAuth.login(usernameVal, passwordVal, selectedRole);
                         if (result.success) {
                             const user = ShirajAuth.getCurrentUser();
-                            window.location.href = user.role === 'admin' ? 'admin-dashboard.html' : 'client-dashboard.html';
+                            if (user.role === 'owner' || user.role === 'trainer' || user.role === 'client') {
+                                window.location.href = 'gym-dashboard.html';
+                            } else {
+                                window.location.href = user.role === 'admin' ? 'admin-dashboard.html' : 'client-dashboard.html';
+                            }
                         } else {
                             submitBtn.classList.remove("loading");
                             errorText.textContent = result.message;

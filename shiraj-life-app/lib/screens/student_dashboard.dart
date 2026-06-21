@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
+import 'package:firebase_auth/firebase_auth.dart';
 import '../models.dart';
 import '../state.dart';
 
@@ -79,7 +80,9 @@ class _StudentDashboardScreenState extends State<StudentDashboardScreen> {
         actions: [
           IconButton(
             icon: const Icon(Icons.logout, color: Colors.redAccent),
-            onPressed: () => Navigator.pop(context),
+            onPressed: () async {
+              await FirebaseAuth.instance.signOut();
+            },
           ),
         ],
       ),
@@ -1443,7 +1446,7 @@ class _StudentDashboardScreenState extends State<StudentDashboardScreen> {
                 ),
                 const SizedBox(height: 6),
                 SelectableText(
-                  "http://localhost:8000/gym-dashboard.html?ref=${currentStudent.id}",
+                  "https://shirajlife.com/gym-dashboard.html?ref=${currentStudent.id}",
                   style: TextStyle(fontSize: 10, fontFamily: 'JetBrains Mono', color: limeColor),
                 ),
               ],
