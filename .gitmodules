@@ -1,0 +1,3 @@
+[submodule "ai-gym-mentor"]
+	path = ai-gym-mentor
+	url = https://github.com/rahulsaroh/AI-Gym-Mentor.git
