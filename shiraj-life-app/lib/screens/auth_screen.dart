@@ -63,6 +63,10 @@ class AuthWrapper extends StatelessWidget {
             GymAppState.instance.setSyncScope(role, linkedId);
 
             if (role == 'owner') {
+              final status = userData['subscriptionStatus'] ?? 'active';
+              if (status == 'pending') {
+                return const OwnerPaywallScreen();
+              }
               return const OwnerDashboardScreen();
             } else if (role == 'trainer') {
               return const TrainerDashboardScreen();
@@ -320,6 +324,7 @@ class _AuthScreenState extends State<AuthScreen> {
             'name': name,
             'linkedId': linkedId,
             'clientId': linkedId,
+            if (_selectedRole == 'owner') 'subscriptionStatus': 'pending',
           });
         }
       }
@@ -779,6 +784,7 @@ class _CompleteRegistrationScreenState extends State<CompleteRegistrationScreen>
         'name': name,
         'linkedId': linkedId,
         'clientId': linkedId,
+        if (_selectedRole == 'owner') 'subscriptionStatus': 'pending',
       });
 
     } catch (e) {
@@ -946,6 +952,55 @@ class _CompleteRegistrationScreenState extends State<CompleteRegistrationScreen>
                 ),
               ),
             ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class OwnerPaywallScreen extends StatelessWidget {
+  const OwnerPaywallScreen({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: darkBg,
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(32.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(Icons.lock, size: 80, color: Colors.white54),
+              const SizedBox(height: 24),
+              const Text(
+                "Unlock Your App",
+                style: TextStyle(
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+              const SizedBox(height: 16),
+              const Text(
+                "Your gym owner account has been created. To unlock the AI Gym Mentor app and begin syncing data with your trainers and clients, please complete your subscription on shirajlife.com.",
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 16, color: Colors.white70, height: 1.5),
+              ),
+              const SizedBox(height: 32),
+              ElevatedButton.icon(
+                icon: const Icon(Icons.logout, color: Colors.white70),
+                label: const Text("Sign Out"),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: cardBg,
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                  side: const BorderSide(color: borderColor),
+                ),
+                onPressed: () => FirebaseAuth.instance.signOut(),
+              )
+            ],
           ),
         ),
       ),

@@ -4021,6 +4021,13 @@
                 if (userData) {
                     const matchedRole = (userData.role === 'client' && role === 'student') || (userData.role === role);
                     if (matchedRole) {
+                        // PAYWALL CHECK
+                        if (userData.role === 'owner' && userData.subscriptionStatus === 'pending') {
+                            showToast('Subscription inactive. Please complete your payment.', 'warning');
+                            showPaywallModal(user.uid);
+                            return;
+                        }
+
                         const sessionUser = {
                             email: email,
                             role: userData.role,
@@ -4176,7 +4183,8 @@
                         role: 'owner',
                         name: name ? name : gymName,
                         linkedId: gymRef.id,
-                        clientId: gymRef.id
+                        clientId: gymRef.id,
+                        subscriptionStatus: 'pending'
                     });
 
                     showToast("Gym registered successfully!", "success");
@@ -7579,7 +7587,27 @@
             
             openModal('trainer-clients-modal');
         }
+        function showPaywallModal(uid) {
+            // Use Stripe Test Payment Link as a placeholder
+            const stripePaymentLink = "https://buy.stripe.com/test_123?client_reference_id=" + uid;
+            const modalHtml = `
+            <div id="saas-paywall-modal" class="modal active" style="z-index: 9999; backdrop-filter: blur(10px);">
+                <div class="modal-content" style="max-width: 450px; text-align: center; padding: 2rem;">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">🔒</div>
+                    <h2 style="color: white; margin-bottom: 1rem;">Unlock Your Dashboard</h2>
+                    <p style="color: var(--txt-dim); margin-bottom: 2rem; line-height: 1.5;">
+                        Your gym owner account has been created successfully. To start managing your gym, trainers, and clients, please subscribe to the goJim SaaS platform.
+                    </p>
+                    <a href="${stripePaymentLink}" class="btn btn-primary" style="display: block; width: 100%; text-decoration: none; padding: 1rem; font-size: 1.1rem; border-radius: 8px;">
+                        Subscribe Now with Stripe
+                    </a>
+                    <button onclick="firebase.auth().signOut().then(() => window.location.reload())" style="margin-top: 1rem; background: transparent; border: none; color: var(--txt-muted); cursor: pointer; text-decoration: underline;">
+                        Sign Out
+                    </button>
+                </div>
+            </div>`;
+            document.body.insertAdjacentHTML('beforeend', modalHtml);
+        }
     </script>
 </body>
-
 </html>
