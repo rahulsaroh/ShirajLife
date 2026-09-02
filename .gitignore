@@ -1,0 +1,18 @@
+# Windows desktop files
+desktop.ini
+**/desktop.ini
+
+# IDE & Editor files
+.vscode/
+.idea/
+.kilo/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Nested repos / external app dirs
+ai-gym-mentor/
+Apps/
