@@ -884,6 +884,222 @@ footer::before {
     opacity: 1;
 }
 
+/* ==========================================
+   ENTERPRISE UI UTILITIES & POLISH
+   ========================================== */
+
+/* Tabular numbers for crisp dynamic computations */
+.tabular-nums,
+[data-tabular="true"] {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum";
+}
+
+/* Glassmorphism card polish */
+.card-glass {
+    background: var(--card);
+    border: 1px solid var(--border);
+    backdrop-filter: blur(14px) saturate(160%);
+    -webkit-backdrop-filter: blur(14px) saturate(160%);
+    box-shadow: var(--sh-sm);
+    transition: transform 0.32s var(--ease-expo), border-color 0.32s ease, box-shadow 0.32s ease;
+}
+
+.card-glass:hover {
+    border-color: var(--border-acc);
+    box-shadow: var(--sh-md), 0 0 24px var(--acc-glow);
+    transform: translateY(-2px);
+}
+
+/* SVG Micro-Icon Badge System */
+.icon-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border-radius: var(--r-md);
+    background: var(--acc-glow);
+    border: 1px solid var(--border-acc);
+    color: var(--acc);
+    flex-shrink: 0;
+    transition: all 0.25s ease;
+}
+
+.icon-badge svg {
+    width: 20px;
+    height: 20px;
+    stroke: currentColor;
+    stroke-width: 2;
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.icon-badge-sm {
+    width: 28px;
+    height: 28px;
+    border-radius: var(--r-sm);
+}
+
+.icon-badge-sm svg {
+    width: 15px;
+    height: 15px;
+}
+
+.icon-badge-lg {
+    width: 48px;
+    height: 48px;
+    border-radius: var(--r-lg);
+}
+
+.icon-badge-lg svg {
+    width: 24px;
+    height: 24px;
+}
+
+/* Tech / Topic Pill Badge with SVG */
+.tech-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    background: var(--bg-1);
+    border: 1px solid var(--border);
+    border-radius: var(--r-full);
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 500;
+    color: var(--txt-1);
+    transition: all 0.2s ease;
+}
+
+.tech-pill svg {
+    width: 12px;
+    height: 12px;
+    stroke: var(--acc);
+    stroke-width: 2;
+    fill: none;
+}
+
+.tech-pill:hover {
+    border-color: var(--border-acc);
+    color: var(--txt-0);
+    background: var(--acc-glow);
+}
+
+/* Modern OS / Browser Window Frame */
+.window-frame {
+    background: var(--card);
+    border: 1px solid var(--border-hi);
+    border-radius: var(--r-lg);
+    box-shadow: var(--sh-lg);
+    overflow: hidden;
+    position: relative;
+}
+
+.window-topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 16px;
+    background: var(--bg-1);
+    border-bottom: 1px solid var(--border);
+}
+
+.window-traffic-lights {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.window-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+}
+
+.window-dot.dot-red { background: #ff5f56; }
+.window-dot.dot-yellow { background: #ffbd2e; }
+.window-dot.dot-green { background: #27c93f; }
+
+.window-crumb {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    color: var(--txt-2);
+    letter-spacing: 0.04em;
+}
+
+.window-live-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: var(--r-full);
+    background: rgba(16, 185, 129, 0.12);
+    border: 1px solid rgba(16, 185, 129, 0.28);
+    color: #10b981;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+.window-live-pill::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #10b981;
+    box-shadow: 0 0 8px #10b981;
+    animation: pulse 2s infinite;
+}
+
+/* STAR / Metric-Driven Impact Grid for Case Studies */
+.star-impact-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8px;
+    margin: 14px 0;
+    padding: 12px;
+    background: var(--bg-1);
+    border: 1px solid var(--border);
+    border-radius: var(--r-md);
+}
+
+@media (min-width: 640px) {
+    .star-impact-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+.star-col {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.star-tag {
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--acc);
+}
+
+.star-desc {
+    font-size: 0.8rem;
+    line-height: 1.45;
+    color: var(--txt-1);
+}
+
+.star-desc strong {
+    color: var(--txt-0);
+    font-weight: 600;
+}
+
 .toast.success { border-left-color: var(--data-clr); }
 .toast.error { border-left-color: var(--health-clr); }
 .toast.info { border-left-color: var(--dev-clr); }

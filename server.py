@@ -1,5 +1,5 @@
 import json
-from http.server import HTTPServer, BaseHTTPRequestHandler
+from http.server import ThreadingHTTPServer, BaseHTTPRequestHandler
 import os
 import threading
 import time
@@ -146,6 +146,8 @@ class GymDbHandler(BaseHTTPRequestHandler):
                 self.wfile.write(f.read().encode('utf-8'))
         else:
             clean_path = self.path.split('?')[0]
+            if clean_path == '/' or clean_path == '':
+                clean_path = '/index.html'
             local_path = os.path.join(os.path.dirname(__file__), clean_path.lstrip('/'))
             
             if os.path.exists(local_path) and os.path.isfile(local_path):
@@ -160,6 +162,12 @@ class GymDbHandler(BaseHTTPRequestHandler):
                     self.send_header('Content-Type', 'application/javascript; charset=utf-8')
                 elif local_path.endswith('.png'):
                     self.send_header('Content-Type', 'image/png')
+                elif local_path.endswith('.ico'):
+                    self.send_header('Content-Type', 'image/x-icon')
+                elif local_path.endswith('.svg'):
+                    self.send_header('Content-Type', 'image/svg+xml')
+                elif local_path.endswith('.json') or local_path.endswith('.webmanifest'):
+                    self.send_header('Content-Type', 'application/json; charset=utf-8')
                 elif local_path.endswith('.jpg') or local_path.endswith('.jpeg'):
                     self.send_header('Content-Type', 'image/jpeg')
                 else:
@@ -254,7 +262,7 @@ def predictive_engagement_worker():
 if __name__ == "__main__":
     t = threading.Thread(target=predictive_engagement_worker, daemon=True)
     t.start()
-    server = HTTPServer(('0.0.0.0', 8000), GymDbHandler)
+    server = ThreadingHTTPServer(('0.0.0.0', 8000), GymDbHandler)
     print("Gym DB Server running on http://localhost:8000...")
     server.serve_forever()
 
