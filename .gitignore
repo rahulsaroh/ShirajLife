@@ -6,6 +6,9 @@ desktop.ini
 .vscode/
 .idea/
 .kilo/
+.agents/
+.claude/
+.zcode/
 *.swp
 *.swo
 
@@ -16,3 +19,13 @@ Thumbs.db
 # Nested repos / external app dirs
 ai-gym-mentor/
 Apps/
+shiraj-life-app/
+
+# Secrets & Environment variables
+.env
+.env.*
+!.env.example
+
+# Build directory & Cloudflare Wrangler cache
+dist/
+.wrangler/

@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <!-- Anti-FOUC: Theme Injection -->
+    <script>
+        (function () {
+            var t = localStorage.getItem('theme') ||
+                (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            document.documentElement.setAttribute('data-theme', t);
+        })();
+    </script>
+
+    <title>Shiraj Life | Unified Web Portal & Operations Hub</title>
+    <meta name="description" content="Unified Web Portal for B2B Client Deliverables, goJim Multi-Tenant SaaS, and Interactive BI Engines.">
+
+    <!-- PWA Manifest & App Icons -->
+    <link rel="manifest" href="manifest.webmanifest">
+    <meta name="theme-color" content="#0e6b62">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="icons/Icon-192.png">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="shared.css">
+    <link rel="stylesheet" href="portal.css">
+</head>
+
+<body>
+    <div id="portal-shell">
+        <!-- Sidebar Navigation -->
+        <aside class="portal-sidebar" id="portal-sidebar">
+            <div class="portal-sidebar-header">
+                <a href="index.html" class="portal-brand">
+                    Shiraj<span>Life</span>
+                </a>
+                <span class="portal-brand-badge">SPA Portal</span>
+            </div>
+
+            <div class="portal-nav-content">
+                <!-- Navigation Group 1: General -->
+                <div class="portal-nav-group">
+                    <div class="portal-nav-group-title">Command Center</div>
+                    <ul class="portal-nav-list">
+                        <li class="portal-nav-item active" data-route="overview">
+                            <a href="#/overview">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                                <span>Launchpad</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Navigation Group 2: Agency & Clients -->
+                <div class="portal-nav-group">
+                    <div class="portal-nav-group-title">Agency & Portals</div>
+                    <ul class="portal-nav-list">
+                        <li class="portal-nav-item" data-route="admin">
+                            <a href="#/admin">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                                <span>Admin Console</span>
+                            </a>
+                        </li>
+                        <li class="portal-nav-item" data-route="client">
+                            <a href="#/client">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                                <span>Client Portal</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Navigation Group 3: SaaS Platforms -->
+                <div class="portal-nav-group">
+                    <div class="portal-nav-group-title">SaaS Platforms</div>
+                    <ul class="portal-nav-list">
+                        <li class="portal-nav-item" data-route="gym">
+                            <a href="#/gym">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/></svg>
+                                <span>goJim Gym Suite</span>
+                                <span class="portal-nav-badge">Multi-Role</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Navigation Group 4: Analytics & Tools -->
+                <div class="portal-nav-group">
+                    <div class="portal-nav-group-title">Engineering Tools</div>
+                    <ul class="portal-nav-list">
+                        <li class="portal-nav-item" data-route="tools/spreadsheets">
+                            <a href="#/tools/spreadsheets">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+                                <span>BI & Spreadsheets</span>
+                            </a>
+                        </li>
+                        <li class="portal-nav-item" data-route="tools/finance">
+                            <a href="#/tools/finance">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                                <span>AI Finance Manager</span>
+                            </a>
+                        </li>
+                        <li class="portal-nav-item" data-route="showcases/ironpulse">
+                            <a href="#/showcases/ironpulse">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m10 15 5-3-5-3v6z"/></svg>
+                                <span>IronPulse Demo</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Navigation Group 5: Settings & Website -->
+                <div class="portal-nav-group">
+                    <div class="portal-nav-group-title">Settings</div>
+                    <ul class="portal-nav-list">
+                        <li class="portal-nav-item" data-route="settings">
+                            <a href="#/settings">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                                <span>Settings & PWA</span>
+                            </a>
+                        </li>
+                        <li class="portal-nav-item">
+                            <a href="index.html">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                                <span>Back to Website</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Sidebar User Profile Card -->
+            <div class="portal-sidebar-footer">
+                <div class="portal-user-card">
+                    <div class="portal-user-avatar">S</div>
+                    <div class="portal-user-meta">
+                        <div class="portal-user-name">Shiraj Life</div>
+                        <div class="portal-user-role">
+                            <span class="portal-role-dot"></span>
+                            <span id="user-card-role-label">Super Admin</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Sidebar Overlay for Mobile -->
+        <div class="portal-sidebar-overlay" onclick="PortalApp.closeMobileMenu()"></div>
+
+        <!-- Main Layout Area -->
+        <div class="portal-main-layout">
+            <!-- Sticky Topbar -->
+            <header class="portal-topbar">
+                <div class="portal-topbar-left">
+                    <button class="portal-mobile-toggle" onclick="PortalApp.toggleMobileMenu()" aria-label="Toggle Sidebar Menu">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                    </button>
+
+                    <nav class="portal-breadcrumbs">
+                        <a href="#/overview" class="portal-breadcrumb-item">Workspace</a>
+                        <span class="portal-breadcrumb-sep">/</span>
+                        <span class="portal-breadcrumb-current" id="breadcrumb-current">Launchpad</span>
+                    </nav>
+                </div>
+
+                <div class="portal-topbar-right">
+                    <!-- Global Role Switcher -->
+                    <div class="portal-role-select-wrap">
+                        <span class="portal-role-select-label">Role:</span>
+                        <select class="portal-role-select" id="global-role-select">
+                            <option value="admin">Super Admin</option>
+                            <option value="client">Client Portal</option>
+                            <option value="owner">Gym Owner</option>
+                            <option value="trainer">Gym Trainer</option>
+                            <option value="student">Gym Member</option>
+                            <option value="guest">Public Guest</option>
+                        </select>
+                    </div>
+
+                    <!-- PWA Install Button -->
+                    <button class="portal-btn-pwa" id="pwa-install-btn" onclick="PortalApp.promptInstall()">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                        <span>Install App</span>
+                    </button>
+
+                    <!-- Theme Toggle -->
+                    <button class="portal-btn-icon" onclick="PortalApp.toggleTheme()" title="Toggle Light/Dark Theme" aria-label="Toggle Theme">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Dynamic SPA Content Outlet -->
+            <main class="portal-container" id="portal-view-container">
+                <!-- Views injected dynamically by portal-app.js -->
+            </main>
+        </div>
+    </div>
+
+    <!-- Application Logic -->
+    <script src="shared-auth.js"></script>
+    <script src="portal-views.js"></script>
+    <script src="portal-app.js"></script>
+</body>
+</html>

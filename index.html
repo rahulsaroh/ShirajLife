@@ -20,6 +20,11 @@
     <meta name="keywords"
         content="Flutter, Dart, SQL, Python, Audit, Government India, Fitness Coach, Finance Tracker, Personal Brand, Mumbai">
 
+    <!-- PWA Manifest & Colors -->
+    <link rel="manifest" href="manifest.webmanifest">
+    <meta name="theme-color" content="#0e6b62">
+    <link rel="apple-touch-icon" href="icons/Icon-192.png">
+
     <meta property="og:type" content="website">
     <meta property="og:title" content="Shiraj Life | Personal Brand Hub & Portfolio">
     <meta property="og:description"
@@ -39,6 +44,7 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500;600&display=swap"
         rel="stylesheet">
+    <link rel="stylesheet" href="shared.css">
 
     <style>
         /* ==========================================
@@ -613,17 +619,77 @@
         }
 
         /* ==========================================
-           HERO SECTION
+           HERO SECTION & PROCEDURAL 3D CANVAS
            ========================================== */
         .hero-section {
-            padding-top: calc(68px + var(--sp-xl));
-            padding-bottom: var(--sp-2xl);
+            padding-top: calc(72px + var(--sp-2xl));
+            padding-bottom: var(--sp-3xl);
             position: relative;
             overflow: hidden;
-            min-height: 92vh;
+            min-height: 90vh;
             display: flex;
-            flex-direction: column;
-            justify-content: center;
+            align-items: center;
+        }
+
+        /* Ambient Canvas & Scrim Container */
+        .hero-bg-anim-container {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* 3D Cyber Ambient Canvas */
+        .hero-cyber-canvas {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            opacity: 0.85;
+        }
+
+        /* High-Definition Contrast Scrim */
+        .hero-bg-scrim {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            z-index: 2;
+            background: 
+                linear-gradient(
+                    90deg,
+                    var(--bg-0) 0%,
+                    rgba(245, 243, 238, 0.95) 35%,
+                    rgba(245, 243, 238, 0.60) 65%,
+                    rgba(245, 243, 238, 0.15) 100%
+                ),
+                linear-gradient(
+                    180deg,
+                    var(--bg-0) 0%,
+                    transparent 15%,
+                    transparent 85%,
+                    var(--bg-0) 100%
+                );
+        }
+
+        [data-theme="dark"] .hero-bg-scrim {
+            background: 
+                linear-gradient(
+                    90deg,
+                    var(--bg-0) 0%,
+                    rgba(8, 12, 15, 0.95) 35%,
+                    rgba(8, 12, 15, 0.60) 65%,
+                    rgba(8, 12, 15, 0.15) 100%
+                ),
+                linear-gradient(
+                    180deg,
+                    var(--bg-0) 0%,
+                    transparent 15%,
+                    transparent 85%,
+                    var(--bg-0) 100%
+                );
         }
 
         /* Animated dot grid */
@@ -639,17 +705,17 @@
         }
 
         @keyframes dotPulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
+            0%, 100% { opacity: 0.55; }
+            50% { opacity: 0.25; }
         }
 
-        /* Radial fade mask */
+        /* Radial fade mask for subtle border vignette */
         .hero-section::after {
             content: '';
             position: absolute;
             inset: 0;
-            background: radial-gradient(ellipse 85% 75% at 38% 52%,
-                    transparent 0%, var(--bg-0) 70%);
+            background: radial-gradient(ellipse 95% 85% at 50% 50%,
+                    transparent 40%, var(--bg-0) 95%);
             pointer-events: none;
             z-index: 0;
         }
@@ -822,12 +888,12 @@
 
         /* Hero headline */
         .hero-title {
-            font-size: clamp(2.8rem, 5.8vw + 0.5rem, 6.25rem);
+            font-size: clamp(2.4rem, 4.2vw, 4.2rem);
             font-weight: 900;
-            line-height: 1.0;
-            letter-spacing: -0.04em;
+            line-height: 1.08;
+            letter-spacing: -0.035em;
             margin-bottom: var(--sp-md);
-            max-width: 980px;
+            max-width: 620px;
         }
 
         /* Gradient accent on "systems." */
@@ -849,20 +915,21 @@
         /* Secondary line, lighter weight */
         .hero-title .sub-line {
             display: block;
-            font-weight: 300;
-            letter-spacing: -0.022em;
+            font-weight: 400;
+            letter-spacing: -0.02em;
             -webkit-text-fill-color: var(--txt-1);
             color: var(--txt-1);
-            margin-top: 8px;
-            font-size: 0.72em;
+            margin-top: 10px;
+            font-size: clamp(1.2rem, 1.8vw, 1.55rem);
+            line-height: 1.3;
         }
 
         .hero-description {
-            font-size: clamp(1rem, 1.5vw + 0.4rem, 1.175rem);
+            font-size: clamp(0.95rem, 1.2vw, 1.075rem);
             color: var(--txt-1);
-            max-width: 580px;
-            margin-bottom: var(--sp-xl);
-            line-height: 1.78;
+            max-width: 540px;
+            margin-bottom: var(--sp-lg);
+            line-height: 1.7;
         }
 
         .hero-ctas {
@@ -2187,7 +2254,12 @@
             </nav>
 
             <div class="nav-actions">
-                <a href="login.html" id="header-portal-btn" class="btn btn-secondary" style="padding: 6px 14px; font-size: 0.8rem;">Client Portal</a>
+                <button class="cmd-trigger-btn" onclick="openCommandPalette()" aria-label="Quick Search (Cmd+K)" style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; background: var(--bg-1); border: 1px solid var(--border); border-radius: var(--r-md); font-family: var(--font-mono); font-size: 0.78rem; color: var(--txt-1); cursor: pointer; transition: all 0.2s ease;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                    <span>Search</span>
+                    <span style="font-size: 0.68rem; padding: 2px 5px; background: var(--bg-2); border-radius: 4px; border: 1px solid var(--border);">⌘K</span>
+                </button>
+                <a href="portal.html" id="header-portal-btn" class="btn btn-secondary" style="padding: 6px 14px; font-size: 0.8rem;">Launch App</a>
                 <button class="theme-toggle" id="theme-toggle" aria-label="Toggle visual theme">
                     <svg class="moon-icon" viewBox="0 0 24 24">
                         <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
@@ -2233,32 +2305,160 @@
 
         <!-- HERO -->
         <section class="hero-section">
+            <!-- Procedural 3D Cyber Globe & Ambient Canvas -->
+            <div class="hero-bg-anim-container" aria-hidden="true">
+                <!-- 3D WebGL / HTML5 Cyber-Globe Canvas -->
+                <canvas id="heroCyberCanvas" class="hero-cyber-canvas"></canvas>
+
+                <!-- Directional Contrast Scrim -->
+                <div class="hero-bg-scrim"></div>
+            </div>
+
             <div class="hero-orb hero-orb-1"></div>
             <div class="hero-orb hero-orb-2"></div>
             <div class="hero-orb hero-orb-3"></div>
             <div class="hero-glow"></div>
             <div class="container">
+                <div class="hero-split-grid">
+                    <!-- Left Hero Content -->
+                    <div class="hero-left-content">
+                        <div class="hero-avail reveal">
+                            <span class="avail-dot"></span>
+                            Multidisciplinary Systems Builder &nbsp;·&nbsp; Mumbai, IN
+                        </div>
 
-                <div class="hero-avail reveal">
-                    <span class="avail-dot"></span>
-                    Business Planner &nbsp;·&nbsp; App/Website Builder &nbsp;·&nbsp; Mumbai, IN
-                </div>
+                        <h1 class="hero-title reveal" style="transition-delay:0.16s;">
+                            Building <span class="gt">systems.</span>
+                            <span class="sub-line">Code, capital, and physical self-mastery.</span>
+                        </h1>
 
+                        <p class="hero-description reveal" style="transition-delay:0.24s;">
+                            Applying the audit precision of public finance to software engineering, multi-tenant SaaS operations, wealth modeling, and athletic discipline. I build utility-first, production platforms.
+                        </p>
 
+                        <div class="hero-ctas reveal" style="transition-delay:0.32s; display:flex; flex-wrap:wrap; gap:12px; margin-bottom:1.5rem;">
+                            <a href="portal.html" class="btn btn-primary"><span>Launch Web App Hub</span> →</a>
+                            <a href="work.html" class="btn btn-secondary">Explore Case Studies</a>
+                        </div>
 
-                <h1 class="hero-title reveal" style="transition-delay:0.16s;">
-                    Building <span class="gt">systems.</span>
-                    <span class="sub-line">Code, capital, and physical self-mastery.</span>
-                </h1>
+                        <div class="trust-badge-row reveal" style="transition-delay:0.38s;">
+                            <div class="trust-badge">
+                                <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                                <span>Zero-Cloud Privacy</span>
+                            </div>
+                            <div class="trust-badge">
+                                <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+                                <span>Real-time Firestore</span>
+                            </div>
+                            <div class="trust-badge">
+                                <svg viewBox="0 0 24 24"><path d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/></svg>
+                                <span>goJim SaaS Core</span>
+                            </div>
+                        </div>
+                    </div>
 
-                <p class="hero-description reveal" style="transition-delay:0.24s;">
-                    Applying the rigorous audit discipline of public finance to software creation, data analysis,
-                    fitness tracking, and digital tools. I build private, utility-first products.
-                </p>
+                    <!-- Right Hero Interactive Terminal -->
+                    <div class="hero-terminal-wrap reveal" style="transition-delay:0.28s;">
+                        <div class="hero-terminal">
+                            <div class="terminal-titlebar">
+                                <div class="terminal-dots">
+                                    <div class="terminal-dot dot-red"></div>
+                                    <div class="terminal-dot dot-yellow"></div>
+                                    <div class="terminal-dot dot-green"></div>
+                                </div>
+                                <span class="terminal-title">SHIRAJ_KERNEL v2.4</span>
+                                <span class="terminal-live-badge">LIVE RUNTIME</span>
+                            </div>
 
-                <div class="hero-ctas reveal" style="transition-delay:0.32s;">
-                    <a href="work.html" class="btn btn-primary"><span>Explore Case Studies</span></a>
-                    <a href="#contact" class="btn btn-secondary">Get in Touch</a>
+                            <div class="terminal-nav">
+                                <button class="terminal-tab-btn active" data-tab="wealth" onclick="switchTerminalTab('wealth')">
+                                    📊 Wealth &amp; BI
+                                </button>
+                                <button class="terminal-tab-btn" data-tab="gym" onclick="switchTerminalTab('gym')">
+                                    🏋️ Gym Floor OS
+                                </button>
+                                <button class="terminal-tab-btn" data-tab="code" onclick="switchTerminalTab('code')">
+                                    💻 Architecture
+                                </button>
+                            </div>
+
+                            <div class="terminal-body">
+                                <!-- Panel 1: Wealth & Compound Engine -->
+                                <div class="terminal-panel active" id="terminal-panel-wealth">
+                                    <div style="display:flex; justify-content:space-between; margin-bottom:12px;">
+                                        <span style="font-size:0.78rem; font-family:var(--font-mono); color:var(--txt-2); text-transform:uppercase;">Compound Wealth Simulator</span>
+                                        <span class="p-badge p-badge-teal">12% CAGR</span>
+                                    </div>
+                                    <div style="margin-bottom:12px;">
+                                        <div style="display:flex; justify-content:space-between; font-size:0.82rem; margin-bottom:4px;">
+                                            <span style="color:var(--txt-1);">Monthly Contribution:</span>
+                                            <strong style="color:var(--txt-0); font-family:var(--font-mono);" id="hero-term-invest-val">₹25,000</strong>
+                                        </div>
+                                        <input type="range" class="p-range-input" min="5000" max="150000" step="5000" value="25000" id="hero-term-invest" oninput="calcHeroTerminalWealth()" style="width:100%;">
+                                    </div>
+                                    <div style="margin-bottom:16px;">
+                                        <div style="display:flex; justify-content:space-between; font-size:0.82rem; margin-bottom:4px;">
+                                            <span style="color:var(--txt-1);">Time Horizon:</span>
+                                            <strong style="color:var(--txt-0); font-family:var(--font-mono);" id="hero-term-years-val">10 Years</strong>
+                                        </div>
+                                        <input type="range" class="p-range-input" min="3" max="25" step="1" value="10" id="hero-term-years" oninput="calcHeroTerminalWealth()" style="width:100%;">
+                                    </div>
+                                    <div style="padding:12px; background:var(--bg-1); border-radius:10px; border:1px solid var(--border-acc); display:flex; justify-content:space-between; align-items:center;">
+                                        <div>
+                                            <div style="font-size:0.72rem; font-family:var(--font-mono); color:var(--txt-2); text-transform:uppercase;">Estimated Portfolio Yield</div>
+                                            <div style="font-family:var(--font-display); font-size:1.45rem; font-weight:800; color:var(--acc);" id="hero-term-fv">₹58,08,477</div>
+                                            <div style="font-size:0.7rem; font-family:var(--font-mono); color:var(--txt-2);" id="hero-term-gain">+₹33,08,477 Gain (12% CAGR)</div>
+                                        </div>
+                                        <a href="portal.html#/tools/spreadsheets" class="p-btn p-btn-secondary p-btn-sm">Full Engine →</a>
+                                    </div>
+                                </div>
+
+                                <!-- Panel 2: Gym Floor OS -->
+                                <div class="terminal-panel" id="terminal-panel-gym">
+                                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                                        <span style="font-size:0.78rem; font-family:var(--font-mono); color:var(--txt-2); text-transform:uppercase;">Live Station Matrix</span>
+                                        <strong style="font-family:var(--font-mono); color:var(--acc); font-size:0.85rem;" id="hero-gym-count" data-count="11">11 / 16 Stations</strong>
+                                    </div>
+                                    <div style="display:grid; grid-template-columns:repeat(8, 1fr); gap:6px; margin-bottom:14px;">
+                                        <div class="p-heatmap-cell occupied hero-gym-slot">#1</div>
+                                        <div class="p-heatmap-cell occupied hero-gym-slot">#2</div>
+                                        <div class="p-heatmap-cell occupied hero-gym-slot">#3</div>
+                                        <div class="p-heatmap-cell occupied hero-gym-slot">#4</div>
+                                        <div class="p-heatmap-cell occupied hero-gym-slot">#5</div>
+                                        <div class="p-heatmap-cell occupied hero-gym-slot">#6</div>
+                                        <div class="p-heatmap-cell occupied hero-gym-slot">#7</div>
+                                        <div class="p-heatmap-cell hero-gym-slot">#8</div>
+                                        <div class="p-heatmap-cell occupied hero-gym-slot">#9</div>
+                                        <div class="p-heatmap-cell occupied hero-gym-slot">#10</div>
+                                        <div class="p-heatmap-cell occupied hero-gym-slot">#11</div>
+                                        <div class="p-heatmap-cell occupied hero-gym-slot">#12</div>
+                                        <div class="p-heatmap-cell hero-gym-slot">#13</div>
+                                        <div class="p-heatmap-cell hero-gym-slot">#14</div>
+                                        <div class="p-heatmap-cell hero-gym-slot">#15</div>
+                                        <div class="p-heatmap-cell hero-gym-slot">#16</div>
+                                    </div>
+                                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                                        <button class="p-btn p-btn-primary p-btn-sm" onclick="simulateHeroTerminalCheckin()">+ Simulate RFID Check-in</button>
+                                        <a href="portal.html#/gym" class="p-btn p-btn-secondary p-btn-sm">Open goJim Suite →</a>
+                                    </div>
+                                </div>
+
+                                <!-- Panel 3: Architecture Code -->
+                                <div class="terminal-panel" id="terminal-panel-code">
+                                    <pre style="margin:0 0 12px 0; padding:12px; background:var(--bg-1); border-radius:10px; font-family:var(--font-mono); font-size:0.75rem; color:var(--txt-0); line-height:1.6; overflow-x:auto;"><code>// Zero-Cloud CAS Statement Parser
+const rawCAS = await CASParser.decrypt(casBuffer, panKey);
+const rebalance = AssetEngine.optimizeTax(rawCAS, {
+    stcgMax: 0.15,
+    rebalanceThreshold: 0.05
+});</code></pre>
+                                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                                        <button class="p-btn p-btn-secondary p-btn-sm" onclick="copyHeroTerminalCode()">Copy Snippet</button>
+                                        <a href="toolkit.html" class="p-btn p-btn-secondary p-btn-sm">Explore Stack →</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <!-- Scroll Indicator Wheel -->
@@ -2267,20 +2467,25 @@
             </div>
         </section>
 
-        <!-- TICKER STRIP -->
-        <div class="ticker-strip" aria-hidden="true">
-            <div class="ticker-wrapper">
-                <div class="ticker-item"><span class="ticker-dot"></span>My testing apps</div>
-                <div class="ticker-item"><span class="ticker-dot"></span>AI Gym Mentor: Track your fitness journey</div>
-                <div class="ticker-item"><span class="ticker-dot"></span>AI Finance Manager: Your finance manager app</div>
-                <div class="ticker-item"><span class="ticker-dot"></span>DeepFLow: Your deep working app</div>
-                <div class="ticker-item"><span class="ticker-dot"></span>Medicine Tracker: Your medicine tracking app</div>
-                <!-- duplicate for loop -->
-                <div class="ticker-item"><span class="ticker-dot"></span>My testing apps</div>
-                <div class="ticker-item"><span class="ticker-dot"></span>AI Gym Mentor: Track your fitness journey</div>
-                <div class="ticker-item"><span class="ticker-dot"></span>AI Finance Manager: Your finance manager app</div>
-                <div class="ticker-item"><span class="ticker-dot"></span>DeepFLow: Your deep working app</div>
-                <div class="ticker-item"><span class="ticker-dot"></span>Medicine Tracker: Your medicine tracking app</div>
+        <!-- HIGH-TRUST CONTINUOUS MARQUEE -->
+        <div class="marquee-section" aria-hidden="true">
+            <div class="marquee-track">
+                <div class="marquee-badge"><span>⚡</span> goJim Multi-Tenant SaaS</div>
+                <div class="marquee-badge"><span>👗</span> Ritu Designer Wear (Live)</div>
+                <div class="marquee-badge"><span>✂️</span> Opulence Luxury Salon CRM</div>
+                <div class="marquee-badge"><span>🏋️</span> IronPulse Gym Platform</div>
+                <div class="marquee-badge"><span>📊</span> Real Estate Cashflow Underwriter</div>
+                <div class="marquee-badge"><span>📑</span> Zero-Cloud CAS Wealth Parser</div>
+                <div class="marquee-badge"><span>🛡️</span> Stripe Billing Webhooks</div>
+                <div class="marquee-badge"><span>📱</span> Flutter 3.x Mobile Core</div>
+                <div class="marquee-badge"><span>⚡</span> goJim Multi-Tenant SaaS</div>
+                <div class="marquee-badge"><span>👗</span> Ritu Designer Wear (Live)</div>
+                <div class="marquee-badge"><span>✂️</span> Opulence Luxury Salon CRM</div>
+                <div class="marquee-badge"><span>🏋️</span> IronPulse Gym Platform</div>
+                <div class="marquee-badge"><span>📊</span> Real Estate Cashflow Underwriter</div>
+                <div class="marquee-badge"><span>📑</span> Zero-Cloud CAS Wealth Parser</div>
+                <div class="marquee-badge"><span>🛡️</span> Stripe Billing Webhooks</div>
+                <div class="marquee-badge"><span>📱</span> Flutter 3.x Mobile Core</div>
             </div>
         </div>
 
@@ -2313,43 +2518,133 @@
                     </div>
                 </div>
 
-                <!-- Animated Metrics -->
-                <div class="metrics-grid reveal" style="transition-delay:0.32s;">
+                <!-- Animated High-Trust Value Metrics -->
+                <div class="metrics-grid reveal" style="transition-delay:0.32s; margin-top:2.5rem;">
                     <div class="metric-card">
-                        <span class="metric-number counter" data-target="5" data-suffix="+">5+</span>
-                        <span class="metric-label">Apps Built & Logged</span>
+                        <span class="metric-number counter" data-target="2.8" data-suffix="L+ INR">2.8L+ INR</span>
+                        <span class="metric-label">Monthly SaaS Volume Automated</span>
                     </div>
                     <div class="metric-card">
-                        <span class="metric-number counter" data-target="10" data-suffix="+">10+</span>
-                        <span class="metric-label">developing apps with github repos</span>
+                        <span class="metric-number counter" data-target="140" data-suffix="+ Daily">140+ Daily</span>
+                        <span class="metric-label">Turnstile Check-Ins Managed</span>
                     </div>
                     <div class="metric-card">
-                        <span class="metric-number counter" data-target="1" data-suffix=" Lakh+">1 Lakh+</span>
-                        <span class="metric-label">lines of codes done till now</span>
+                        <span class="metric-number counter" data-target="100" data-suffix="% Local">100% Local</span>
+                        <span class="metric-label">Zero-Cloud Financial Privacy</span>
                     </div>
                     <div class="metric-card">
-                        <span class="metric-number counter" data-target="100" data-suffix="%">100%</span>
-                        <span class="metric-label">Customer satisfaction</span>
+                        <span class="metric-number counter" data-target="5" data-suffix="+ Live">5+ Live</span>
+                        <span class="metric-label">Production Platforms Deployed</span>
                     </div>
                 </div>
             </div>
         </section>
 
+        <!-- FEATURED FLAGSHIP ECOSYSTEMS -->
+        <section class="ecosystem-section">
+            <div class="container">
+                <div class="section-header reveal">
+                    <span class="section-eyebrow">Production Vault</span>
+                    <h2 class="section-title">Flagship Applications &amp; Platforms.</h2>
+                    <p style="color:var(--txt-1); max-width:650px; margin-top:0.5rem;">
+                        Engineered from scratch to solve critical operational bottlenecks across fitness facilities, financial portfolio audits, and high-conversion client portals.
+                    </p>
+                </div>
 
+                <div class="ecosystem-grid">
+                    <!-- Card 1: goJim SaaS -->
+                    <div class="ecosystem-card reveal" style="transition-delay:0.08s;">
+                        <div class="ecosystem-card-top">
+                            <div class="ecosystem-icon">🏋️</div>
+                            <span class="p-badge p-badge-teal" style="margin-bottom:8px;">Multi-Tenant SaaS</span>
+                            <h3>goJim Gym Operating System</h3>
+                            <p>End-to-end gym facility management: 32-station RFID/QR turnstile heatmaps, automated Stripe member billing, personal trainer rosters, and member 1RM progress tracking.</p>
+                            
+                            <div class="ecosystem-interactive-preview">
+                                <div style="display:flex; justify-content:space-between; font-size:0.75rem; font-family:var(--font-mono); margin-bottom:6px;">
+                                    <span style="color:var(--txt-2);">FACILITY OCCUPANCY</span>
+                                    <span style="color:var(--acc); font-weight:700;">65% PEAK</span>
+                                </div>
+                                <div style="height:6px; background:var(--bg-2); border-radius:3px; overflow:hidden;">
+                                    <div style="width:65%; height:100%; background:var(--acc); border-radius:3px;"></div>
+                                </div>
+                            </div>
+                        </div>
 
-        <!-- CONTACT -->
+                        <div class="ecosystem-card-footer">
+                            <a href="portal.html#/gym" class="p-btn p-btn-primary p-btn-sm">Launch Live Sandbox →</a>
+                            <a href="ironpulse-gym.html" class="p-btn p-btn-secondary p-btn-sm">Case Study</a>
+                        </div>
+                    </div>
+
+                    <!-- Card 2: Interactive BI Suite -->
+                    <div class="ecosystem-card reveal" style="transition-delay:0.16s;">
+                        <div class="ecosystem-card-top">
+                            <div class="ecosystem-icon">📊</div>
+                            <span class="p-badge p-badge-teal" style="margin-bottom:8px;">Financial Modeling</span>
+                            <h3>Interactive BI &amp; Underwriter Suite</h3>
+                            <p>Reactive mathematical engines: Real Estate Deal Underwriter (Cashflow, Cap Rate, DSCR), SaaS Runway &amp; Burn Forecaster, and Sales Commission Pipelines powered by Chart.js.</p>
+                            
+                            <div class="ecosystem-interactive-preview">
+                                <div style="display:flex; justify-content:space-between; font-size:0.75rem; font-family:var(--font-mono); margin-bottom:6px;">
+                                    <span style="color:var(--txt-2);">UNDERWRITER ENGINES</span>
+                                    <span class="p-verdict p-verdict-strong" style="font-size:0.65rem; padding:2px 6px;">STRONG DEAL</span>
+                                </div>
+                                <div style="font-size:0.8rem; color:var(--txt-1); font-family:var(--font-mono);">
+                                    +682/mo Net Cashflow • 7.8% Cap
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ecosystem-card-footer">
+                            <a href="portal.html#/tools/spreadsheets" class="p-btn p-btn-primary p-btn-sm">Try Calculators →</a>
+                            <a href="spreadsheet-services.html" class="p-btn p-btn-secondary p-btn-sm">View BI Specs</a>
+                        </div>
+                    </div>
+
+                    <!-- Card 3: AI Finance Manager -->
+                    <div class="ecosystem-card reveal" style="transition-delay:0.24s;">
+                        <div class="ecosystem-card-top">
+                            <div class="ecosystem-icon">📑</div>
+                            <span class="p-badge p-badge-teal" style="margin-bottom:8px;">Air-Gapped FinTech</span>
+                            <h3>AI Finance Manager &amp; Wealth Parser</h3>
+                            <p>Local-first portfolio auditor for Indian retail investors: Parses encrypted NSDL/CDSL CAS PDF statements entirely in volatile memory with zero cloud telemetry.</p>
+                            
+                            <div class="ecosystem-interactive-preview">
+                                <div style="display:flex; justify-content:space-between; font-size:0.75rem; font-family:var(--font-mono); margin-bottom:6px;">
+                                    <span style="color:var(--txt-2);">DATA SECURITY</span>
+                                    <span style="color:#10b981; font-weight:700;">100% OFFLINE</span>
+                                </div>
+                                <div style="font-size:0.8rem; color:var(--txt-1); font-family:var(--font-mono);">
+                                    Auto STCG/LTCG Capital Gains Tax
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ecosystem-card-footer">
+                            <a href="portal.html#/tools/finance" class="p-btn p-btn-primary p-btn-sm">Architecture Spec →</a>
+                            <a href="finance-manager.html" class="p-btn p-btn-secondary p-btn-sm">App Details</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CONTACT & INTERACTIVE PROJECT ESTIMATOR -->
         <section id="contact">
             <div class="container">
                 <div class="section-header reveal">
-                    <span class="section-eyebrow">Connect</span>
+                    <span class="section-eyebrow">Connect &amp; Scope</span>
                     <h2 class="section-title">Initiate a dialogue.</h2>
+                    <p style="color:var(--txt-1); max-width:600px; margin-top:0.5rem;">
+                        Have a software product, financial model, or operations system in mind? Configure your scope below for an instant preliminary timeline &amp; estimate.
+                    </p>
                 </div>
 
                 <div class="contact-grid">
                     <div class="contact-info reveal" style="transition-delay:0.08s;">
                         <p class="contact-sub">
-                            I am open to discussions regarding database automation, Flutter development projects,
-                            local-first architectures, or structured athletic programming.
+                            Available for custom SaaS architecture, Flutter mobile engineering, spreadsheet BI models, or gym operations consulting.
                         </p>
                         <div class="contact-methods">
                             <a href="mailto:rahulsaroh007@gmail.com" class="contact-method">
@@ -2364,7 +2659,7 @@
                                 <svg viewBox="0 0 24 24">
                                     <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
                                 </svg>
-                                +91 77159 62857
+                                +91 77159 62857 (WhatsApp)
                             </a>
                             <a href="https://instagram.com/rahulshiraj" class="contact-method" target="_blank" rel="noopener noreferrer">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -2384,44 +2679,78 @@
                                 Mumbai, Maharashtra, India
                             </div>
                         </div>
-                        <div class="contact-qr" style="margin-top: 2rem; display: flex; flex-direction: column; gap: 0.5rem;">
-                            <span class="form-label" style="font-size: 0.75rem; letter-spacing: 0.05em; text-transform: uppercase;">Scan to connect on Instagram</span>
-                            <img src="instagram_qr.png" alt="Instagram @rahulshiraj QR Code" style="max-width: 180px; width: 100%; height: auto; border-radius: 12px; box-shadow: var(--sh-md); border: 1px solid var(--border); transition: transform 0.3s ease;" onmouseover="this.style.transform='scale(1.03)'" onmouseout="this.style.transform='scale(1)'">
-                        </div>
                     </div>
 
-                    <div class="reveal" style="transition-delay:0.18s;">
-                        <form action="https://formsubmit.co/rahulsaroh007@gmail.com" method="POST" class="contact-form" id="contact-form">
-                            <div class="form-group">
-                                <label for="name" class="form-label">full_name</label>
-                                <input type="text" id="name" name="name" class="form-input"
-                                    placeholder="e.g. Rahul Sharma" required autocomplete="name">
+                    <!-- Interactive Scope Configurator & Form -->
+                    <div class="estimator-wrapper reveal" style="transition-delay:0.18s;">
+                        <form action="https://formsubmit.co/rahulsaroh007@gmail.com" method="POST" id="contact-form">
+                            <!-- Step 1: Scope -->
+                            <span class="estimator-step-title">Step 1 • Select Project Scope</span>
+                            <div class="scope-chips">
+                                <div class="scope-chip selected" data-scope="saas" onclick="selectEstimatorScope('saas', 75000, 'Custom SaaS Web App', this)">
+                                    ⚡ SaaS Web App
+                                </div>
+                                <div class="scope-chip" data-scope="mobile" onclick="selectEstimatorScope('mobile', 85000, 'Flutter Mobile App (iOS/Android)', this)">
+                                    📱 Flutter Mobile App
+                                </div>
+                                <div class="scope-chip" data-scope="spreadsheet" onclick="selectEstimatorScope('spreadsheet', 25000, 'Interactive BI & Spreadsheet Model', this)">
+                                    📊 BI &amp; Spreadsheets
+                                </div>
+                                <div class="scope-chip" data-scope="crm" onclick="selectEstimatorScope('crm', 60000, 'Operations &amp; CRM Platform', this)">
+                                    🛠️ Gym / Salon CRM
+                                </div>
                             </div>
 
-                            <div class="form-group">
-                                <label for="email" class="form-label">email_address</label>
-                                <input type="email" id="email" name="email" class="form-input"
-                                    placeholder="e.g. rahul@example.com" required autocomplete="email">
+                            <!-- Step 2: Timeline -->
+                            <span class="estimator-step-title">Step 2 • Target Delivery Velocity</span>
+                            <div class="scope-chips">
+                                <div class="scope-chip selected" data-timeline="sprint" onclick="selectEstimatorTimeline('sprint', 1.0, 'Rapid Sprint (2-3 Weeks)', this)">
+                                    🚀 Rapid Sprint (2-3 Wks)
+                                </div>
+                                <div class="scope-chip" data-timeline="full" onclick="selectEstimatorTimeline('full', 1.35, 'Full Production Build (1-2 Mo)', this)">
+                                    🏗️ Full Build (1-2 Mo)
+                                </div>
+                                <div class="scope-chip" data-timeline="enterprise" onclick="selectEstimatorTimeline('enterprise', 1.8, 'Enterprise Ecosystem', this)">
+                                    🏢 Enterprise Ecosystem
+                                </div>
                             </div>
 
-                            <div class="form-group">
-                                <label for="subject" class="form-label">subject_focus</label>
-                                <input type="text" id="subject" name="subject" class="form-input"
-                                    placeholder="e.g. App Dev Project / Collaboration" required>
+                            <!-- Step 3: Contact Inputs -->
+                            <span class="estimator-step-title" style="margin-top:12px;">Step 3 • Contact Details &amp; Objectives</span>
+                            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:12px;" class="p-grid-2col">
+                                <div class="form-group" style="margin-bottom:0;">
+                                    <label for="name" class="form-label" style="font-size:0.75rem;">Your Name</label>
+                                    <input type="text" id="name" name="name" class="form-input" placeholder="e.g. Rahul Sharma" required autocomplete="name" style="padding:8px 12px; font-size:0.88rem;">
+                                </div>
+                                <div class="form-group" style="margin-bottom:0;">
+                                    <label for="email" class="form-label" style="font-size:0.75rem;">Email / WhatsApp</label>
+                                    <input type="text" id="email" name="email" class="form-input" placeholder="e.g. rahul@example.com / +91..." required autocomplete="email" style="padding:8px 12px; font-size:0.88rem;">
+                                </div>
                             </div>
 
-                            <div class="form-group">
-                                <label for="message" class="form-label">detailed_message</label>
-                                <textarea id="message" name="message" class="form-input"
-                                    placeholder="Describe project parameters, timelines, or topics..."
-                                    required></textarea>
+                            <input type="hidden" id="subject" name="subject" value="Project Inquiry: Custom SaaS Web App (Rapid Sprint)">
+
+                            <div class="form-group" style="margin-bottom:12px;">
+                                <label for="message" class="form-label" style="font-size:0.75rem;">Project Parameters / Objectives</label>
+                                <textarea id="message" name="message" class="form-input" rows="3" placeholder="Tell me about your target features, data inputs, or launch timeline..." required style="padding:8px 12px; font-size:0.88rem;"></textarea>
                             </div>
 
-                            <span id="form-status" class="form-status"></span>
+                            <!-- Real-time Dynamic Estimate Summary Banner -->
+                            <div class="estimator-summary-bar">
+                                <div>
+                                    <div class="estimator-est-label">Estimated Engagement</div>
+                                    <div class="estimator-est-val" id="est-summary-val">₹75,000</div>
+                                    <div style="font-size:0.75rem; color:var(--txt-2); font-family:var(--font-mono);" id="est-summary-scope">Custom SaaS Web App • Rapid Sprint (2-3 Weeks)</div>
+                                </div>
+                                <button type="submit" class="btn btn-primary" style="padding:10px 20px;">
+                                    Submit Inquiry →
+                                </button>
+                            </div>
 
-                            <button type="submit" class="btn btn-primary" style="align-self:flex-start;">
-                                Send Message
-                            </button>
+                            <span id="form-status" class="form-status" style="margin-top:10px;"></span>
+                        </form>
+                    </div>
+                </div>
                         </form>
                     </div>
                 </div>
@@ -2698,7 +3027,7 @@
                 });
             });
 
-            /* ─── 11. HERO SPOTLIGHT GLOW ─── */
+            /* ─── 11. HERO SPOTLIGHT GLOW & CONTINUOUS PARALLAX ─── */
             const heroSection = document.querySelector('.hero-section');
             if (heroSection) {
                 let heroFrameId = null;
@@ -2712,13 +3041,445 @@
                         const y = e.clientY - rect.top;
                         heroSection.style.setProperty('--mouse-x', `${x}px`);
                         heroSection.style.setProperty('--mouse-y', `${y}px`);
+
+                        // 3D Parallax tilt for the motion graphics viewport
+                        const centerX = rect.width / 2;
+                        const centerY = rect.height / 2;
+                        const tiltX = ((x - centerX) / centerX) * 22;
+                        const tiltY = ((y - centerY) / centerY) * 22;
+                        heroSection.style.setProperty('--hero-tilt-x', `${tiltX}px`);
+                        heroSection.style.setProperty('--hero-tilt-y', `${tiltY}px`);
                     });
                 });
+
+                heroSection.addEventListener('mouseleave', () => {
+                    heroSection.style.setProperty('--hero-tilt-x', '0px');
+                    heroSection.style.setProperty('--hero-tilt-y', '0px');
+                });
             }
+
+            /* ─── 12. REMOTION 3D CYBER-GLOBE & PROCEDURAL HUD TELEMETRY ENGINE ─── */
+            (function initHeroCyberMotion() {
+                const canvas = document.getElementById('heroCyberCanvas');
+                const hero = document.querySelector('.hero-section');
+                if (!canvas || !hero) return;
+
+                const ctx = canvas.getContext('2d');
+                let width = 0;
+                let height = 0;
+                let dpr = 1;
+                let animId = null;
+                let mouseX = -9999;
+                let mouseY = -9999;
+                let targetTiltX = 0.22;
+                let targetTiltY = 0;
+                let currentTiltX = 0.22;
+                let currentTiltY = 0;
+                let globeAngle = 0;
+
+                function resize() {
+                    const rect = hero.getBoundingClientRect();
+                    dpr = Math.min(window.devicePixelRatio || 1, 2);
+                    width = rect.width;
+                    height = rect.height;
+                    canvas.width = width * dpr;
+                    canvas.height = height * dpr;
+                    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+                }
+                resize();
+                window.addEventListener('resize', resize, { passive: true });
+
+                // ─── 1. Major Global Geo-Hubs (Lat/Lon in degrees) ───
+                const geoHubs = [
+                    { name: 'Mumbai', lat: 19.076, lon: 72.878, primary: true },
+                    { name: 'Tokyo', lat: 35.676, lon: 139.650, primary: false },
+                    { name: 'London', lat: 51.507, lon: -0.127, primary: false },
+                    { name: 'San Francisco', lat: 37.774, lon: -122.419, primary: false },
+                    { name: 'Frankfurt', lat: 50.110, lon: 8.682, primary: false },
+                    { name: 'Singapore', lat: 1.352, lon: 103.820, primary: false },
+                    { name: 'Sydney', lat: -33.868, lon: 151.209, primary: false },
+                    { name: 'New York', lat: 40.712, lon: -74.006, primary: false },
+                    { name: 'Dubai', lat: 25.204, lon: 55.270, primary: false }
+                ];
+
+                // Convert lat/lon to 3D Cartesian coordinates on unit sphere
+                function latLonToSphere(latDeg, lonDeg, radius) {
+                    const phi = (90 - latDeg) * (Math.PI / 180);
+                    const theta = (lonDeg + 180) * (Math.PI / 180);
+                    return {
+                        x: -(radius * Math.sin(phi) * Math.cos(theta)),
+                        y: radius * Math.cos(phi),
+                        z: radius * Math.sin(phi) * Math.sin(theta)
+                    };
+                }
+
+                // ─── 2. Generate Dense Fibonacci Sphere Point Cloud (Landmass + Grid) ───
+                const GLOBE_BASE_RADIUS = 185;
+                const pointCount = 520;
+                const spherePoints = [];
+                const goldenRatio = (1 + Math.sqrt(5)) / 2;
+
+                for (let i = 0; i < pointCount; i++) {
+                    const theta = 2 * Math.PI * i / goldenRatio;
+                    const phi = Math.acos(1 - 2 * (i + 0.5) / pointCount);
+                    const x = Math.cos(theta) * Math.sin(phi);
+                    const y = Math.cos(phi);
+                    const z = Math.sin(theta) * Math.sin(phi);
+
+                    // Cluster variation for organic cyber topography
+                    const isDenseCluster = (i % 7 === 0 || i % 11 === 0);
+                    spherePoints.push({
+                        baseX: x,
+                        baseY: y,
+                        baseZ: z,
+                        size: isDenseCluster ? 1.6 : 1.0,
+                        alpha: isDenseCluster ? 0.75 : 0.45,
+                        pulseOffset: Math.random() * Math.PI * 2
+                    });
+                }
+
+                // ─── 3. Flight Routes / Data Trajectory Arcs ───
+                const routes = [
+                    { from: 0, to: 1, progress: 0.15, speed: 0.007, color: 'primary' }, // Mumbai -> Tokyo
+                    { from: 0, to: 2, progress: 0.65, speed: 0.006, color: 'primary' }, // Mumbai -> London
+                    { from: 0, to: 5, progress: 0.40, speed: 0.008, color: 'primary' }, // Mumbai -> Singapore
+                    { from: 2, to: 7, progress: 0.80, speed: 0.005, color: 'accent' },  // London -> NY
+                    { from: 7, to: 3, progress: 0.30, speed: 0.007, color: 'accent' },  // NY -> SF
+                    { from: 3, to: 1, progress: 0.50, speed: 0.006, color: 'accent' },  // SF -> Tokyo
+                    { from: 5, to: 6, progress: 0.10, speed: 0.007, color: 'accent' },  // Singapore -> Sydney
+                    { from: 0, to: 8, progress: 0.75, speed: 0.009, color: 'primary' }  // Mumbai -> Dubai
+                ];
+
+                // ─── 4. Outer Orbital Satellites ───
+                const satellites = [
+                    { angle: 0, speed: 0.012, radius: 250, tilt: 0.45, size: 3.5, label: 'SAT-01 // GPS' },
+                    { angle: Math.PI * 0.7, speed: -0.009, radius: 280, tilt: -0.35, size: 3.0, label: 'SAT-02 // MESH' },
+                    { angle: Math.PI * 1.4, speed: 0.008, radius: 310, tilt: 0.75, size: 2.8, label: 'SAT-03 // LEO' }
+                ];
+
+                // ─── 5. Ambient Floating Network Particles ───
+                const ambientParticleCount = 28;
+                const ambientParticles = [];
+                for (let i = 0; i < ambientParticleCount; i++) {
+                    ambientParticles.push({
+                        x: Math.random() * (window.innerWidth || 1200),
+                        y: Math.random() * 800,
+                        vx: (Math.random() - 0.5) * 0.35,
+                        vy: (Math.random() - 0.5) * 0.35,
+                        size: Math.random() * 1.5 + 0.8,
+                        alpha: Math.random() * 0.4 + 0.2
+                    });
+                }
+
+                // 3D Point Rotation & Perspective Projection
+                function project3D(x, y, z, cx, cy, tiltX, tiltY, angle) {
+                    // Rotate around Y axis (Globe spin)
+                    const cosY = Math.cos(angle + tiltY);
+                    const sinY = Math.sin(angle + tiltY);
+                    const x1 = x * cosY - z * sinY;
+                    const z1 = x * sinY + z * cosY;
+
+                    // Rotate around X axis (Axial tilt + mouse tilt)
+                    const cosX = Math.cos(tiltX);
+                    const sinX = Math.sin(tiltX);
+                    const y2 = y * cosX - z1 * sinX;
+                    const z2 = y * sinX + z1 * cosX;
+
+                    // Perspective formula
+                    const fov = 480;
+                    const scale = fov / (fov + z2 + 80);
+                    return {
+                        x: cx + x1 * scale,
+                        y: cy + y2 * scale,
+                        z: z2,
+                        scale: scale,
+                        visible: z2 > -120
+                    };
+                }
+
+                // Mouse Parallax
+                hero.addEventListener('mousemove', e => {
+                    const rect = hero.getBoundingClientRect();
+                    mouseX = e.clientX - rect.left;
+                    mouseY = e.clientY - rect.top;
+                    targetTiltY = ((mouseX / width) - 0.5) * 0.6;
+                    targetTiltX = 0.22 + ((mouseY / height) - 0.5) * 0.35;
+                }, { passive: true });
+
+                hero.addEventListener('mouseleave', () => {
+                    mouseX = -9999;
+                    mouseY = -9999;
+                    targetTiltY = 0;
+                    targetTiltX = 0.22;
+                });
+
+                // Viewport Intersection Observer for CPU optimization
+                let isVisible = true;
+                if ('IntersectionObserver' in window) {
+                    const observer = new IntersectionObserver(entries => {
+                        isVisible = entries[0].isIntersecting;
+                        if (isVisible && !animId) loop();
+                    }, { threshold: 0.05 });
+                    observer.observe(hero);
+                }
+
+                // ─── MAIN ANIMATION LOOP ───
+                function loop() {
+                    if (!isVisible) {
+                        animId = null;
+                        return;
+                    }
+
+                    ctx.clearRect(0, 0, width, height);
+
+                    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+                    const colCyan = isDark ? '24, 212, 192' : '12, 130, 118';
+                    const colBright = isDark ? '45, 255, 230' : '8, 95, 86';
+                    const colBlue = isDark ? '56, 189, 248' : '2, 110, 175';
+                    const colWhite = isDark ? '255, 255, 255' : '15, 23, 42';
+
+                    // Smooth spring tilt damping
+                    currentTiltX += (targetTiltX - currentTiltX) * 0.04;
+                    currentTiltY += (targetTiltY - currentTiltY) * 0.04;
+                    globeAngle += 0.0042; // Continuous procedural planetary spin
+
+                    // Responsive Globe Center & Scale
+                    const isDesktop = width > 992;
+                    const globeRadius = Math.min(width * 0.22, GLOBE_BASE_RADIUS);
+                    const globeCX = isDesktop ? width * 0.76 : width * 0.50;
+                    const globeCY = isDesktop ? height * 0.50 : height * 0.44;
+
+                    // ─── A. Ambient Dust Particles ───
+                    for (let i = 0; i < ambientParticles.length; i++) {
+                        const ap = ambientParticles[i];
+                        ap.x += ap.vx;
+                        ap.y += ap.vy;
+                        if (ap.x < 0) ap.x = width;
+                        if (ap.x > width) ap.x = 0;
+                        if (ap.y < 0) ap.y = height;
+                        if (ap.y > height) ap.y = 0;
+
+                        ctx.beginPath();
+                        ctx.arc(ap.x, ap.y, ap.size, 0, Math.PI * 2);
+                        ctx.fillStyle = `rgba(${colCyan}, ${ap.alpha * 0.6})`;
+                        ctx.fill();
+                    }
+
+                    // ─── B. 3D Globe Atmosphere Halo ───
+                    const haloGrad = ctx.createRadialGradient(globeCX, globeCY, globeRadius * 0.7, globeCX, globeCY, globeRadius * 1.35);
+                    haloGrad.addColorStop(0, `rgba(${colCyan}, ${isDark ? 0.07 : 0.04})`);
+                    haloGrad.addColorStop(0.65, `rgba(${colBlue}, ${isDark ? 0.04 : 0.02})`);
+                    haloGrad.addColorStop(1, 'rgba(0, 0, 0, 0)');
+                    ctx.beginPath();
+                    ctx.arc(globeCX, globeCY, globeRadius * 1.35, 0, Math.PI * 2);
+                    ctx.fillStyle = haloGrad;
+                    ctx.fill();
+
+                    // ─── C. 3D Latitude & Longitude Wireframe Rings ───
+                    const latitudes = [-60, -30, 0, 30, 60];
+                    for (let lat of latitudes) {
+                        const rLat = globeRadius * Math.cos(lat * Math.PI / 180);
+                        const yLat = globeRadius * Math.sin(lat * Math.PI / 180);
+                        const stepCount = 36;
+                        ctx.beginPath();
+                        for (let s = 0; s <= stepCount; s++) {
+                            const lonAngle = (s / stepCount) * Math.PI * 2;
+                            const px = rLat * Math.cos(lonAngle);
+                            const pz = rLat * Math.sin(lonAngle);
+                            const proj = project3D(px, yLat, pz, globeCX, globeCY, currentTiltX, currentTiltY, globeAngle);
+                            if (s === 0) ctx.moveTo(proj.x, proj.y);
+                            else ctx.lineTo(proj.x, proj.y);
+                        }
+                        ctx.strokeStyle = lat === 0 ? `rgba(${colBright}, 0.18)` : `rgba(${colCyan}, 0.08)`;
+                        ctx.lineWidth = lat === 0 ? 1.2 : 0.7;
+                        ctx.stroke();
+                    }
+
+                    // ─── D. 3D Fibonacci Sphere Point Cloud (Continents & Points) ───
+                    for (let i = 0; i < spherePoints.length; i++) {
+                        const pt = spherePoints[i];
+                        const x = pt.baseX * globeRadius;
+                        const y = pt.baseY * globeRadius;
+                        const z = pt.baseZ * globeRadius;
+
+                        const proj = project3D(x, y, z, globeCX, globeCY, currentTiltX, currentTiltY, globeAngle);
+                        if (!proj.visible) continue;
+
+                        // Shading factor based on Z depth (-radius to +radius)
+                        const depthFactor = (proj.z + globeRadius) / (globeRadius * 2); // 0 (back) to 1 (front)
+                        const clampedDepth = Math.max(0.08, Math.min(1.0, depthFactor));
+                        const pointAlpha = pt.alpha * clampedDepth * (isDark ? 0.9 : 0.7);
+
+                        ctx.beginPath();
+                        ctx.arc(proj.x, proj.y, Math.max(0.6, pt.size * proj.scale * clampedDepth), 0, Math.PI * 2);
+                        ctx.fillStyle = `rgba(${clampedDepth > 0.65 ? colBright : colCyan}, ${pointAlpha})`;
+                        ctx.fill();
+
+                        // Occasional micro-connections between neighboring surface points
+                        if (i % 8 === 0 && clampedDepth > 0.5) {
+                            const nextPt = spherePoints[(i + 1) % spherePoints.length];
+                            const nextProj = project3D(nextPt.baseX * globeRadius, nextPt.baseY * globeRadius, nextPt.baseZ * globeRadius, globeCX, globeCY, currentTiltX, currentTiltY, globeAngle);
+                            if (nextProj.visible && Math.hypot(proj.x - nextProj.x, proj.y - nextProj.y) < 32) {
+                                ctx.beginPath();
+                                ctx.moveTo(proj.x, proj.y);
+                                ctx.lineTo(nextProj.x, nextProj.y);
+                                ctx.strokeStyle = `rgba(${colCyan}, ${0.15 * clampedDepth})`;
+                                ctx.lineWidth = 0.6;
+                                ctx.stroke();
+                            }
+                        }
+                    }
+
+                    // ─── E. Geo-Hub Nodes & Telemetry Pulses ───
+                    const projectedHubs = geoHubs.map(hub => {
+                        const pos = latLonToSphere(hub.lat, hub.lon, globeRadius);
+                        const proj = project3D(pos.x, pos.y, pos.z, globeCX, globeCY, currentTiltX, currentTiltY, globeAngle);
+                        return { ...hub, pos, proj };
+                    });
+
+                    projectedHubs.forEach(hub => {
+                        if (!hub.proj.visible || hub.proj.z < -20) return;
+                        const depth = Math.max(0.15, (hub.proj.z + globeRadius) / (globeRadius * 2));
+                        const alpha = depth * (hub.primary ? 1.0 : 0.75);
+
+                        // Pulsing ripple ring
+                        const pulseScale = 1 + ((Date.now() / 600) % 2);
+                        ctx.beginPath();
+                        ctx.arc(hub.proj.x, hub.proj.y, (hub.primary ? 7 : 4) * pulseScale * hub.proj.scale, 0, Math.PI * 2);
+                        ctx.strokeStyle = `rgba(${colBright}, ${(1 - pulseScale / 3) * alpha * 0.7})`;
+                        ctx.lineWidth = 1;
+                        ctx.stroke();
+
+                        // Solid Hub Core
+                        ctx.beginPath();
+                        ctx.arc(hub.proj.x, hub.proj.y, (hub.primary ? 3.8 : 2.2) * hub.proj.scale, 0, Math.PI * 2);
+                        ctx.fillStyle = hub.primary ? `rgba(${colWhite}, ${alpha})` : `rgba(${colBright}, ${alpha})`;
+                        ctx.shadowColor = `rgba(${colBright}, ${alpha * 0.8})`;
+                        ctx.shadowBlur = hub.primary ? 10 : 4;
+                        ctx.fill();
+                        ctx.shadowBlur = 0;
+
+                        // Hub Text Label for Primary / Selected Hubs on Front Face
+                        if (depth > 0.55 && isDesktop) {
+                            ctx.font = `${hub.primary ? 'bold 10px' : '9px'} "JetBrains Mono", monospace`;
+                            ctx.fillStyle = `rgba(${colBright}, ${alpha * 0.9})`;
+                            ctx.fillText(`● ${hub.name}`, hub.proj.x + 8, hub.proj.y + 3);
+                        }
+                    });
+
+                    // ─── F. Great-Circle 3D Orbital Flight Arcs & Traveling Packets ───
+                    routes.forEach(route => {
+                        const hubA = projectedHubs[route.from];
+                        const hubB = projectedHubs[route.to];
+                        if (!hubA || !hubB) return;
+
+                        // Calculate elevated 3D trajectory curve (parabolic arc above sphere surface)
+                        const arcSegments = 24;
+                        ctx.beginPath();
+                        let isArcFront = false;
+
+                        for (let s = 0; s <= arcSegments; s++) {
+                            const t = s / arcSegments;
+                            // Interpolate sphere coords
+                            const lx = hubA.pos.x + (hubB.pos.x - hubA.pos.x) * t;
+                            const ly = hubA.pos.y + (hubB.pos.y - hubA.pos.y) * t;
+                            const lz = hubA.pos.z + (hubB.pos.z - hubA.pos.z) * t;
+                            const len = Math.sqrt(lx * lx + ly * ly + lz * lz) || 1;
+
+                            // Arc elevation profile (highest at mid-flight t=0.5)
+                            const altitude = Math.sin(t * Math.PI) * (globeRadius * 0.28);
+                            const curRadius = globeRadius + altitude;
+                            const sx = (lx / len) * curRadius;
+                            const sy = (ly / len) * curRadius;
+                            const sz = (lz / len) * curRadius;
+
+                            const p = project3D(sx, sy, sz, globeCX, globeCY, currentTiltX, currentTiltY, globeAngle);
+                            if (p.z > 0) isArcFront = true;
+
+                            if (s === 0) ctx.moveTo(p.x, p.y);
+                            else ctx.lineTo(p.x, p.y);
+                        }
+
+                        ctx.strokeStyle = route.color === 'primary'
+                            ? `rgba(${colBright}, ${isArcFront ? 0.45 : 0.12})`
+                            : `rgba(${colBlue}, ${isArcFront ? 0.35 : 0.08})`;
+                        ctx.lineWidth = route.color === 'primary' ? 1.4 : 0.9;
+                        ctx.stroke();
+
+                        // Animate traveling packet along arc
+                        route.progress += route.speed;
+                        if (route.progress >= 1) route.progress = 0;
+
+                        const tPkt = route.progress;
+                        const lx = hubA.pos.x + (hubB.pos.x - hubA.pos.x) * tPkt;
+                        const ly = hubA.pos.y + (hubB.pos.y - hubA.pos.y) * tPkt;
+                        const lz = hubA.pos.z + (hubB.pos.z - hubA.pos.z) * tPkt;
+                        const len = Math.sqrt(lx * lx + ly * ly + lz * lz) || 1;
+                        const altitude = Math.sin(tPkt * Math.PI) * (globeRadius * 0.28);
+                        const curRadius = globeRadius + altitude;
+                        const pktProj = project3D((lx / len) * curRadius, (ly / len) * curRadius, (lz / len) * curRadius, globeCX, globeCY, currentTiltX, currentTiltY, globeAngle);
+
+                        if (pktProj.visible && pktProj.z > -40) {
+                            const pktAlpha = Math.max(0.2, (pktProj.z + globeRadius) / (globeRadius * 2));
+                            ctx.beginPath();
+                            ctx.arc(pktProj.x, pktProj.y, 2.5 * pktProj.scale, 0, Math.PI * 2);
+                            ctx.fillStyle = `rgba(${colWhite}, ${pktAlpha})`;
+                            ctx.shadowColor = `rgba(${colBright}, 0.9)`;
+                            ctx.shadowBlur = 8;
+                            ctx.fill();
+                            ctx.shadowBlur = 0;
+                        }
+                    });
+
+                    // ─── G. Outer Satellites & Orbital Laser Beams ───
+                    satellites.forEach(sat => {
+                        sat.angle += sat.speed;
+                        const sx = Math.cos(sat.angle) * sat.radius;
+                        const sy = Math.sin(sat.angle) * (sat.radius * 0.35);
+                        const sz = Math.sin(sat.angle) * (sat.radius * 0.9);
+
+                        // Tilt transform
+                        const satProj = project3D(sx, sy, sz, globeCX, globeCY, currentTiltX + sat.tilt, currentTiltY, globeAngle * 0.5);
+                        if (!satProj.visible) return;
+
+                        const satAlpha = satProj.z > 0 ? 0.9 : 0.35;
+
+                        // Satellite body
+                        ctx.fillStyle = `rgba(${colBright}, ${satAlpha})`;
+                        ctx.fillRect(satProj.x - 2.5, satProj.y - 2.5, 5, 5);
+
+                        // Solar wings
+                        ctx.strokeStyle = `rgba(${colWhite}, ${satAlpha * 0.8})`;
+                        ctx.lineWidth = 1;
+                        ctx.beginPath();
+                        ctx.moveTo(satProj.x - 7, satProj.y);
+                        ctx.lineTo(satProj.x + 7, satProj.y);
+                        ctx.stroke();
+
+                        // Laser beam to Mumbai core hub periodically
+                        const primeHub = projectedHubs[0];
+                        if (primeHub && primeHub.proj.visible && satProj.z > 0 && Math.sin(globeAngle * 3 + sat.angle) > 0.6) {
+                            ctx.beginPath();
+                            ctx.moveTo(satProj.x, satProj.y);
+                            ctx.lineTo(primeHub.proj.x, primeHub.proj.y);
+                            ctx.strokeStyle = `rgba(${colBright}, 0.35)`;
+                            ctx.setLineDash([3, 6]);
+                            ctx.lineWidth = 0.8;
+                            ctx.stroke();
+                            ctx.setLineDash([]);
+                        }
+                    });
+
+                    animId = requestAnimationFrame(loop);
+                }
+
+                loop();
+            })();
 
         });
     </script>
     <script src="shared-auth.js"></script>
+    <script src="site-interactive.js"></script>
 </body>
 
 </html>

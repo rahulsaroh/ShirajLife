@@ -1,0 +1,68 @@
+{
+  "name": "Shiraj Life | Unified Web Portal",
+  "short_name": "Shiraj Life",
+  "description": "Unified Web Portal and SaaS command center for Shiraj Life client projects, goJim Gym operations, and interactive BI engines.",
+  "start_url": "portal.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#080c0f",
+  "theme_color": "#0e6b62",
+  "categories": ["business", "productivity", "utilities"],
+  "icons": [
+    {
+      "src": "icons/Icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/Icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/Icon-maskable-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "icons/Icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Launchpad",
+      "short_name": "Hub",
+      "description": "Portal command center and quick launcher",
+      "url": "portal.html#/overview",
+      "icons": [{ "src": "icons/Icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Admin Console",
+      "short_name": "Admin",
+      "description": "Agency client management and contracts",
+      "url": "portal.html#/admin",
+      "icons": [{ "src": "icons/Icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Gym Management",
+      "short_name": "goJim",
+      "description": "Multi-tenant Gym & Fitness SaaS",
+      "url": "portal.html#/gym",
+      "icons": [{ "src": "icons/Icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "BI & Spreadsheets",
+      "short_name": "BI Suite",
+      "description": "Interactive financial underwriting and P&L engines",
+      "url": "portal.html#/tools/spreadsheets",
+      "icons": [{ "src": "icons/Icon-192.png", "sizes": "192x192" }]
+    }
+  ]
+}

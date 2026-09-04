@@ -453,13 +453,13 @@
         const headerPortalBtn = document.getElementById("header-portal-btn");
         if (headerPortalBtn) {
             if (user) {
-                headerPortalBtn.textContent = "Dashboard";
-                headerPortalBtn.href = user.role === "admin" ? "admin-dashboard.html" : "client-dashboard.html";
+                headerPortalBtn.textContent = "Web App Hub";
+                headerPortalBtn.href = user.role === "admin" ? "portal.html#/admin" : "portal.html#/client";
                 headerPortalBtn.classList.remove("btn-secondary");
                 headerPortalBtn.classList.add("btn-primary");
             } else {
-                headerPortalBtn.textContent = "Client Portal";
-                headerPortalBtn.href = "login.html";
+                headerPortalBtn.textContent = "Launch App";
+                headerPortalBtn.href = "portal.html";
                 headerPortalBtn.classList.remove("btn-primary");
                 headerPortalBtn.classList.add("btn-secondary");
             }
@@ -476,11 +476,11 @@
                 mobileDrawer.appendChild(mobilePortalLink);
             }
             if (user) {
-                mobilePortalLink.textContent = "Dashboard";
-                mobilePortalLink.href = user.role === "admin" ? "admin-dashboard.html" : "client-dashboard.html";
+                mobilePortalLink.textContent = "Web App Hub";
+                mobilePortalLink.href = user.role === "admin" ? "portal.html#/admin" : "portal.html#/client";
             } else {
-                mobilePortalLink.textContent = "Client Portal";
-                mobilePortalLink.href = "login.html";
+                mobilePortalLink.textContent = "Launch App";
+                mobilePortalLink.href = "portal.html";
             }
         }
     };
