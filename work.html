@@ -14,15 +14,57 @@
         })();
     </script>
 
-    <title>Portfolio Vault | Shiraj Life</title>
-    <meta name="description" content="A complete directory of production applications, utility scripts, databases, and open-source projects.">
+    <title>Portfolio Vault &amp; Products | Shiraj Life</title>
+    <meta name="description" content="A complete directory of production applications, Etsy digital products, SaaS dashboards, and open-source systems.">
     <link rel="icon" type="image/png" href="favicon.png">
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <link rel="stylesheet" href="shared.css">
     <style>
-        /* Add the 3D transform property to work-card */
+        /* 3D transform property for work-card */
         .work-card {
             transform: perspective(1000px) rotateX(var(--rotate-x, 0deg)) rotateY(var(--rotate-y, 0deg));
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100%;
+        }
+
+        /* Filter Pills */
+        .filter-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: var(--sp-xl);
+        }
+
+        .filter-btn {
+            background: var(--bg-1);
+            border: 1px solid var(--border);
+            color: var(--txt-1);
+            padding: 8px 16px;
+            border-radius: var(--r-full);
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .filter-btn:hover {
+            border-color: var(--border-acc);
+            color: var(--txt-0);
+        }
+
+        .filter-btn.active {
+            background: var(--acc);
+            color: #fff;
+            border-color: var(--acc);
+            box-shadow: 0 0 12px var(--acc-glow);
+        }
+
+        .work-card.is-hidden {
+            display: none !important;
         }
     </style>
 </head>
@@ -90,7 +132,7 @@
     </div>
 
     <main>
-        <!-- ETSY LISTINGS / DIGITAL PRODUCTS -->
+        <!-- 1. ETSY LISTINGS / DIGITAL PRODUCTS -->
         <section style="padding-bottom: var(--sp-xl);">
             <div class="container">
                 <div class="section-header reveal">
@@ -98,8 +140,8 @@
                     <h2 class="section-title">Etsy Listings &amp; Spreadsheet Templates.</h2>
                 </div>
 
-                <div class="work-grid">
-                    <!-- Project: Etsy Spreadsheet Engines -->
+                <div class="work-grid" style="grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));">
+                    <!-- Etsy Product 1: Spreadsheet Engines -->
                     <div class="work-card card-finance reveal" onclick="window.location.href='spreadsheet-services.html'" style="transition-delay: 0.03s; --glow-clr:var(--acc); --glow-clr-glow:var(--acc-glow); --glow-clr-glow-lg:var(--acc-glow-vivid);">
                         <div class="work-card-content">
                             <div class="work-card-meta">
@@ -108,10 +150,10 @@
                                 <span class="tag">Automated BI</span>
                             </div>
                             <h3 class="work-card-title">Spreadsheet &amp; Dashboard Engines</h3>
-                            <p class="work-card-desc">Audit-grade financial calculators, real estate underwriting models, and automated business KPI tracking sheets.</p>
+                            <p class="work-card-desc">Turnkey audit-grade financial calculators, multi-unit real estate underwriting models, and automated business KPI tracking sheets.</p>
                         </div>
                         <div class="work-card-footer">
-                            <span class="btn-text" style="font-size: 0.8rem;">Explore Live Demos</span>
+                            <span class="btn-text" style="font-size: 0.8rem;">Explore Live Models &amp; Demos</span>
                             <svg viewBox="0 0 24 24" style="width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width:2.5;">
                                 <line x1="5" y1="12" x2="19" y2="12" />
                                 <polyline points="12 5 19 12 12 19" />
@@ -122,199 +164,227 @@
             </div>
         </section>
 
-        <!-- APPS & OPEN SOURCE VAULT -->
+        <!-- 2. FULL PORTFOLIO VAULT -->
         <section style="padding-top: 0;">
             <div class="container">
                 <div class="section-header reveal">
-                    <span class="section-eyebrow">Full Vault</span>
-                    <h2 class="section-title">All Apps, Dashboards Open Source Contributions.</h2>
+                    <span class="section-eyebrow">Engineering Vault</span>
+                    <h2 class="section-title">All Applications, SaaS &amp; Systems.</h2>
                 </div>
 
-                <div class="work-grid">
-                    <!-- Project 1: Gym Mentor -->
-                    <div class="work-card card-health reveal" onclick="window.location.href='gym-mentor.html'" style="transition-delay: 0.05s;">
+                <!-- Category Filter Bar -->
+                <div class="filter-bar reveal">
+                    <button class="filter-btn active" data-filter="all">All Products (10)</button>
+                    <button class="filter-btn" data-filter="saas">SaaS &amp; Platforms (2)</button>
+                    <button class="filter-btn" data-filter="mobile">Mobile &amp; Desktop (5)</button>
+                    <button class="filter-btn" data-filter="client">Client Brand Builds (3)</button>
+                    <button class="filter-btn" data-filter="data">Open Data (1)</button>
+                </div>
+
+                <div class="work-grid" id="vault-grid">
+                    <!-- Project 1: goJim B2B Gym Dashboard (SaaS) -->
+                    <div class="work-card card-dev reveal" data-category="saas" onclick="window.location.href='gym-dashboard.html'" style="transition-delay: 0.05s; --glow-clr: #a3e635; --glow-clr-glow: rgba(163, 230, 53, 0.12); --glow-clr-glow-lg: rgba(163, 230, 53, 0.25);">
+                        <div class="work-card-content">
+                            <div class="work-card-meta">
+                                <span class="tag">B2B SaaS</span>
+                                <span class="tag">Firestore</span>
+                            </div>
+                            <h3 class="work-card-title">goJim Management OS</h3>
+                            <p class="work-card-desc">Multi-tenant gym operations platform with role-based simulation, pro-shop POS ledger, and live floor occupancy heatmap telemetry.</p>
+                        </div>
+                        <div class="work-card-footer">
+                            <span class="btn-text" style="font-size: 0.8rem;">View Product &amp; Demo</span>
+                            <svg viewBox="0 0 24 24" style="width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width:2.5;">
+                                <line x1="5" y1="12" x2="19" y2="12" />
+                                <polyline points="12 5 19 12 12 19" />
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- Project 2: Unified Agency & Client Portal (SaaS) -->
+                    <div class="work-card card-dev reveal" data-category="saas" onclick="window.location.href='portal.html'" style="transition-delay: 0.08s; --glow-clr: var(--acc); --glow-clr-glow: var(--acc-glow); --glow-clr-glow-lg: var(--acc-glow-vivid);">
+                        <div class="work-card-content">
+                            <div class="work-card-meta">
+                                <span class="tag">Web Hub</span>
+                                <span class="tag">SPA</span>
+                            </div>
+                            <h3 class="work-card-title">Shiraj Life Agency Portal</h3>
+                            <p class="work-card-desc">Unified client console managing active project milestones, contracts, deliverables review, and embedded tool execution.</p>
+                        </div>
+                        <div class="work-card-footer">
+                            <span class="btn-text" style="font-size: 0.8rem;">Launch Portal Console</span>
+                            <svg viewBox="0 0 24 24" style="width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width:2.5;">
+                                <line x1="5" y1="12" x2="19" y2="12" />
+                                <polyline points="12 5 19 12 12 19" />
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- Project 3: AI Gym Mentor (Mobile) -->
+                    <div class="work-card card-health reveal" data-category="mobile" onclick="window.location.href='gym-mentor.html'" style="transition-delay: 0.1s;">
                         <div class="work-card-content">
                             <div class="work-card-meta">
                                 <span class="tag">Flutter</span>
                                 <span class="tag">SQLite</span>
                             </div>
                             <h3 class="work-card-title">AI Gym Mentor</h3>
-                            <p class="work-card-desc">Offline-first lifting logger and hypertrophy analyzer with local Gemini cache recommendations.</p>
+                            <p class="work-card-desc">Offline-first lifting workout tracker and hypertrophy curve analyzer with on-device Gemini intelligence cache coaching.</p>
                         </div>
                         <div class="work-card-footer">
-                            <span class="btn-text" style="font-size: 0.8rem;">View Details</span>
-                            <svg viewBox="0 0 24 24" style="width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2.5;">
+                            <span class="btn-text" style="font-size: 0.8rem;">View Product &amp; Specs</span>
+                            <svg viewBox="0 0 24 24" style="width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width:2.5;">
                                 <line x1="5" y1="12" x2="19" y2="12" />
                                 <polyline points="12 5 19 12 12 19" />
                             </svg>
                         </div>
                     </div>
 
-                    <!-- Project: goJim B2B Gym Dashboard -->
-                    <div class="work-card card-dev reveal" onclick="window.location.href='gym-dashboard.html'" style="transition-delay: 0.08s; --glow-clr: #a3e635; --glow-clr-glow: rgba(163, 230, 53, 0.12); --glow-clr-glow-lg: rgba(163, 230, 53, 0.25);">
-                        <div class="work-card-content">
-                            <div class="work-card-meta">
-                                <span class="tag">B2B SaaS</span>
-                                <span class="tag">HTML/CSS/JS</span>
-                            </div>
-                            <h3 class="work-card-title">goJim Management</h3>
-                            <p class="work-card-desc">Premium gym operations dashboard demonstrating owner, personal trainer, and student relationship tracking workflows.</p>
-                        </div>
-                        <div class="work-card-footer">
-                            <span class="btn-text" style="font-size: 0.8rem;">View Dashboard Demo</span>
-                            <svg viewBox="0 0 24 24" style="width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2.5;">
-                                <line x1="5" y1="12" x2="19" y2="12" />
-                                <polyline points="12 5 19 12 12 19" />
-                            </svg>
-                        </div>
-                    </div>
-
-                    <!-- Project 2: AI Finance Manager -->
-                    <div class="work-card card-finance reveal" onclick="window.location.href='finance-manager.html'" style="transition-delay: 0.1s;">
+                    <!-- Project 4: AI Finance Manager (Mobile / Python) -->
+                    <div class="work-card card-finance reveal" data-category="mobile" onclick="window.location.href='finance-manager.html'" style="transition-delay: 0.12s;">
                         <div class="work-card-content">
                             <div class="work-card-meta">
                                 <span class="tag">Python</span>
                                 <span class="tag">Pandas</span>
                             </div>
                             <h3 class="work-card-title">AI Finance Manager</h3>
-                            <p class="work-card-desc">Private portfolio tracker parsing local CAS PDFs and mapping risk rebalance tables.</p>
+                            <p class="work-card-desc">Air-gapped personal wealth auditor parsing local CAS PDF statements and computing portfolio tax efficiency tables.</p>
                         </div>
                         <div class="work-card-footer">
-                            <span class="btn-text" style="font-size: 0.8rem;">View Details</span>
-                            <svg viewBox="0 0 24 24" style="width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2.5;">
+                            <span class="btn-text" style="font-size: 0.8rem;">View Product &amp; Specs</span>
+                            <svg viewBox="0 0 24 24" style="width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width:2.5;">
                                 <line x1="5" y1="12" x2="19" y2="12" />
                                 <polyline points="12 5 19 12 12 19" />
                             </svg>
                         </div>
                     </div>
 
-                    <!-- Project: Ritu Designer -->
-                    <div class="work-card card-content reveal" onclick="window.location.href='ritu-designer.html'" style="transition-delay: 0.12s;">
-                        <div class="work-card-content">
-                            <div class="work-card-meta">
-                                <span class="tag">HTML/CSS</span>
-                                <span class="tag">Fashion</span>
-                            </div>
-                            <h3 class="work-card-title">Ritu Designer</h3>
-                            <p class="work-card-desc">Bespoke fashion designer landing page featuring Diwan Fashion House couture and stitching academy.</p>
-                        </div>
-                        <div class="work-card-footer">
-                            <span class="btn-text" style="font-size: 0.8rem;">View Live Demo</span>
-                            <svg viewBox="0 0 24 24" style="width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2.5;">
-                                <line x1="5" y1="12" x2="19" y2="12" />
-                                <polyline points="12 5 19 12 12 19" />
-                            </svg>
-                        </div>
-                    </div>
-
-                    <!-- Project 3: Habit-Flow -->
-                    <div class="work-card card-dev reveal" onclick="window.open('https://github.com/rahulsaroh/Habit-Flow', '_blank')" style="transition-delay: 0.15s;">
+                    <!-- Project 5: Habit-Flow (Mobile) -->
+                    <div class="work-card card-dev reveal" data-category="mobile" onclick="window.location.href='habit-flow.html'" style="transition-delay: 0.15s; --glow-clr: #38bdf8; --glow-clr-glow: rgba(56, 189, 248, 0.12); --glow-clr-glow-lg: rgba(56, 189, 248, 0.25);">
                         <div class="work-card-content">
                             <div class="work-card-meta">
                                 <span class="tag">Flutter</span>
-                                <span class="tag">Dart</span>
+                                <span class="tag">Hive DB</span>
                             </div>
                             <h3 class="work-card-title">Habit-Flow</h3>
-                            <p class="work-card-desc">A premium interactive habit tracking application structured around routine building loops.</p>
+                            <p class="work-card-desc">Interactive daily routine engineering app structured around execution loops, streak momentum, and zero telemetry.</p>
                         </div>
                         <div class="work-card-footer">
-                            <span class="btn-text" style="font-size: 0.8rem;">View on GitHub</span>
-                            <svg viewBox="0 0 24 24" style="width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2.5;">
+                            <span class="btn-text" style="font-size: 0.8rem;">View Product &amp; Specs</span>
+                            <svg viewBox="0 0 24 24" style="width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width:2.5;">
                                 <line x1="5" y1="12" x2="19" y2="12" />
                                 <polyline points="12 5 19 12 12 19" />
                             </svg>
                         </div>
                     </div>
 
-                    <!-- Project 4: Trading-App -->
-                    <div class="work-card card-finance reveal" onclick="window.open('https://github.com/rahulsaroh/Trading-App', '_blank')" style="transition-delay: 0.2s;">
+                    <!-- Project 6: Trading-App (Mobile / FinTech) -->
+                    <div class="work-card card-finance reveal" data-category="mobile" onclick="window.location.href='trading-app.html'" style="transition-delay: 0.18s; --glow-clr: #10b981; --glow-clr-glow: rgba(16, 185, 129, 0.12); --glow-clr-glow-lg: rgba(16, 185, 129, 0.25);">
                         <div class="work-card-content">
                             <div class="work-card-meta">
                                 <span class="tag">Flutter</span>
-                                <span class="tag">Dart</span>
+                                <span class="tag">CustomPainter</span>
                             </div>
                             <h3 class="work-card-title">Trading-App</h3>
-                            <p class="work-card-desc">Modern trading UI application demonstrating mock orders and real-time ledger updates.</p>
+                            <p class="work-card-desc">Modern financial exchange terminal simulator demonstrating live order book depth, candlestick charts, and instant fill flows.</p>
                         </div>
                         <div class="work-card-footer">
-                            <span class="btn-text" style="font-size: 0.8rem;">View on GitHub</span>
-                            <svg viewBox="0 0 24 24" style="width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2.5;">
+                            <span class="btn-text" style="font-size: 0.8rem;">View Product &amp; Specs</span>
+                            <svg viewBox="0 0 24 24" style="width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width:2.5;">
                                 <line x1="5" y1="12" x2="19" y2="12" />
                                 <polyline points="12 5 19 12 12 19" />
                             </svg>
                         </div>
                     </div>
 
-                    <!-- Project 5: Mouse-Click-Updated -->
-                    <div class="work-card card-ai reveal" onclick="window.open('https://github.com/rahulsaroh/Mouse-Click-Updated', '_blank')" style="transition-delay: 0.25s;">
+                    <!-- Project 7: Mouse Click Utility (Desktop) -->
+                    <div class="work-card card-ai reveal" data-category="mobile" onclick="window.location.href='mouse-click-utility.html'" style="transition-delay: 0.2s; --glow-clr: #ef4444; --glow-clr-glow: rgba(239, 68, 68, 0.12); --glow-clr-glow-lg: rgba(239, 68, 68, 0.25);">
                         <div class="work-card-content">
                             <div class="work-card-meta">
-                                <span class="tag">Flutter</span>
-                                <span class="tag">Utility</span>
+                                <span class="tag">Desktop</span>
+                                <span class="tag">Win32 API</span>
                             </div>
                             <h3 class="work-card-title">Mouse Click Utility</h3>
-                            <p class="work-card-desc">A custom productivity companion tool designed to manage background macro mouse clicks.</p>
+                            <p class="work-card-desc">High-frequency cursor macro automation companion with gaussian jitter variance and emergency hotkey kill switches.</p>
                         </div>
                         <div class="work-card-footer">
-                            <span class="btn-text" style="font-size: 0.8rem;">View on GitHub</span>
-                            <svg viewBox="0 0 24 24" style="width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2.5;">
+                            <span class="btn-text" style="font-size: 0.8rem;">View Product &amp; Specs</span>
+                            <svg viewBox="0 0 24 24" style="width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width:2.5;">
                                 <line x1="5" y1="12" x2="19" y2="12" />
                                 <polyline points="12 5 19 12 12 19" />
                             </svg>
                         </div>
                     </div>
 
-                    <!-- Project 6: Free Exercise Database -->
-                    <div class="work-card card-data reveal" onclick="window.open('https://github.com/rahulsaroh/free-exercise-db', '_blank')" style="transition-delay: 0.3s;">
+                    <!-- Project 8: IronPulse Gym (Client) -->
+                    <div class="work-card card-health reveal" data-category="client" onclick="window.location.href='ironpulse-gym.html'" style="transition-delay: 0.22s; --glow-clr: #ff4a1c; --glow-clr-glow: rgba(255, 74, 28, 0.12);">
                         <div class="work-card-content">
                             <div class="work-card-meta">
-                                <span class="tag">Dataset</span>
-                                <span class="tag">JSON</span>
+                                <span class="tag">Client Build</span>
+                                <span class="tag">Fitness Brand</span>
                             </div>
-                            <h3 class="work-card-title">Free Exercise DB</h3>
-                            <p class="work-card-desc">Open-source public domain exercise database detailing over 800 workout movements.</p>
+                            <h3 class="work-card-title">IronPulse Gym</h3>
+                            <p class="work-card-desc">High-performance athletic facility showcase with dynamic duration pricing calculator and training program lead conversion.</p>
                         </div>
                         <div class="work-card-footer">
-                            <span class="btn-text" style="font-size: 0.8rem;">View on GitHub</span>
-                            <svg viewBox="0 0 24 24" style="width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2.5;">
+                            <span class="btn-text" style="font-size: 0.8rem;">View Live Client Site</span>
+                            <svg viewBox="0 0 24 24" style="width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width:2.5;">
                                 <line x1="5" y1="12" x2="19" y2="12" />
                                 <polyline points="12 5 19 12 12 19" />
                             </svg>
                         </div>
                     </div>
 
-                    <!-- Project 7: Exercises Dataset -->
-                    <div class="work-card card-content reveal" onclick="window.open('https://github.com/rahulsaroh/exercises-dataset', '_blank')" style="transition-delay: 0.35s;">
+                    <!-- Project 9: Opulence Salon (Client) -->
+                    <div class="work-card card-content reveal" data-category="client" onclick="window.location.href='opulence-salon.html'" style="transition-delay: 0.25s; --glow-clr: #d4af37; --glow-clr-glow: rgba(212, 175, 55, 0.12);">
                         <div class="work-card-content">
                             <div class="work-card-meta">
-                                <span class="tag">Resources</span>
-                                <span class="tag">Media</span>
+                                <span class="tag">Client Build</span>
+                                <span class="tag">Luxury Beauty</span>
                             </div>
-                            <h3 class="work-card-title">Exercises Dataset</h3>
-                            <p class="work-card-desc">Comprehensive asset files including thumbnails and exercise animation files.</p>
+                            <h3 class="work-card-title">Opulence Salon</h3>
+                            <p class="work-card-desc">Luxury makeover brand portal with interactive 5-column accordion image collage, service rate card, and sliding cart booking drawer.</p>
                         </div>
                         <div class="work-card-footer">
-                            <span class="btn-text" style="font-size: 0.8rem;">View on GitHub</span>
-                            <svg viewBox="0 0 24 24" style="width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2.5;">
+                            <span class="btn-text" style="font-size: 0.8rem;">View Live Client Site</span>
+                            <svg viewBox="0 0 24 24" style="width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width:2.5;">
                                 <line x1="5" y1="12" x2="19" y2="12" />
                                 <polyline points="12 5 19 12 12 19" />
                             </svg>
                         </div>
                     </div>
 
-                    <!-- Project 8: ShirajLife Website -->
-                    <div class="work-card card-dev reveal" onclick="window.open('https://github.com/rahulsaroh/ShirajLife', '_blank')" style="transition-delay: 0.4s;">
+                    <!-- Project 10: Ritu Designer (Client) -->
+                    <div class="work-card card-content reveal" data-category="client" onclick="window.location.href='ritu-designer.html'" style="transition-delay: 0.28s; --glow-clr: #800020; --glow-clr-glow: rgba(128, 0, 32, 0.12);">
                         <div class="work-card-content">
                             <div class="work-card-meta">
-                                <span class="tag">HTML</span>
-                                <span class="tag">CSS</span>
+                                <span class="tag">Client Build</span>
+                                <span class="tag">Bespoke Couture</span>
                             </div>
-                            <h3 class="work-card-title">ShirajLife Hub</h3>
-                            <p class="work-card-desc">Code base of this brand hub, implementing custom 3D glows and theme states.</p>
+                            <h3 class="work-card-title">Ritu Designer</h3>
+                            <p class="work-card-desc">Bespoke fashion designer landing page featuring Diwan Fashion House couture boutique, stitching academy, and order intake.</p>
                         </div>
                         <div class="work-card-footer">
-                            <span class="btn-text" style="font-size: 0.8rem;">View Source Code</span>
-                            <svg viewBox="0 0 24 24" style="width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2.5;">
+                            <span class="btn-text" style="font-size: 0.8rem;">View Live Client Site</span>
+                            <svg viewBox="0 0 24 24" style="width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width:2.5;">
+                                <line x1="5" y1="12" x2="19" y2="12" />
+                                <polyline points="12 5 19 12 12 19" />
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- Project 11: Free Exercise Database & Dataset (Data) -->
+                    <div class="work-card card-data reveal" data-category="data" onclick="window.location.href='exercise-db.html'" style="transition-delay: 0.3s; --glow-clr: #a855f7; --glow-clr-glow: rgba(168, 85, 247, 0.12);">
+                        <div class="work-card-content">
+                            <div class="work-card-meta">
+                                <span class="tag">Open Source</span>
+                                <span class="tag">JSON Dataset</span>
+                            </div>
+                            <h3 class="work-card-title">Free Exercise DB &amp; Dataset</h3>
+                            <p class="work-card-desc">Public domain exercise dataset indexing 800+ movements with anatomical tags, equipment constraints, and demonstration assets.</p>
+                        </div>
+                        <div class="work-card-footer">
+                            <span class="btn-text" style="font-size: 0.8rem;">View Product &amp; Specs</span>
+                            <svg viewBox="0 0 24 24" style="width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width:2.5;">
                                 <line x1="5" y1="12" x2="19" y2="12" />
                                 <polyline points="12 5 19 12 12 19" />
                             </svg>
@@ -337,13 +407,10 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const header = document.getElementById('header');
-
-            /* Scrolled header state */
             window.addEventListener('scroll', () => {
                 header.classList.toggle('scrolled', window.scrollY > 24);
             }, { passive: true });
 
-            /* Theme toggle */
             const themeBtn = document.getElementById('theme-toggle');
             themeBtn.addEventListener('click', () => {
                 const current = document.documentElement.getAttribute('data-theme');
@@ -352,7 +419,6 @@
                 localStorage.setItem('theme', next);
             });
 
-            /* Mobile menu */
             const mobileBtn = document.getElementById('mobile-menu-btn');
             const mobileDrawer = document.getElementById('mobile-drawer');
             const hamburgerSVG = `<svg viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>`;
@@ -363,14 +429,14 @@
                 mobileBtn.innerHTML = hamburgerSVG;
             }
 
-            mobileBtn.addEventListener('click', e => {
+            mobileBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
                 const isOpen = mobileDrawer.classList.toggle('open');
                 mobileBtn.innerHTML = isOpen ? closeSVG : hamburgerSVG;
             });
 
             mobileDrawer.querySelectorAll('.nav-link').forEach(l => l.addEventListener('click', closeDrawer));
-            document.addEventListener('click', e => {
+            document.addEventListener('click', (e) => {
                 if (!mobileDrawer.contains(e.target) && !mobileBtn.contains(e.target)) closeDrawer();
             });
 
@@ -379,42 +445,54 @@
             workCards.forEach(card => {
                 let frameId = null;
 
-                card.addEventListener('mousemove', e => {
-                    if (frameId) {
-                        cancelAnimationFrame(frameId);
-                    }
+                card.addEventListener('mousemove', (e) => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
 
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+
+                    const rotateX = ((y - centerY) / centerY) * -7;
+                    const rotateY = ((x - centerX) / centerX) * 7;
+
+                    if (frameId) cancelAnimationFrame(frameId);
                     frameId = requestAnimationFrame(() => {
-                        const rect = card.getBoundingClientRect();
-                        const x = e.clientX - rect.left;
-                        const y = e.clientY - rect.top;
-
-                        const centerX = rect.width / 2;
-                        const centerY = rect.height / 2;
-
-                        // 12 degrees max tilt
-                        const rotateX = ((centerY - y) / centerY) * 12;
-                        const rotateY = ((x - centerX) / centerX) * 12;
-
-                        card.style.setProperty('--x', `${x}px`);
-                        card.style.setProperty('--y', `${y}px`);
-                        card.style.setProperty('--rotate-x', `${rotateX}deg`);
-                        card.style.setProperty('--rotate-y', `${rotateY}deg`);
+                        card.style.setProperty('--rotate-x', `${rotateX.toFixed(2)}deg`);
+                        card.style.setProperty('--rotate-y', `${rotateY.toFixed(2)}deg`);
                     });
                 });
 
                 card.addEventListener('mouseleave', () => {
-                    if (frameId) {
-                        cancelAnimationFrame(frameId);
-                    }
-                    card.style.setProperty('--rotate-x', '0deg');
-                    card.style.setProperty('--rotate-y', '0deg');
+                    if (frameId) cancelAnimationFrame(frameId);
+                    card.style.setProperty('--rotate-x', `0deg`);
+                    card.style.setProperty('--rotate-y', `0deg`);
+                });
+            });
+
+            /* ─── CATEGORY FILTER LOGIC ─── */
+            const filterBtns = document.querySelectorAll('.filter-btn');
+            const vaultCards = document.querySelectorAll('#vault-grid .work-card');
+
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    filterBtns.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+
+                    const filter = btn.getAttribute('data-filter');
+
+                    vaultCards.forEach(card => {
+                        const cat = card.getAttribute('data-category');
+                        if (filter === 'all' || cat === filter) {
+                            card.classList.remove('is-hidden');
+                        } else {
+                            card.classList.add('is-hidden');
+                        }
+                    });
                 });
             });
         });
     </script>
-    <script src="shared-auth.js"></script>
-<script src="site-interactive.js"></script>
 </body>
 
 </html>

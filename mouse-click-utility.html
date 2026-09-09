@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Anti-FOUC: apply theme before paint -->
+    <script>
+        (function () {
+            var t = localStorage.getItem('theme') ||
+                (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            document.documentElement.setAttribute('data-theme', t);
+        })();
+    </script>
+
+    <title>Mouse Click Automation Utility | Shiraj Life</title>
+    <meta name="description" content="In-depth overview of Mouse Click Utility, a lightweight desktop background macro automation and productivity companion tool.">
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="stylesheet" href="shared.css">
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <header id="header">
+        <div class="container nav-container">
+            <a href="index.html" class="logo" aria-label="Shiraj Life Home">
+                Shiraj<span>Life</span>
+            </a>
+
+            <nav class="nav-links" aria-label="Main Navigation">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="about.html" class="nav-link">About</a>
+                <a href="services.html" class="nav-link">Services</a>
+                <a href="spreadsheet-services.html" class="nav-link">Spreadsheets &amp; BI</a>
+                <a href="work.html" class="nav-link active">My Work</a>
+                <a href="toolkit.html" class="nav-link">Toolkit</a>
+                <a href="clients.html" class="nav-link">Clients</a>
+                <a href="contact.html" class="nav-link">Contact</a>
+            </nav>
+
+            <div class="nav-actions">
+                <a href="login.html" id="header-portal-btn" class="btn btn-secondary" style="padding: 6px 14px; font-size: 0.8rem;">Client Portal</a>
+                <button class="theme-toggle" id="theme-toggle" aria-label="Toggle visual theme">
+                    <svg class="moon-icon" viewBox="0 0 24 24">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+                    </svg>
+                    <svg class="sun-icon" viewBox="0 0 24 24">
+                        <circle cx="12" cy="12" r="5" />
+                        <line x1="12" y1="1" x2="12" y2="3" />
+                        <line x1="12" y1="21" x2="12" y2="23" />
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                        <line x1="1" y1="12" x2="3" y2="12" />
+                        <line x1="21" y1="12" x2="23" y2="12" />
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+                    </svg>
+                </button>
+
+                <button class="mobile-nav-btn" id="mobile-menu-btn" aria-label="Toggle menu navigation drawer">
+                    <svg viewBox="0 0 24 24">
+                        <line x1="3" y1="12" x2="21" y2="12" />
+                        <line x1="3" y1="6" x2="21" y2="6" />
+                        <line x1="3" y1="18" x2="21" y2="18" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- MOBILE DRAWER -->
+    <div class="mobile-drawer" id="mobile-drawer">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="about.html" class="nav-link">About</a>
+        <a href="services.html" class="nav-link">Services</a>
+        <a href="spreadsheet-services.html" class="nav-link">Spreadsheets &amp; BI</a>
+        <a href="work.html" class="nav-link active">My Work</a>
+        <a href="toolkit.html" class="nav-link">Toolkit</a>
+        <a href="clients.html" class="nav-link">Clients</a>
+        <a href="contact.html" class="nav-link">Contact</a>
+    </div>
+
+    <main>
+        <section>
+            <div class="container">
+                <a href="work.html" class="btn-text" style="display: inline-flex; align-items: center; gap: 6px; font-size: 0.85rem; margin-bottom: 24px;">
+                    <svg viewBox="0 0 24 24" style="width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width:2.5;">
+                        <line x1="19" y1="12" x2="5" y2="12" />
+                        <polyline points="12 19 5 12 12 5" />
+                    </svg>
+                    Back to All Work
+                </a>
+
+                <div class="showcase-grid">
+                    <!-- Column 1: Visual Mockup -->
+                    <div class="showcase-visual">
+                        <div style="background: linear-gradient(135deg, rgba(239, 68, 68, 0.08), rgba(249, 115, 22, 0.12)); border-radius: var(--r-md); padding: 32px 24px; text-align: center; border: 1px solid var(--border);">
+                            <div style="display: inline-flex; align-items: center; justify-content: center; width: 80px; height: 80px; border-radius: 20px; background: var(--bg-1); border: 1px solid var(--border); box-shadow: var(--sh-md); margin-bottom: 20px;">
+                                <svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M12 2v6M12 18v4M4.93 4.93l4.24 4.24M14.83 14.83l4.24 4.24M2 12h6M18 12h4M4.93 19.07l4.24-4.24M14.83 9.17l4.24-4.24"/>
+                                    <circle cx="12" cy="12" r="3"/>
+                                </svg>
+                            </div>
+                            <h2 style="font-size: 1.4rem; margin-bottom: 8px;">Mouse Click Utility</h2>
+                            <p style="font-size: 0.88rem; color: var(--txt-1); max-width: 360px; margin: 0 auto 24px;">Configurable low-latency cursor actuation engine with randomized jitter intervals and hotkey overrides.</p>
+                            
+                            <div style="background: var(--bg-0); border-radius: var(--r-md); border: 1px solid var(--border); padding: 16px; text-align: left; font-family: var(--font-mono); font-size: 0.78rem;">
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 8px; padding-bottom: 6px; border-bottom: 1px solid var(--border);">
+                                    <span style="color: var(--txt-2);">Actuation Rate</span>
+                                    <span style="color: #ef4444; font-weight: 700;">1ms – 60,000ms</span>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 8px; padding-bottom: 6px; border-bottom: 1px solid var(--border);">
+                                    <span style="color: var(--txt-2);">Hotkey Control</span>
+                                    <span style="color: var(--txt-0);">F6 Start / F7 Kill</span>
+                                </div>
+                                <div style="display: flex; justify-content: space-between;">
+                                    <span style="color: var(--txt-2);">Resource Footprint</span>
+                                    <span style="color: #10b981;">&lt; 15 MB RAM</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Column 2: Specs & Info -->
+                    <div class="showcase-info">
+                        <div class="showcase-header">
+                            <span class="app-category">Desktop Utility &amp; Automation</span>
+                            <h1>Mouse Click Utility</h1>
+                            <div class="showcase-meta-list">
+                                <span class="tag">Flutter Desktop</span>
+                                <span class="tag">Windows Native</span>
+                                <span class="tag">Win32 API</span>
+                                <span class="tag">Automation</span>
+                            </div>
+                        </div>
+
+                        <div class="showcase-card">
+                            <h3>Overview</h3>
+                            <p>Mouse Click Utility is a lightweight desktop automation companion built to execute precise, repetitive mouse clicks and macro coordinate actions. Tailored for QA engineers running stress-test UI workflows, data entry automation, and hardware testing rigs.</p>
+                            <p>Engineered with zero third-party bloat, ensuring minimal CPU usage and instantaneous response to hardware kill-switch hotkeys.</p>
+                        </div>
+
+                        <div class="showcase-card">
+                            <h3>Key Features</h3>
+                            <ul class="features-list">
+                                <li><strong>Sub-Millisecond Interval Control</strong>: Configurable click delay ranging from high-frequency burst clicks (1ms) to periodic keep-alive intervals.</li>
+                                <li><strong>Randomized Anti-Detection Variance</strong>: Natural gaussian jitter dispersion to simulate authentic human pointer micro-movements.</li>
+                                <li><strong>Global System Hooking</strong>: Intercepts low-level keyboard input to trigger instant emergency pause and kill hotkeys without taking window focus.</li>
+                                <li><strong>Coordinate Path Record &amp; Replay</strong>: Save multi-point click sequences with repeatable step loops.</li>
+                            </ul>
+                        </div>
+
+                        <div class="showcase-card">
+                            <h3>Technical Specs</h3>
+                            <div class="specs-grid">
+                                <div class="spec-item">
+                                    <span>Core Engine</span>
+                                    <span>Flutter Desktop (C++ / Win32)</span>
+                                </div>
+                                <div class="spec-item">
+                                    <span>Native Hooks</span>
+                                    <span>User32.dll Event Injection</span>
+                                </div>
+                                <div class="spec-item">
+                                    <span>Binary Size</span>
+                                    <span>Self-Contained &lt; 20 MB</span>
+                                </div>
+                                <div class="spec-item">
+                                    <span>Platform</span>
+                                    <span>Windows 10 / 11 x64</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; gap: 16px; flex-wrap: wrap;">
+                            <a href="https://github.com/rahulsaroh/Mouse-Click-Updated" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="flex: 1;">
+                                View GitHub Repository
+                            </a>
+                            <a href="contact.html" class="btn btn-secondary">
+                                Request Automation Script
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="container footer-content">
+            <span class="footer-logo">Shiraj<span>Life</span></span>
+            <span class="footer-copy">&copy; 2026 Shiraj. All rights reserved.</span>
+        </div>
+    </footer>
+
+    <!-- SCRIPTS -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const header = document.getElementById('header');
+            window.addEventListener('scroll', () => {
+                header.classList.toggle('scrolled', window.scrollY > 24);
+            }, { passive: true });
+
+            const themeBtn = document.getElementById('theme-toggle');
+            themeBtn.addEventListener('click', () => {
+                const current = document.documentElement.getAttribute('data-theme');
+                const next = current === 'dark' ? 'light' : 'dark';
+                document.documentElement.setAttribute('data-theme', next);
+                localStorage.setItem('theme', next);
+            });
+
+            const mobileBtn = document.getElementById('mobile-menu-btn');
+            const mobileDrawer = document.getElementById('mobile-drawer');
+            const hamburgerSVG = `<svg viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>`;
+            const closeSVG = `<svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`;
+
+            function closeDrawer() {
+                mobileDrawer.classList.remove('open');
+                mobileBtn.innerHTML = hamburgerSVG;
+            }
+
+            mobileBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const isOpen = mobileDrawer.classList.toggle('open');
+                mobileBtn.innerHTML = isOpen ? closeSVG : hamburgerSVG;
+            });
+
+            mobileDrawer.querySelectorAll('.nav-link').forEach(l => l.addEventListener('click', closeDrawer));
+            document.addEventListener('click', (e) => {
+                if (!mobileDrawer.contains(e.target) && !mobileBtn.contains(e.target)) closeDrawer();
+            });
+        });
+    </script>
+</body>
+
+</html>

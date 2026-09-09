@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Anti-FOUC: apply theme before paint -->
+    <script>
+        (function () {
+            var t = localStorage.getItem('theme') ||
+                (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            document.documentElement.setAttribute('data-theme', t);
+        })();
+    </script>
+
+    <title>Free Exercise Database &amp; Dataset | Shiraj Life</title>
+    <meta name="description" content="In-depth overview of the Free Exercise Database and Animation Dataset: 800+ open-source strength movements, anatomical muscle maps, and JSON schemas.">
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="stylesheet" href="shared.css">
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <header id="header">
+        <div class="container nav-container">
+            <a href="index.html" class="logo" aria-label="Shiraj Life Home">
+                Shiraj<span>Life</span>
+            </a>
+
+            <nav class="nav-links" aria-label="Main Navigation">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="about.html" class="nav-link">About</a>
+                <a href="services.html" class="nav-link">Services</a>
+                <a href="spreadsheet-services.html" class="nav-link">Spreadsheets &amp; BI</a>
+                <a href="work.html" class="nav-link active">My Work</a>
+                <a href="toolkit.html" class="nav-link">Toolkit</a>
+                <a href="clients.html" class="nav-link">Clients</a>
+                <a href="contact.html" class="nav-link">Contact</a>
+            </nav>
+
+            <div class="nav-actions">
+                <a href="login.html" id="header-portal-btn" class="btn btn-secondary" style="padding: 6px 14px; font-size: 0.8rem;">Client Portal</a>
+                <button class="theme-toggle" id="theme-toggle" aria-label="Toggle visual theme">
+                    <svg class="moon-icon" viewBox="0 0 24 24">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+                    </svg>
+                    <svg class="sun-icon" viewBox="0 0 24 24">
+                        <circle cx="12" cy="12" r="5" />
+                        <line x1="12" y1="1" x2="12" y2="3" />
+                        <line x1="12" y1="21" x2="12" y2="23" />
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                        <line x1="1" y1="12" x2="3" y2="12" />
+                        <line x1="21" y1="12" x2="23" y2="12" />
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+                    </svg>
+                </button>
+
+                <button class="mobile-nav-btn" id="mobile-menu-btn" aria-label="Toggle menu navigation drawer">
+                    <svg viewBox="0 0 24 24">
+                        <line x1="3" y1="12" x2="21" y2="12" />
+                        <line x1="3" y1="6" x2="21" y2="6" />
+                        <line x1="3" y1="18" x2="21" y2="18" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- MOBILE DRAWER -->
+    <div class="mobile-drawer" id="mobile-drawer">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="about.html" class="nav-link">About</a>
+        <a href="services.html" class="nav-link">Services</a>
+        <a href="spreadsheet-services.html" class="nav-link">Spreadsheets &amp; BI</a>
+        <a href="work.html" class="nav-link active">My Work</a>
+        <a href="toolkit.html" class="nav-link">Toolkit</a>
+        <a href="clients.html" class="nav-link">Clients</a>
+        <a href="contact.html" class="nav-link">Contact</a>
+    </div>
+
+    <main>
+        <section>
+            <div class="container">
+                <a href="work.html" class="btn-text" style="display: inline-flex; align-items: center; gap: 6px; font-size: 0.85rem; margin-bottom: 24px;">
+                    <svg viewBox="0 0 24 24" style="width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width:2.5;">
+                        <line x1="19" y1="12" x2="5" y2="12" />
+                        <polyline points="12 19 5 12 12 5" />
+                    </svg>
+                    Back to All Work
+                </a>
+
+                <div class="showcase-grid">
+                    <!-- Column 1: Visual / Schema Mockup -->
+                    <div class="showcase-visual">
+                        <div style="background: linear-gradient(135deg, rgba(168, 85, 247, 0.08), rgba(59, 130, 246, 0.12)); border-radius: var(--r-md); padding: 32px 24px; text-align: center; border: 1px solid var(--border);">
+                            <div style="display: inline-flex; align-items: center; justify-content: center; width: 80px; height: 80px; border-radius: 20px; background: var(--bg-1); border: 1px solid var(--border); box-shadow: var(--sh-md); margin-bottom: 20px;">
+                                <svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="#a855f7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <ellipse cx="12" cy="5" rx="9" ry="3"/>
+                                    <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/>
+                                    <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/>
+                                </svg>
+                            </div>
+                            <h2 style="font-size: 1.4rem; margin-bottom: 8px;">Free Exercise Database</h2>
+                            <p style="font-size: 0.88rem; color: var(--txt-1); max-width: 360px; margin: 0 auto 24px;">Public domain exercise repository containing 800+ anatomically tagged movements, visual demonstrations, and normalized schemas.</p>
+                            
+                            <div style="background: var(--bg-0); border-radius: var(--r-md); border: 1px solid var(--border); padding: 16px; text-align: left; font-family: var(--font-mono); font-size: 0.78rem;">
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 8px; padding-bottom: 6px; border-bottom: 1px solid var(--border);">
+                                    <span style="color: var(--txt-2);">Indexed Movements</span>
+                                    <span style="color: #a855f7; font-weight: 700;">800+ Exercises</span>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 8px; padding-bottom: 6px; border-bottom: 1px solid var(--border);">
+                                    <span style="color: var(--txt-2);">Target Muscles</span>
+                                    <span style="color: var(--txt-0);">Primary, Secondary, Stabilizers</span>
+                                </div>
+                                <div style="display: flex; justify-content: space-between;">
+                                    <span style="color: var(--txt-2);">Licensing</span>
+                                    <span style="color: #10b981;">MIT / Open Source</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Column 2: Specs & Info -->
+                    <div class="showcase-info">
+                        <div class="showcase-header">
+                            <span class="app-category">Open Data &amp; Athletic Datasets</span>
+                            <h1>Free Exercise DB &amp; Dataset</h1>
+                            <div class="showcase-meta-list">
+                                <span class="tag">JSON Schema</span>
+                                <span class="tag">Dataset</span>
+                                <span class="tag">Biomechanics</span>
+                                <span class="tag">Open Source</span>
+                            </div>
+                        </div>
+
+                        <div class="showcase-card">
+                            <h3>Overview</h3>
+                            <p>Free Exercise DB is an open-source, developer-friendly database created to solve the fragmentation of fitness data. Built to power health and fitness applications, workout trackers, and AI training coaches without vendor lock-in or recurring API subscription fees.</p>
+                            <p>Each movement is mapped with normalized anatomical classifications, equipment constraints, difficulty tiers, and step-by-step execution cues.</p>
+                        </div>
+
+                        <div class="showcase-card">
+                            <h3>Key Features</h3>
+                            <ul class="features-list">
+                                <li><strong>Granular Anatomical Tagging</strong>: Every entry specifies primary agonist, synergist, and stabilizer muscle groups.</li>
+                                <li><strong>Equipment Taxonomy</strong>: Categorized by Barbell, Dumbbell, Cable, Machine, Kettlebell, Bodyweight, and Bands.</li>
+                                <li><strong>Media Assets &amp; Thumbnails</strong>: Accompanied by demonstration assets and execution animation frames.</li>
+                                <li><strong>Zero-Dependency Import</strong>: Ready-to-use structured JSON schemas compatible with SQLite, PostgreSQL, Firestore, and Pandas.</li>
+                            </ul>
+                        </div>
+
+                        <div class="showcase-card">
+                            <h3>Technical Specs</h3>
+                            <div class="specs-grid">
+                                <div class="spec-item">
+                                    <span>Format</span>
+                                    <span>Normalized JSON &amp; CSV</span>
+                                </div>
+                                <div class="spec-item">
+                                    <span>Total Records</span>
+                                    <span>800+ Verified Movements</span>
+                                </div>
+                                <div class="spec-item">
+                                    <span>License</span>
+                                    <span>MIT Permissive License</span>
+                                </div>
+                                <div class="spec-item">
+                                    <span>Integrations</span>
+                                    <span>Used in AI Gym Mentor &amp; goJim</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; gap: 16px; flex-wrap: wrap;">
+                            <a href="https://github.com/rahulsaroh/free-exercise-db" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="flex: 1;">
+                                Free Exercise DB Repository
+                            </a>
+                            <a href="https://github.com/rahulsaroh/exercises-dataset" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">
+                                Exercises Media Dataset
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="container footer-content">
+            <span class="footer-logo">Shiraj<span>Life</span></span>
+            <span class="footer-copy">&copy; 2026 Shiraj. All rights reserved.</span>
+        </div>
+    </footer>
+
+    <!-- SCRIPTS -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const header = document.getElementById('header');
+            window.addEventListener('scroll', () => {
+                header.classList.toggle('scrolled', window.scrollY > 24);
+            }, { passive: true });
+
+            const themeBtn = document.getElementById('theme-toggle');
+            themeBtn.addEventListener('click', () => {
+                const current = document.documentElement.getAttribute('data-theme');
+                const next = current === 'dark' ? 'light' : 'dark';
+                document.documentElement.setAttribute('data-theme', next);
+                localStorage.setItem('theme', next);
+            });
+
+            const mobileBtn = document.getElementById('mobile-menu-btn');
+            const mobileDrawer = document.getElementById('mobile-drawer');
+            const hamburgerSVG = `<svg viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>`;
+            const closeSVG = `<svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`;
+
+            function closeDrawer() {
+                mobileDrawer.classList.remove('open');
+                mobileBtn.innerHTML = hamburgerSVG;
+            }
+
+            mobileBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const isOpen = mobileDrawer.classList.toggle('open');
+                mobileBtn.innerHTML = isOpen ? closeSVG : hamburgerSVG;
+            });
+
+            mobileDrawer.querySelectorAll('.nav-link').forEach(l => l.addEventListener('click', closeDrawer));
+            document.addEventListener('click', (e) => {
+                if (!mobileDrawer.contains(e.target) && !mobileBtn.contains(e.target)) closeDrawer();
+            });
+        });
+    </script>
+</body>
+
+</html>
