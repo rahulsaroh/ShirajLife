@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<!-- Anti-FOUC: apply theme before paint -->
+	<script>
+		(function () {
+			var t = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+			document.documentElement.setAttribute('data-theme', t);
+		})();
+	</script>
+
+	<title>ProVideo Camera Lab — Shiraj Life</title>
+	<meta name="description" content="Overview of ProVideo Camera Lab: High-framerate video recording, sensor diagnostics, and AI camera calibration.">
+	<link rel="icon" type="image/png" href="favicon.png">
+	<link rel="icon" type="image/x-icon" href="favicon.ico">
+	<link rel="stylesheet" href="shared.css">
+</head>
+
+<body>
+
+	<!-- HEADER -->
+	<header id="header">
+		<div class="container nav-container">
+			<a href="index.html" class="logo" aria-label="Shiraj Life Home">
+				Shiraj<span>Life</span>
+			</a>
+
+			<nav class="nav-links" aria-label="Main Navigation">
+				<a href="index.html" class="nav-link">Home</a>
+				<a href="about.html" class="nav-link">About</a>
+				<a href="services.html" class="nav-link">Services</a>
+				<a href="spreadsheet-services.html" class="nav-link">Spreadsheets &amp; BI</a>
+				<a href="work.html" class="nav-link active">My Work</a>
+				<a href="toolkit.html" class="nav-link">Toolkit</a>
+				<a href="clients.html" class="nav-link">Clients</a>
+				<a href="contact.html" class="nav-link">Contact</a>
+			</nav>
+
+			<div class="nav-actions">
+				<a href="login.html" id="header-portal-btn" class="btn btn-secondary" style="padding: 6px 14px; font-size: 0.8rem;">Client Portal</a>
+				<button class="theme-toggle" id="theme-toggle" aria-label="Toggle visual theme">
+					<svg class="moon-icon" viewBox="0 0 24 24">
+						<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+					</svg>
+					<svg class="sun-icon" viewBox="0 0 24 24">
+						<circle cx="12" cy="12" r="5" />
+						<line x1="12" y1="1" x2="12" y2="3" />
+						<line x1="12" y1="21" x2="12" y2="23" />
+						<line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+						<line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+						<line x1="1" y1="12" x2="3" y2="12" />
+						<line x1="21" y1="12" x2="23" y2="12" />
+						<line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+						<line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+					</svg>
+				</button>
+
+				<button class="mobile-nav-btn" id="mobile-menu-btn" aria-label="Toggle menu navigation drawer">
+					<svg viewBox="0 0 24 24">
+						<line x1="3" y1="12" x2="21" y2="12" />
+						<line x1="3" y1="6" x2="21" y2="6" />
+						<line x1="3" y1="18" x2="21" y2="18" />
+					</svg>
+				</button>
+			</div>
+		</div>
+	</header>
+
+	<!-- MOBILE DRAWER -->
+	<div class="mobile-drawer" id="mobile-drawer">
+		<a href="index.html" class="nav-link">Home</a>
+		<a href="about.html" class="nav-link">About</a>
+		<a href="services.html" class="nav-link">Services</a>
+		<a href="spreadsheet-services.html" class="nav-link">Spreadsheets &amp; BI</a>
+		<a href="work.html" class="nav-link active">My Work</a>
+		<a href="toolkit.html" class="nav-link">Toolkit</a>
+		<a href="clients.html" class="nav-link">Clients</a>
+		<a href="contact.html" class="nav-link">Contact</a>
+	</div>
+
+	<main>
+		<section>
+			<div class="container">
+				<div class="showcase-grid">
+					<!-- Visual Card -->
+					<div class="showcase-visual" style="background: var(--bg-1); border: 1px solid var(--border-acc); border-radius: var(--r-xl); padding: var(--sp-xl); display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; position: relative; overflow: hidden; min-height: 380px;">
+						<div style="position: absolute; inset: 0; background: radial-gradient(circle at center, rgba(236, 72, 153, 0.15) 0%, transparent 70%); pointer-events: none;"></div>
+						<div style="width: 72px; height: 72px; background: rgba(236, 72, 153, 0.15); border: 1px solid rgba(236, 72, 153, 0.4); border-radius: var(--r-lg); display: flex; align-items: center; justify-content: center; margin-bottom: 20px; box-shadow: 0 0 24px rgba(236, 72, 153, 0.25);">
+							<svg viewBox="0 0 24 24" style="width: 36px; height: 36px; fill: none; stroke: #ec4899; stroke-width: 2;">
+								<polygon points="23 7 16 12 23 17 23 7" />
+								<rect x="1" y="5" width="15" height="14" rx="2" ry="2" />
+							</svg>
+						</div>
+						<h2 style="font-family: var(--font-display); font-size: 1.6rem; font-weight: 800; margin-bottom: 8px;">ProVideo Camera Lab</h2>
+						<p style="font-family: var(--font-mono); font-size: 0.8rem; color: #ec4899; margin-bottom: 20px;">Real-Time Capture &amp; Gemini Vision</p>
+						<div style="display: flex; gap: 8px; flex-wrap: wrap; justify-content: center;">
+							<span class="tag" style="background: rgba(236, 72, 153, 0.1); border-color: rgba(236, 72, 153, 0.3); color: #ec4899;">4K WebRTC</span>
+							<span class="tag" style="background: rgba(236, 72, 153, 0.1); border-color: rgba(236, 72, 153, 0.3); color: #ec4899;">Gemini Vision</span>
+							<span class="tag" style="background: rgba(236, 72, 153, 0.1); border-color: rgba(236, 72, 153, 0.3); color: #ec4899;">Sensor Stats</span>
+						</div>
+					</div>
+
+					<!-- Specs & Details -->
+					<div class="showcase-info">
+						<div class="showcase-header">
+							<span class="app-category">Media Engineering &amp; AI Vision</span>
+							<h1>ProVideo Camera &amp; Diagnostics Lab</h1>
+							<div class="showcase-meta-list">
+								<span class="tag">React</span>
+								<span class="tag">TypeScript</span>
+								<span class="tag">Vite</span>
+								<span class="tag">Google GenAI SDK</span>
+								<span class="tag">MediaStream API</span>
+							</div>
+						</div>
+
+						<div class="showcase-card">
+							<h3>Architecture Overview</h3>
+							<p>ProVideo Camera Lab is a professional web-based video recording, resolution benchmarking, and automated camera calibration suite. Built on React and Vite with Google's `@google/genai` vision models, it evaluates real-time optical streams for color fidelity, sharpness, and latency.</p>
+							<p>The system includes a Python test runner harness (`check_video.py`) that captures raw frames, performs automated FPS stress-tests, and verifies video codec containers.</p>
+						</div>
+
+						<div class="showcase-card">
+							<h3>Key Capabilities</h3>
+							<ul class="features-list">
+								<li><strong>Live Hardware Sensor Telemetry</strong>: Streams real-time frame rates, exposure balance, bitrate consumption, and dropped frame graphs.</li>
+								<li><strong>Gemini Optical Analysis</strong>: Interrogates video frames with multimodal AI to detect optical blur, composition balance, and lighting artifacts.</li>
+								<li><strong>Multi-Track Audio &amp; Video Isolation</strong>: Clean media container splitting for lossless audio recording and synchronized video encoding.</li>
+								<li><strong>Automated Python Test Rig</strong>: Headless CLI verification ensuring hardware encoders remain stable under high-resolution loads.</li>
+							</ul>
+						</div>
+
+						<div class="showcase-card">
+							<h3>Technical Specifications</h3>
+							<div class="specs-grid">
+								<div class="spec-item">
+									<span>Frontend Engine</span>
+									<span>React 18 + Vite + TypeScript</span>
+								</div>
+								<div class="spec-item">
+									<span>AI Diagnostics</span>
+									<span>Google Gemini Multimodal Vision</span>
+								</div>
+								<div class="spec-item">
+									<span>Media Engine</span>
+									<span>HTML5 MediaRecorder &amp; Canvas API</span>
+								</div>
+								<div class="spec-item">
+									<span>Automation</span>
+									<span>Python 3 OpenCV Test Scripts</span>
+								</div>
+							</div>
+						</div>
+
+						<div style="display: flex; gap: 16px; margin-top: var(--sp-md); flex-wrap: wrap;">
+							<a href="https://github.com/rahulsaroh/Video-Recording" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="flex: 1; justify-content: center; display: inline-flex; align-items: center; gap: 8px;">
+								<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+									<path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/>
+								</svg>
+								<span>View GitHub Repository</span>
+							</a>
+							<a href="work.html" class="btn btn-secondary">
+								← All Projects
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+	</main>
+
+	<!-- FOOTER -->
+	<footer>
+		<div class="container footer-content">
+			<span class="footer-logo">Shiraj<span>Life</span></span>
+			<span class="footer-copy">&copy; 2026 Shiraj. All rights reserved.</span>
+		</div>
+	</footer>
+
+	<!-- SCRIPTS -->
+	<script>
+		document.addEventListener('DOMContentLoaded', () => {
+			const header = document.getElementById('header');
+			window.addEventListener('scroll', () => {
+				header.classList.toggle('scrolled', window.scrollY > 24);
+			}, { passive: true });
+
+			const themeBtn = document.getElementById('theme-toggle');
+			themeBtn.addEventListener('click', () => {
+				const current = document.documentElement.getAttribute('data-theme');
+				const next = current === 'dark' ? 'light' : 'dark';
+				document.documentElement.setAttribute('data-theme', next);
+				localStorage.setItem('theme', next);
+			});
+
+			const mobileBtn = document.getElementById('mobile-menu-btn');
+			const mobileDrawer = document.getElementById('mobile-drawer');
+			const hamburgerSVG = `<svg viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>`;
+			const closeSVG = `<svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`;
+
+			function closeDrawer() {
+				mobileDrawer.classList.remove('open');
+				mobileBtn.innerHTML = hamburgerSVG;
+			}
+
+			mobileBtn.addEventListener('click', (e) => {
+				e.stopPropagation();
+				const isOpen = mobileDrawer.classList.toggle('open');
+				mobileBtn.innerHTML = isOpen ? closeSVG : hamburgerSVG;
+			});
+
+			mobileDrawer.querySelectorAll('.nav-link').forEach(l => l.addEventListener('click', closeDrawer));
+			document.addEventListener('click', (e) => {
+				if (!mobileDrawer.contains(e.target) && !mobileBtn.contains(e.target)) closeDrawer();
+			});
+		});
+	</script>
+	<script src="shared-auth.js"></script>
+</body>
+
+</html>

@@ -132,264 +132,481 @@
     </div>
 
     <main>
-        <!-- 1. ETSY LISTINGS / DIGITAL PRODUCTS -->
-        <section style="padding-bottom: var(--sp-xl);">
-            <div class="container">
-                <div class="section-header reveal">
-                    <span class="section-eyebrow">Digital Products</span>
-                    <h2 class="section-title">Etsy Listings &amp; Spreadsheet Templates.</h2>
-                </div>
+		<!-- 0. ENGINEERING CASE STUDIES -->
+		<section style="padding-top: calc(var(--nav-h) + var(--sp-xl)); padding-bottom: var(--sp-xl);">
+			<div class="container">
+				<div class="section-header reveal">
+					<span class="section-eyebrow">Engineering Case Studies</span>
+					<h1 class="section-title">Bottleneck → Architecture → Measured Result.</h1>
+					<p class="section-subtitle">How each flagship system handles real-world constraints, offline edge cases, and audit-grade accuracy.</p>
+				</div>
 
-                <div class="work-grid" style="grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));">
-                    <!-- Etsy Product 1: Spreadsheet Engines -->
-                    <div class="work-card card-finance reveal" onclick="window.location.href='spreadsheet-services.html'" style="transition-delay: 0.03s; --glow-clr:var(--acc); --glow-clr-glow:var(--acc-glow); --glow-clr-glow-lg:var(--acc-glow-vivid);">
-                        <div class="work-card-content">
-                            <div class="work-card-meta">
-                                <span class="tag">Etsy Listings</span>
-                                <span class="tag">Financial Models</span>
-                                <span class="tag">Automated BI</span>
-                            </div>
-                            <h3 class="work-card-title">Spreadsheet &amp; Dashboard Engines</h3>
-                            <p class="work-card-desc">Turnkey audit-grade financial calculators, multi-unit real estate underwriting models, and automated business KPI tracking sheets.</p>
-                        </div>
-                        <div class="work-card-footer">
-                            <span class="btn-text" style="font-size: 0.8rem;">Explore Live Models &amp; Demos</span>
-                            <svg viewBox="0 0 24 24" style="width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width:2.5;">
-                                <line x1="5" y1="12" x2="19" y2="12" />
-                                <polyline points="12 5 19 12 12 19" />
-                            </svg>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+				<div class="work-grid" style="grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));">
+					<div class="work-card card-dev reveal" onclick="window.location.href='portal.html#/gym'" style="--glow-clr: var(--acc); --glow-clr-glow: var(--acc-glow); --glow-clr-glow-lg: var(--acc-glow-vivid);">
+						<div class="work-card-content">
+							<div class="work-card-meta">
+								<span class="tag">Case Study 01</span>
+								<span class="tag">Flutter + SQLite</span>
+								<span class="tag">RFID Hardware</span>
+							</div>
+							<h3 class="work-card-title">goJim Management OS</h3>
+							<div style="display:grid; gap:8px; font-size:0.82rem; color:var(--txt-1); margin-top:10px;">
+								<div><strong style="color:var(--txt-0);">Bottleneck:</strong> Gym turnstiles stalled during Wi-Fi drops; manual Excel billing leaked renewals.</div>
+								<div><strong style="color:var(--txt-0);">Architecture:</strong> Local-first SQLite queue + deterministic RFID debounce + background sync.</div>
+								<div><strong style="color:var(--txt-0);">Edge Case:</strong> Double-tap turnstile bursts &amp; mid-month plan freezes reconciled idempotently.</div>
+								<div><strong style="color:var(--acc);">Result:</strong> 140+ daily check-ins at &lt;15ms latency · ₹2.8L+/mo automated billing.</div>
+							</div>
+						</div>
+						<div class="work-card-footer">
+							<span class="btn-text" style="font-size: 0.8rem;">Inspect goJim Architecture</span>
+							<svg viewBox="0 0 24 24" style="width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2.5;"><line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" /></svg>
+						</div>
+					</div>
 
-        <!-- 2. FULL PORTFOLIO VAULT -->
-        <section style="padding-top: 0;">
-            <div class="container">
-                <div class="section-header reveal">
-                    <span class="section-eyebrow">Engineering Vault</span>
-                    <h2 class="section-title">All Applications, SaaS &amp; Systems.</h2>
-                </div>
+					<div class="work-card card-finance reveal" onclick="window.location.href='finance-manager.html'" style="transition-delay:0.05s; --glow-clr: #10b981; --glow-clr-glow: rgba(16, 185, 129, 0.12); --glow-clr-glow-lg: rgba(16, 185, 129, 0.25);">
+						<div class="work-card-content">
+							<div class="work-card-meta">
+								<span class="tag">Case Study 02</span>
+								<span class="tag">Zero-Cloud WASM</span>
+								<span class="tag">FinTech</span>
+							</div>
+							<h3 class="work-card-title">AI Finance Manager (CAS Engine)</h3>
+							<div style="display:grid; gap:8px; font-size:0.82rem; color:var(--txt-1); margin-top:10px;">
+								<div><strong style="color:var(--txt-0);">Bottleneck:</strong> Retail investors refuse uploading password-locked NSDL/CDSL PDFs to third-party servers.</div>
+								<div><strong style="color:var(--txt-0);">Architecture:</strong> In-browser PDF decryption + Newton-Raphson XIRR solver + FIFO tax lot matcher.</div>
+								<div><strong style="color:var(--txt-0);">Edge Case:</strong> Multi-folio ISIN mergers, dividend reinvestments &amp; FY26 STCG/LTCG grandfathering.</div>
+								<div><strong style="color:var(--acc);">Result:</strong> 100% offline parsing in &lt;50ms · Zero bytes transmitted off-device.</div>
+							</div>
+						</div>
+						<div class="work-card-footer">
+							<span class="btn-text" style="font-size: 0.8rem;">Inspect CAS Engine</span>
+							<svg viewBox="0 0 24 24" style="width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2.5;"><line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" /></svg>
+						</div>
+					</div>
 
-                <!-- Category Filter Bar -->
-                <div class="filter-bar reveal">
-                    <button class="filter-btn active" data-filter="all">All Products (10)</button>
-                    <button class="filter-btn" data-filter="saas">SaaS &amp; Platforms (2)</button>
-                    <button class="filter-btn" data-filter="mobile">Mobile &amp; Desktop (5)</button>
-                    <button class="filter-btn" data-filter="client">Client Brand Builds (3)</button>
-                    <button class="filter-btn" data-filter="data">Open Data (1)</button>
-                </div>
+					<div class="work-card card-dev reveal" onclick="window.location.href='allotment-system.html'" style="transition-delay:0.1s; --glow-clr: #38bdf8; --glow-clr-glow: rgba(56, 189, 248, 0.12); --glow-clr-glow-lg: rgba(56, 189, 248, 0.25);">
+						<div class="work-card-content">
+							<div class="work-card-meta">
+								<span class="tag">Case Study 03</span>
+								<span class="tag">Gov Audit</span>
+								<span class="tag">Python + SQL</span>
+							</div>
+							<h3 class="work-card-title">Quarters Allotment &amp; Audit OS</h3>
+							<div style="display:grid; gap:8px; font-size:0.82rem; color:var(--txt-1); margin-top:10px;">
+								<div><strong style="color:var(--txt-0);">Bottleneck:</strong> Manual seniority rosters &amp; housing allotment ledgers caused audit discrepancies.</div>
+								<div><strong style="color:var(--txt-0);">Architecture:</strong> Immutable append-only audit log + deterministic priority queue rules engine.</div>
+								<div><strong style="color:var(--txt-0);">Edge Case:</strong> Retroactive grade revisions &amp; mid-cycle surrender/retention overrides.</div>
+								<div><strong style="color:var(--acc);">Result:</strong> 100% traceable allotment decisions · Zero audit objections.</div>
+							</div>
+						</div>
+						<div class="work-card-footer">
+							<span class="btn-text" style="font-size: 0.8rem;">Inspect Audit System</span>
+							<svg viewBox="0 0 24 24" style="width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2.5;"><line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" /></svg>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
 
-                <div class="work-grid" id="vault-grid">
-                    <!-- Project 1: goJim B2B Gym Dashboard (SaaS) -->
-                    <div class="work-card card-dev reveal" data-category="saas" onclick="window.location.href='gym-dashboard.html'" style="transition-delay: 0.05s; --glow-clr: #a3e635; --glow-clr-glow: rgba(163, 230, 53, 0.12); --glow-clr-glow-lg: rgba(163, 230, 53, 0.25);">
-                        <div class="work-card-content">
-                            <div class="work-card-meta">
-                                <span class="tag">B2B SaaS</span>
-                                <span class="tag">Firestore</span>
-                            </div>
-                            <h3 class="work-card-title">goJim Management OS</h3>
-                            <p class="work-card-desc">Multi-tenant gym operations platform with role-based simulation, pro-shop POS ledger, and live floor occupancy heatmap telemetry.</p>
-                        </div>
-                        <div class="work-card-footer">
-                            <span class="btn-text" style="font-size: 0.8rem;">View Product &amp; Demo</span>
-                            <svg viewBox="0 0 24 24" style="width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width:2.5;">
-                                <line x1="5" y1="12" x2="19" y2="12" />
-                                <polyline points="12 5 19 12 12 19" />
-                            </svg>
-                        </div>
-                    </div>
+		<!-- 1. ETSY LISTINGS / DIGITAL PRODUCTS -->
+		<section style="padding-bottom: var(--sp-xl);">
+			<div class="container">
+				<div class="section-header reveal">
+					<span class="section-eyebrow">Digital Products &amp; Financial Models</span>
+					<h2 class="section-title">Etsy Listings &amp; Spreadsheet Engines.</h2>
+				</div>
 
-                    <!-- Project 2: Unified Agency & Client Portal (SaaS) -->
-                    <div class="work-card card-dev reveal" data-category="saas" onclick="window.location.href='portal.html'" style="transition-delay: 0.08s; --glow-clr: var(--acc); --glow-clr-glow: var(--acc-glow); --glow-clr-glow-lg: var(--acc-glow-vivid);">
-                        <div class="work-card-content">
-                            <div class="work-card-meta">
-                                <span class="tag">Web Hub</span>
-                                <span class="tag">SPA</span>
-                            </div>
-                            <h3 class="work-card-title">Shiraj Life Agency Portal</h3>
-                            <p class="work-card-desc">Unified client console managing active project milestones, contracts, deliverables review, and embedded tool execution.</p>
-                        </div>
-                        <div class="work-card-footer">
-                            <span class="btn-text" style="font-size: 0.8rem;">Launch Portal Console</span>
-                            <svg viewBox="0 0 24 24" style="width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width:2.5;">
-                                <line x1="5" y1="12" x2="19" y2="12" />
-                                <polyline points="12 5 19 12 12 19" />
-                            </svg>
-                        </div>
-                    </div>
+				<div class="work-grid" style="grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));">
+					<!-- Etsy Product 1: Airbnb Deal Analyzer PRO -->
+					<div class="work-card card-finance reveal" onclick="window.location.href='spreadsheet-services.html#airbnb-pro'" style="transition-delay: 0.03s; --glow-clr: #10b981; --glow-clr-glow: rgba(16, 185, 129, 0.12); --glow-clr-glow-lg: rgba(16, 185, 129, 0.25);">
+						<div class="work-card-content">
+							<div class="work-card-meta">
+								<span class="tag">Etsy Best Seller</span>
+								<span class="tag">Real Estate STR</span>
+								<span class="tag">Excel &amp; Sheets</span>
+							</div>
+							<h3 class="work-card-title">Airbnb Deal Analyzer PRO</h3>
+							<p class="work-card-desc">Institutional STR underwriting engine calculating seasonality revenue, Cap Rate, Cash-on-Cash, 10-yr projections, and 1-page lender pitch deck.</p>
+						</div>
+						<div class="work-card-footer">
+							<span class="btn-text" style="font-size: 0.8rem;">Explore Model &amp; Live Demo</span>
+							<svg viewBox="0 0 24 24" style="width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2.5;">
+								<line x1="5" y1="12" x2="19" y2="12" />
+								<polyline points="12 5 19 12 12 19" />
+							</svg>
+						</div>
+					</div>
 
-                    <!-- Project 3: AI Gym Mentor (Mobile) -->
-                    <div class="work-card card-health reveal" data-category="mobile" onclick="window.location.href='gym-mentor.html'" style="transition-delay: 0.1s;">
-                        <div class="work-card-content">
-                            <div class="work-card-meta">
-                                <span class="tag">Flutter</span>
-                                <span class="tag">SQLite</span>
-                            </div>
-                            <h3 class="work-card-title">AI Gym Mentor</h3>
-                            <p class="work-card-desc">Offline-first lifting workout tracker and hypertrophy curve analyzer with on-device Gemini intelligence cache coaching.</p>
-                        </div>
-                        <div class="work-card-footer">
-                            <span class="btn-text" style="font-size: 0.8rem;">View Product &amp; Specs</span>
-                            <svg viewBox="0 0 24 24" style="width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width:2.5;">
-                                <line x1="5" y1="12" x2="19" y2="12" />
-                                <polyline points="12 5 19 12 12 19" />
-                            </svg>
-                        </div>
-                    </div>
+					<!-- Etsy Product 2: BRRRR Deal Analyzer PRO -->
+					<div class="work-card card-finance reveal" onclick="window.location.href='spreadsheet-services.html#brrrr-pro'" style="transition-delay: 0.06s; --glow-clr: #38bdf8; --glow-clr-glow: rgba(56, 189, 248, 0.12); --glow-clr-glow-lg: rgba(56, 189, 248, 0.25);">
+						<div class="work-card-content">
+							<div class="work-card-meta">
+								<span class="tag">Etsy Digital</span>
+								<span class="tag">BRRRR Strategy</span>
+								<span class="tag">Multi-Unit</span>
+							</div>
+							<h3 class="work-card-title">BRRRR Deal Analyzer PRO</h3>
+							<p class="work-card-desc">Complete Buy, Rehab, Rent, Refinance, Repeat framework with holding cost engine, cash-out recovery, and long-term equity compounding models.</p>
+						</div>
+						<div class="work-card-footer">
+							<span class="btn-text" style="font-size: 0.8rem;">Explore Model &amp; Live Demo</span>
+							<svg viewBox="0 0 24 24" style="width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2.5;">
+								<line x1="5" y1="12" x2="19" y2="12" />
+							<polyline points="12 5 19 12 12 19" />
+							</svg>
+						</div>
+					</div>
 
-                    <!-- Project 4: AI Finance Manager (Mobile / Python) -->
-                    <div class="work-card card-finance reveal" data-category="mobile" onclick="window.location.href='finance-manager.html'" style="transition-delay: 0.12s;">
-                        <div class="work-card-content">
-                            <div class="work-card-meta">
-                                <span class="tag">Python</span>
-                                <span class="tag">Pandas</span>
-                            </div>
-                            <h3 class="work-card-title">AI Finance Manager</h3>
-                            <p class="work-card-desc">Air-gapped personal wealth auditor parsing local CAS PDF statements and computing portfolio tax efficiency tables.</p>
-                        </div>
-                        <div class="work-card-footer">
-                            <span class="btn-text" style="font-size: 0.8rem;">View Product &amp; Specs</span>
-                            <svg viewBox="0 0 24 24" style="width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width:2.5;">
-                                <line x1="5" y1="12" x2="19" y2="12" />
-                                <polyline points="12 5 19 12 12 19" />
-                            </svg>
-                        </div>
-                    </div>
+					<!-- Digital Product 3: DeepFlow Timer -->
+					<div class="work-card card-dev reveal" onclick="window.location.href='deepflow.html'" style="transition-delay: 0.09s; --glow-clr: var(--acc); --glow-clr-glow: var(--acc-glow); --glow-clr-glow-lg: var(--acc-glow-vivid);">
+						<div class="work-card-content">
+							<div class="work-card-meta">
+								<span class="tag">Gumroad App</span>
+								<span class="tag">Focus Utility</span>
+								<span class="tag">Flutter</span>
+							</div>
+							<h3 class="work-card-title">DeepFlow Productivity Timer</h3>
+							<p class="work-card-desc">Minimalist, sound-engineered Pomodoro &amp; deep-work execution timer with session telemetry and zero distractions.</p>
+						</div>
+						<div class="work-card-footer">
+							<span class="btn-text" style="font-size: 0.8rem;">View Product &amp; Specs</span>
+							<svg viewBox="0 0 24 24" style="width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2.5;">
+								<line x1="5" y1="12" x2="19" y2="12" />
+								<polyline points="12 5 19 12 12 19" />
+							</svg>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
 
-                    <!-- Project 5: Habit-Flow (Mobile) -->
-                    <div class="work-card card-dev reveal" data-category="mobile" onclick="window.location.href='habit-flow.html'" style="transition-delay: 0.15s; --glow-clr: #38bdf8; --glow-clr-glow: rgba(56, 189, 248, 0.12); --glow-clr-glow-lg: rgba(56, 189, 248, 0.25);">
-                        <div class="work-card-content">
-                            <div class="work-card-meta">
-                                <span class="tag">Flutter</span>
-                                <span class="tag">Hive DB</span>
-                            </div>
-                            <h3 class="work-card-title">Habit-Flow</h3>
-                            <p class="work-card-desc">Interactive daily routine engineering app structured around execution loops, streak momentum, and zero telemetry.</p>
-                        </div>
-                        <div class="work-card-footer">
-                            <span class="btn-text" style="font-size: 0.8rem;">View Product &amp; Specs</span>
-                            <svg viewBox="0 0 24 24" style="width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width:2.5;">
-                                <line x1="5" y1="12" x2="19" y2="12" />
-                                <polyline points="12 5 19 12 12 19" />
-                            </svg>
-                        </div>
-                    </div>
+		<!-- 2. FULL PORTFOLIO VAULT -->
+		<section style="padding-top: 0;">
+			<div class="container">
+				<div class="section-header reveal">
+					<span class="section-eyebrow">Engineering Vault</span>
+					<h2 class="section-title">All Applications, SaaS &amp; Systems.</h2>
+				</div>
 
-                    <!-- Project 6: Trading-App (Mobile / FinTech) -->
-                    <div class="work-card card-finance reveal" data-category="mobile" onclick="window.location.href='trading-app.html'" style="transition-delay: 0.18s; --glow-clr: #10b981; --glow-clr-glow: rgba(16, 185, 129, 0.12); --glow-clr-glow-lg: rgba(16, 185, 129, 0.25);">
-                        <div class="work-card-content">
-                            <div class="work-card-meta">
-                                <span class="tag">Flutter</span>
-                                <span class="tag">CustomPainter</span>
-                            </div>
-                            <h3 class="work-card-title">Trading-App</h3>
-                            <p class="work-card-desc">Modern financial exchange terminal simulator demonstrating live order book depth, candlestick charts, and instant fill flows.</p>
-                        </div>
-                        <div class="work-card-footer">
-                            <span class="btn-text" style="font-size: 0.8rem;">View Product &amp; Specs</span>
-                            <svg viewBox="0 0 24 24" style="width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width:2.5;">
-                                <line x1="5" y1="12" x2="19" y2="12" />
-                                <polyline points="12 5 19 12 12 19" />
-                            </svg>
-                        </div>
-                    </div>
+				<!-- Category Filter Bar -->
+				<div class="filter-bar reveal">
+					<button class="filter-btn active" data-filter="all">All Products (16)</button>
+					<button class="filter-btn" data-filter="saas">SaaS &amp; Platforms (4)</button>
+					<button class="filter-btn" data-filter="mobile">Mobile &amp; Desktop (7)</button>
+					<button class="filter-btn" data-filter="client">Client Brand Builds (3)</button>
+					<button class="filter-btn" data-filter="data">Open Data &amp; Tools (2)</button>
+				</div>
 
-                    <!-- Project 7: Mouse Click Utility (Desktop) -->
-                    <div class="work-card card-ai reveal" data-category="mobile" onclick="window.location.href='mouse-click-utility.html'" style="transition-delay: 0.2s; --glow-clr: #ef4444; --glow-clr-glow: rgba(239, 68, 68, 0.12); --glow-clr-glow-lg: rgba(239, 68, 68, 0.25);">
-                        <div class="work-card-content">
-                            <div class="work-card-meta">
-                                <span class="tag">Desktop</span>
-                                <span class="tag">Win32 API</span>
-                            </div>
-                            <h3 class="work-card-title">Mouse Click Utility</h3>
-                            <p class="work-card-desc">High-frequency cursor macro automation companion with gaussian jitter variance and emergency hotkey kill switches.</p>
-                        </div>
-                        <div class="work-card-footer">
-                            <span class="btn-text" style="font-size: 0.8rem;">View Product &amp; Specs</span>
-                            <svg viewBox="0 0 24 24" style="width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width:2.5;">
-                                <line x1="5" y1="12" x2="19" y2="12" />
-                                <polyline points="12 5 19 12 12 19" />
-                            </svg>
-                        </div>
-                    </div>
+				<div class="work-grid" id="vault-grid">
+					<!-- Project 1: Forge Coding Agent (SaaS / Desktop IDE) -->
+					<div class="work-card card-dev reveal" data-category="saas" onclick="window.location.href='forge-agent.html'" style="transition-delay: 0.03s; --glow-clr: #38bdf8; --glow-clr-glow: rgba(56, 189, 248, 0.12); --glow-clr-glow-lg: rgba(56, 189, 248, 0.25);">
+						<div class="work-card-content">
+							<div class="work-card-meta">
+								<span class="tag">AI Agent IDE</span>
+								<span class="tag">Electron</span>
+								<span class="tag">Monaco</span>
+							</div>
+							<h3 class="work-card-title">Forge Desktop Agent</h3>
+							<p class="work-card-desc">Autonomous desktop coding agent with pnpm monorepo architecture, semantic RAG codebase indexing, and 50+ tokenized UI systems.</p>
+						</div>
+						<div class="work-card-footer">
+							<span class="btn-text" style="font-size: 0.8rem;">View Architecture &amp; Spec</span>
+							<svg viewBox="0 0 24 24" style="width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2.5;">
+								<line x1="5" y1="12" x2="19" y2="12" />
+								<polyline points="12 5 19 12 12 19" />
+							</svg>
+						</div>
+					</div>
 
-                    <!-- Project 8: IronPulse Gym (Client) -->
-                    <div class="work-card card-health reveal" data-category="client" onclick="window.location.href='ironpulse-gym.html'" style="transition-delay: 0.22s; --glow-clr: #ff4a1c; --glow-clr-glow: rgba(255, 74, 28, 0.12);">
-                        <div class="work-card-content">
-                            <div class="work-card-meta">
-                                <span class="tag">Client Build</span>
-                                <span class="tag">Fitness Brand</span>
-                            </div>
-                            <h3 class="work-card-title">IronPulse Gym</h3>
-                            <p class="work-card-desc">High-performance athletic facility showcase with dynamic duration pricing calculator and training program lead conversion.</p>
-                        </div>
-                        <div class="work-card-footer">
-                            <span class="btn-text" style="font-size: 0.8rem;">View Live Client Site</span>
-                            <svg viewBox="0 0 24 24" style="width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width:2.5;">
-                                <line x1="5" y1="12" x2="19" y2="12" />
-                                <polyline points="12 5 19 12 12 19" />
-                            </svg>
-                        </div>
-                    </div>
+					<!-- Project 2: goJim B2B Gym Dashboard (SaaS) -->
+					<div class="work-card card-dev reveal" data-category="saas" onclick="window.location.href='gym-dashboard.html'" style="transition-delay: 0.05s; --glow-clr: #a3e635; --glow-clr-glow: rgba(163, 230, 53, 0.12); --glow-clr-glow-lg: rgba(163, 230, 53, 0.25);">
+						<div class="work-card-content">
+							<div class="work-card-meta">
+								<span class="tag">B2B SaaS</span>
+								<span class="tag">Firestore</span>
+							</div>
+							<h3 class="work-card-title">goJim Management OS</h3>
+							<p class="work-card-desc">Multi-tenant gym operations platform with role-based simulation, pro-shop POS ledger, and live floor occupancy heatmap telemetry.</p>
+						</div>
+						<div class="work-card-footer">
+							<span class="btn-text" style="font-size: 0.8rem;">View Product &amp; Demo</span>
+							<svg viewBox="0 0 24 24" style="width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2.5;">
+								<line x1="5" y1="12" x2="19" y2="12" />
+								<polyline points="12 5 19 12 12 19" />
+							</svg>
+						</div>
+					</div>
 
-                    <!-- Project 9: Opulence Salon (Client) -->
-                    <div class="work-card card-content reveal" data-category="client" onclick="window.location.href='opulence-salon.html'" style="transition-delay: 0.25s; --glow-clr: #d4af37; --glow-clr-glow: rgba(212, 175, 55, 0.12);">
-                        <div class="work-card-content">
-                            <div class="work-card-meta">
-                                <span class="tag">Client Build</span>
-                                <span class="tag">Luxury Beauty</span>
-                            </div>
-                            <h3 class="work-card-title">Opulence Salon</h3>
-                            <p class="work-card-desc">Luxury makeover brand portal with interactive 5-column accordion image collage, service rate card, and sliding cart booking drawer.</p>
-                        </div>
-                        <div class="work-card-footer">
-                            <span class="btn-text" style="font-size: 0.8rem;">View Live Client Site</span>
-                            <svg viewBox="0 0 24 24" style="width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width:2.5;">
-                                <line x1="5" y1="12" x2="19" y2="12" />
-                                <polyline points="12 5 19 12 12 19" />
-                            </svg>
-                        </div>
-                    </div>
+					<!-- Project 3: Quarters Allotment System (Enterprise SaaS) -->
+					<div class="work-card card-dev reveal" data-category="saas" onclick="window.location.href='allotment-system.html'" style="transition-delay: 0.07s; --glow-clr: #818cf8; --glow-clr-glow: rgba(129, 140, 248, 0.12); --glow-clr-glow-lg: rgba(129, 140, 248, 0.25);">
+						<div class="work-card-content">
+							<div class="work-card-meta">
+								<span class="tag">Enterprise SaaS</span>
+								<span class="tag">Supabase RLS</span>
+								<span class="tag">React + Flutter</span>
+							</div>
+							<h3 class="work-card-title">Quarters Allotment OS</h3>
+							<p class="work-card-desc">Gov/Corporate housing quarter allotment system with automated seniority algorithms, audit trails, and mobile tenant portal.</p>
+						</div>
+						<div class="work-card-footer">
+							<span class="btn-text" style="font-size: 0.8rem;">View Enterprise Architecture</span>
+							<svg viewBox="0 0 24 24" style="width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2.5;">
+								<line x1="5" y1="12" x2="19" y2="12" />
+								<polyline points="12 5 19 12 12 19" />
+							</svg>
+						</div>
+					</div>
 
-                    <!-- Project 10: Ritu Designer (Client) -->
-                    <div class="work-card card-content reveal" data-category="client" onclick="window.location.href='ritu-designer.html'" style="transition-delay: 0.28s; --glow-clr: #800020; --glow-clr-glow: rgba(128, 0, 32, 0.12);">
-                        <div class="work-card-content">
-                            <div class="work-card-meta">
-                                <span class="tag">Client Build</span>
-                                <span class="tag">Bespoke Couture</span>
-                            </div>
-                            <h3 class="work-card-title">Ritu Designer</h3>
-                            <p class="work-card-desc">Bespoke fashion designer landing page featuring Diwan Fashion House couture boutique, stitching academy, and order intake.</p>
-                        </div>
-                        <div class="work-card-footer">
-                            <span class="btn-text" style="font-size: 0.8rem;">View Live Client Site</span>
-                            <svg viewBox="0 0 24 24" style="width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width:2.5;">
-                                <line x1="5" y1="12" x2="19" y2="12" />
-                                <polyline points="12 5 19 12 12 19" />
-                            </svg>
-                        </div>
-                    </div>
+					<!-- Project 4: Unified Agency Client Portal (SaaS) -->
+					<div class="work-card card-dev reveal" data-category="saas" onclick="window.location.href='portal.html'" style="transition-delay: 0.09s; --glow-clr: var(--acc); --glow-clr-glow: var(--acc-glow); --glow-clr-glow-lg: var(--acc-glow-vivid);">
+						<div class="work-card-content">
+							<div class="work-card-meta">
+								<span class="tag">Web Hub</span>
+								<span class="tag">SPA</span>
+							</div>
+							<h3 class="work-card-title">Shiraj Life Agency Portal</h3>
+							<p class="work-card-desc">Unified client console managing active project milestones, contracts, deliverables review, and embedded tool execution.</p>
+						</div>
+						<div class="work-card-footer">
+							<span class="btn-text" style="font-size: 0.8rem;">Launch Portal Console</span>
+							<svg viewBox="0 0 24 24" style="width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2.5;">
+								<line x1="5" y1="12" x2="19" y2="12" />
+								<polyline points="12 5 19 12 12 19" />
+							</svg>
+						</div>
+					</div>
 
-                    <!-- Project 11: Free Exercise Database & Dataset (Data) -->
-                    <div class="work-card card-data reveal" data-category="data" onclick="window.location.href='exercise-db.html'" style="transition-delay: 0.3s; --glow-clr: #a855f7; --glow-clr-glow: rgba(168, 85, 247, 0.12);">
-                        <div class="work-card-content">
-                            <div class="work-card-meta">
-                                <span class="tag">Open Source</span>
-                                <span class="tag">JSON Dataset</span>
-                            </div>
-                            <h3 class="work-card-title">Free Exercise DB &amp; Dataset</h3>
-                            <p class="work-card-desc">Public domain exercise dataset indexing 800+ movements with anatomical tags, equipment constraints, and demonstration assets.</p>
-                        </div>
-                        <div class="work-card-footer">
-                            <span class="btn-text" style="font-size: 0.8rem;">View Product &amp; Specs</span>
-                            <svg viewBox="0 0 24 24" style="width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width:2.5;">
-                                <line x1="5" y1="12" x2="19" y2="12" />
-                                <polyline points="12 5 19 12 12 19" />
-                            </svg>
-                        </div>
-                    </div>
+					<!-- Project 5: Gym Mentor (Mobile) -->
+					<div class="work-card card-health reveal" data-category="mobile" onclick="window.location.href='gym-mentor.html'" style="transition-delay: 0.11s;">
+						<div class="work-card-content">
+							<div class="work-card-meta">
+								<span class="tag">Flutter</span>
+								<span class="tag">SQLite</span>
+							</div>
+							<h3 class="work-card-title">AI Gym Mentor</h3>
+							<p class="work-card-desc">Offline-first lifting workout tracker with hypertrophy curve analyzer and on-device Gemini intelligence cache coaching.</p>
+						</div>
+						<div class="work-card-footer">
+							<span class="btn-text" style="font-size: 0.8rem;">View Product &amp; Specs</span>
+							<svg viewBox="0 0 24 24" style="width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2.5;">
+								<line x1="5" y1="12" x2="19" y2="12" />
+								<polyline points="12 5 19 12 12 19" />
+							</svg>
+						</div>
+					</div>
+
+					<!-- Project 6: Finance Manager (Mobile / Python) -->
+					<div class="work-card card-finance reveal" data-category="mobile" onclick="window.location.href='finance-manager.html'" style="transition-delay: 0.13s;">
+						<div class="work-card-content">
+							<div class="work-card-meta">
+								<span class="tag">Flutter</span>
+								<span class="tag">Firebase</span>
+								<span class="tag">SMS Scraper</span>
+							</div>
+							<h3 class="work-card-title">AI Finance Manager</h3>
+							<p class="work-card-desc">Personal wealth suite with automated SMS transaction scraping, 20+ financial calculators, and multi-currency budgeting.</p>
+						</div>
+						<div class="work-card-footer">
+							<span class="btn-text" style="font-size: 0.8rem;">View Product &amp; Specs</span>
+							<svg viewBox="0 0 24 24" style="width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2.5;">
+								<line x1="5" y1="12" x2="19" y2="12" />
+								<polyline points="12 5 19 12 12 19" />
+							</svg>
+						</div>
+					</div>
+
+					<!-- Project 7: Habit-Flow (Mobile) -->
+					<div class="work-card card-dev reveal" data-category="mobile" onclick="window.location.href='habit-flow.html'" style="transition-delay: 0.15s; --glow-clr: #38bdf8; --glow-clr-glow: rgba(56, 189, 248, 0.12); --glow-clr-glow-lg: rgba(56, 189, 248, 0.25);">
+						<div class="work-card-content">
+							<div class="work-card-meta">
+								<span class="tag">Flutter</span>
+								<span class="tag">Hive DB</span>
+							</div>
+							<h3 class="work-card-title">Habit-Flow</h3>
+							<p class="work-card-desc">Interactive daily routine engineering app structured around execution loops, streak momentum, and zero telemetry.</p>
+						</div>
+						<div class="work-card-footer">
+							<span class="btn-text" style="font-size: 0.8rem;">View Product &amp; Specs</span>
+							<svg viewBox="0 0 24 24" style="width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2.5;">
+								<line x1="5" y1="12" x2="19" y2="12" />
+								<polyline points="12 5 19 12 12 19" />
+							</svg>
+						</div>
+					</div>
+
+					<!-- Project 8: Trading-App (Mobile / FinTech) -->
+					<div class="work-card card-finance reveal" data-category="mobile" onclick="window.location.href='trading-app.html'" style="transition-delay: 0.17s; --glow-clr: #10b981; --glow-clr-glow: rgba(16, 185, 129, 0.12); --glow-clr-glow-lg: rgba(16, 185, 129, 0.25);">
+						<div class="work-card-content">
+							<div class="work-card-meta">
+								<span class="tag">Flutter</span>
+								<span class="tag">CustomPainter</span>
+							</div>
+							<h3 class="work-card-title">Trading-App</h3>
+							<p class="work-card-desc">Modern financial exchange terminal simulator demonstrating live order book depth, candlestick charts, and instant fill flows.</p>
+						</div>
+						<div class="work-card-footer">
+							<span class="btn-text" style="font-size: 0.8rem;">View Product &amp; Specs</span>
+							<svg viewBox="0 0 24 24" style="width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2.5;">
+								<line x1="5" y1="12" x2="19" y2="12" />
+								<polyline points="12 5 19 12 12 19" />
+							</svg>
+						</div>
+					</div>
+
+					<!-- Project 9: DriveBridge LAN Share (Mobile / Desktop) -->
+					<div class="work-card card-dev reveal" data-category="mobile" onclick="window.location.href='drivebridge.html'" style="transition-delay: 0.19s; --glow-clr: #06b6d4; --glow-clr-glow: rgba(6, 182, 212, 0.12); --glow-clr-glow-lg: rgba(6, 182, 212, 0.25);">
+						<div class="work-card-content">
+							<div class="work-card-meta">
+								<span class="tag">Flutter</span>
+								<span class="tag">P2P Network</span>
+								<span class="tag">Cross-Platform</span>
+							</div>
+							<h3 class="work-card-title">DriveBridge LAN Share</h3>
+							<p class="work-card-desc">High-speed wireless local file manager bridging mobile phones and PC networks with zero cloud relay requirement.</p>
+						</div>
+						<div class="work-card-footer">
+							<span class="btn-text" style="font-size: 0.8rem;">View Product &amp; Specs</span>
+							<svg viewBox="0 0 24 24" style="width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2.5;">
+								<line x1="5" y1="12" x2="19" y2="12" />
+								<polyline points="12 5 19 12 12 19" />
+							</svg>
+						</div>
+					</div>
+
+					<!-- Project 10: ProVideo Camera Lab (Mobile / Media) -->
+					<div class="work-card card-ai reveal" data-category="mobile" onclick="window.location.href='video-lab.html'" style="transition-delay: 0.21s; --glow-clr: #ec4899; --glow-clr-glow: rgba(236, 72, 153, 0.12); --glow-clr-glow-lg: rgba(236, 72, 153, 0.25);">
+						<div class="work-card-content">
+							<div class="work-card-meta">
+								<span class="tag">React + Vite</span>
+								<span class="tag">Gemini API</span>
+								<span class="tag">Media Lab</span>
+							</div>
+							<h3 class="work-card-title">ProVideo Camera Lab</h3>
+							<p class="work-card-desc">Professional video capture suite with real-time resolution testing, AI camera calibration, and frame-by-frame analysis.</p>
+						</div>
+						<div class="work-card-footer">
+							<span class="btn-text" style="font-size: 0.8rem;">View Product &amp; Specs</span>
+							<svg viewBox="0 0 24 24" style="width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2.5;">
+								<line x1="5" y1="12" x2="19" y2="12" />
+								<polyline points="12 5 19 12 12 19" />
+							</svg>
+						</div>
+					</div>
+
+					<!-- Project 11: Mouse Click Utility (Desktop) -->
+					<div class="work-card card-ai reveal" data-category="mobile" onclick="window.location.href='mouse-click-utility.html'" style="transition-delay: 0.23s; --glow-clr: #ef4444; --glow-clr-glow: rgba(239, 68, 68, 0.12); --glow-clr-glow-lg: rgba(239, 68, 68, 0.25);">
+						<div class="work-card-content">
+							<div class="work-card-meta">
+								<span class="tag">Desktop</span>
+								<span class="tag">Win32 API</span>
+							</div>
+							<h3 class="work-card-title">Mouse Click Utility</h3>
+							<p class="work-card-desc">High-frequency cursor macro automation companion with gaussian jitter variance and emergency hotkey kill switches.</p>
+						</div>
+						<div class="work-card-footer">
+							<span class="btn-text" style="font-size: 0.8rem;">View Product &amp; Specs</span>
+							<svg viewBox="0 0 24 24" style="width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2.5;">
+								<line x1="5" y1="12" x2="19" y2="12" />
+								<polyline points="12 5 19 12 12 19" />
+							</svg>
+						</div>
+					</div>
+
+					<!-- Project 12: IronPulse Gym (Client) -->
+					<div class="work-card card-health reveal" data-category="client" onclick="window.location.href='ironpulse-gym.html'" style="transition-delay: 0.25s; --glow-clr: #ff4a1c; --glow-clr-glow: rgba(255, 74, 28, 0.12);">
+						<div class="work-card-content">
+							<div class="work-card-meta">
+								<span class="tag">Client Build</span>
+								<span class="tag">Fitness Brand</span>
+							</div>
+							<h3 class="work-card-title">IronPulse Gym</h3>
+							<p class="work-card-desc">High-performance athletic facility showcase with dynamic duration pricing calculator and training program lead conversion.</p>
+						</div>
+						<div class="work-card-footer">
+							<span class="btn-text" style="font-size: 0.8rem;">View Live Client Site</span>
+							<svg viewBox="0 0 24 24" style="width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2.5;">
+								<line x1="5" y1="12" x2="19" y2="12" />
+								<polyline points="12 5 19 12 12 19" />
+							</svg>
+						</div>
+					</div>
+
+					<!-- Project 13: Opulence Salon (Client) -->
+					<div class="work-card card-content reveal" data-category="client" onclick="window.location.href='opulence-salon.html'" style="transition-delay: 0.27s; --glow-clr: #d4af37; --glow-clr-glow: rgba(212, 175, 55, 0.12);">
+						<div class="work-card-content">
+							<div class="work-card-meta">
+								<span class="tag">Client Build</span>
+								<span class="tag">Luxury Beauty</span>
+							</div>
+							<h3 class="work-card-title">Opulence Salon</h3>
+							<p class="work-card-desc">Luxury makeover brand portal with interactive 5-column accordion image collage, service rate card, and sliding booking drawer.</p>
+						</div>
+						<div class="work-card-footer">
+							<span class="btn-text" style="font-size: 0.8rem;">View Live Client Site</span>
+							<svg viewBox="0 0 24 24" style="width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2.5;">
+								<line x1="5" y1="12" x2="19" y2="12" />
+								<polyline points="12 5 19 12 12 19" />
+							</svg>
+						</div>
+					</div>
+
+					<!-- Project 14: Ritu Designer (Client) -->
+					<div class="work-card card-content reveal" data-category="client" onclick="window.location.href='ritu-designer.html'" style="transition-delay: 0.29s; --glow-clr: #800020; --glow-clr-glow: rgba(128, 0, 32, 0.12);">
+						<div class="work-card-content">
+							<div class="work-card-meta">
+								<span class="tag">Client Build</span>
+								<span class="tag">Bespoke Couture</span>
+							</div>
+							<h3 class="work-card-title">Ritu Designer</h3>
+							<p class="work-card-desc">Bespoke fashion designer landing page featuring Diwan Fashion House couture boutique, stitching academy, and order intake.</p>
+						</div>
+						<div class="work-card-footer">
+							<span class="btn-text" style="font-size: 0.8rem;">View Live Client Site</span>
+							<svg viewBox="0 0 24 24" style="width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2.5;">
+								<line x1="5" y1="12" x2="19" y2="12" />
+								<polyline points="12 5 19 12 12 19" />
+							</svg>
+						</div>
+					</div>
+
+					<!-- Project 15: Free Exercise Database & Dataset (Data) -->
+					<div class="work-card card-data reveal" data-category="data" onclick="window.location.href='exercise-db.html'" style="transition-delay: 0.31s; --glow-clr: #a855f7; --glow-clr-glow: rgba(168, 85, 247, 0.12);">
+						<div class="work-card-content">
+							<div class="work-card-meta">
+								<span class="tag">Open Source</span>
+								<span class="tag">JSON Dataset</span>
+							</div>
+							<h3 class="work-card-title">Free Exercise &amp; Dataset</h3>
+							<p class="work-card-desc">Public domain exercise dataset indexing 800+ movements with anatomical tags, equipment constraints, and demonstration assets.</p>
+						</div>
+						<div class="work-card-footer">
+							<span class="btn-text" style="font-size: 0.8rem;">View Product &amp; Specs</span>
+							<svg viewBox="0 0 24 24" style="width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2.5;">
+								<line x1="5" y1="12" x2="19" y2="12" />
+								<polyline points="12 5 19 12 12 19" />
+							</svg>
+						</div>
+					</div>
+
+					<!-- Project 16: gstack Agent Runner (Data / Automation) -->
+					<div class="work-card card-data reveal" data-category="data" onclick="window.location.href='gstack-runner.html'" style="transition-delay: 0.33s; --glow-clr: #f59e0b; --glow-clr-glow: rgba(245, 158, 11, 0.12);">
+						<div class="work-card-content">
+							<div class="work-card-meta">
+								<span class="tag">Automation</span>
+								<span class="tag">Bun / Node.js</span>
+								<span class="tag">Playwright</span>
+							</div>
+							<h3 class="work-card-title">gstack Autonomous Pipeline</h3>
+							<p class="work-card-desc">Headless browser automation framework with Claude skill runner, Playwright execution, and Mermaid/Excalidraw diagram renderers.</p>
+						</div>
+						<div class="work-card-footer">
+							<span class="btn-text" style="font-size: 0.8rem;">View Pipeline Tools</span>
+							<svg viewBox="0 0 24 24" style="width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2.5;">
+								<line x1="5" y1="12" x2="19" y2="12" />
+								<polyline points="12 5 19 12 12 19" />
+							</svg>
+						</div>
+					</div>
                 </div>
             </div>
         </section>

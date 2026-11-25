@@ -28,33 +28,95 @@
         });
     };
 
-    // Mini Wealth Calculator in Hero Terminal
-    window.calcHeroTerminalWealth = function () {
-        const principal = parseFloat(document.getElementById('hero-term-invest')?.value || 25000);
-        const years = parseFloat(document.getElementById('hero-term-years')?.value || 10);
-        const rate = 0.12; // 12% CAGR equity benchmark
+    // Currency state (INR default, toggleable to USD)
+    let heroCurrency = 'INR';
+    const USD_RATE = 84;
 
-        const fv = principal * (Math.pow(1 + rate, years));
-        const totalInvested = principal;
+    function formatMoney(inrAmount) {
+        if (heroCurrency === 'USD') {
+            const usd = Math.round(inrAmount / USD_RATE);
+            return `$${usd.toLocaleString('en-US')}`;
+        }
+        return `₹${Math.round(inrAmount).toLocaleString('en-IN')}`;
+    }
+
+    window.toggleHeroCurrency = function () {
+        heroCurrency = heroCurrency === 'INR' ? 'USD' : 'INR';
+        const btn = document.getElementById('hero-currency-toggle');
+        if (btn) btn.textContent = heroCurrency === 'INR' ? '₹ INR' : '$ USD';
+        calcHeroTerminalWealth();
+        updateEstimatorTotal();
+    };
+
+    // Mini SIP Wealth Calculator in Hero Terminal (True Monthly SIP Compounding)
+    window.calcHeroTerminalWealth = function () {
+        const monthlySip = parseFloat(document.getElementById('hero-term-invest')?.value || 25000);
+        const years = parseFloat(document.getElementById('hero-term-years')?.value || 10);
+        const annualRate = 0.12; // 12% CAGR equity benchmark
+        const monthlyRate = annualRate / 12;
+        const months = years * 12;
+
+        // Future Value of Monthly SIP (annuity due): P * [((1 + r)^n - 1) / r] * (1 + r)
+        const fv = monthlySip * ((Math.pow(1 + monthlyRate, months) - 1) / monthlyRate) * (1 + monthlyRate);
+        const totalInvested = monthlySip * months;
         const wealthGain = fv - totalInvested;
 
         const valInvest = document.getElementById('hero-term-invest-val');
-        if (valInvest) valInvest.textContent = `₹${principal.toLocaleString('en-IN')}`;
+        if (valInvest) valInvest.textContent = `${formatMoney(monthlySip)}/mo`;
 
         const valYears = document.getElementById('hero-term-years-val');
         if (valYears) valYears.textContent = `${years} Years`;
 
         const outFv = document.getElementById('hero-term-fv');
-        if (outFv) outFv.textContent = `₹${Math.round(fv).toLocaleString('en-IN')}`;
+        if (outFv) outFv.textContent = formatMoney(fv);
 
         const outGain = document.getElementById('hero-term-gain');
-        if (outGain) outGain.textContent = `+₹${Math.round(wealthGain).toLocaleString('en-IN')} Gain (12% CAGR)`;
+        if (outGain) outGain.textContent = `+${formatMoney(wealthGain)} Gain · ${formatMoney(totalInvested)} Invested (12% CAGR)`;
+    };
+
+    // 1-Click Sample NSDL CAS Parser Sandbox
+    window.loadSampleCAS = function () {
+        const out = document.getElementById('hero-cas-output');
+        const btn = document.getElementById('hero-cas-btn');
+        if (!out) return;
+
+        if (btn) {
+            btn.disabled = true;
+            btn.textContent = 'Decrypting CAS...';
+        }
+
+        setTimeout(() => {
+            out.style.display = 'block';
+            out.innerHTML = `
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                    <span style="font-family:var(--font-mono); font-size:0.7rem; color:var(--acc); font-weight:700;">NSDL_CAS_2026.PDF · PARSED IN 38ms (LOCAL)</span>
+                    <span style="font-family:var(--font-mono); font-size:0.72rem; color:#10b981; font-weight:800;">XIRR 16.4%</span>
+                </div>
+                <div style="display:flex; height:6px; border-radius:99px; overflow:hidden; gap:2px; margin-bottom:8px;">
+                    <div style="width:68%; background:var(--acc);" title="Equity 68%"></div>
+                    <div style="width:22%; background:#3b82f6;" title="Debt 22%"></div>
+                    <div style="width:10%; background:#f59e0b;" title="Gold 10%"></div>
+                </div>
+                <div style="display:flex; justify-content:space-between; font-size:0.72rem; color:var(--txt-1); font-family:var(--font-mono);">
+                    <span>68% Equity · 22% Debt · 10% Gold</span>
+                    <span style="color:var(--txt-0);">LTCG Free: ₹1.12L</span>
+                </div>
+            `;
+            if (btn) {
+                btn.disabled = false;
+                btn.textContent = '✓ Sample CAS Loaded';
+            }
+            if (window.showToast) {
+                window.showToast('Parsed 14 folios locally — zero bytes sent to cloud', 'success');
+            }
+        }, 220);
     };
 
     // Mini Gym Check-in Simulator in Hero Terminal
     window.simulateHeroTerminalCheckin = function () {
         const slots = document.querySelectorAll('.hero-gym-slot');
         const emptySlots = Array.from(slots).filter(s => !s.classList.contains('active') && !s.classList.contains('occupied'));
+        const logEl = document.getElementById('hero-gym-log');
 
         if (emptySlots.length > 0) {
             const randomSlot = emptySlots[Math.floor(Math.random() * emptySlots.length)];
@@ -68,12 +130,29 @@
                 countEl.textContent = `${next} / 16 Stations`;
             }
 
+            if (logEl) {
+                const names = ['Aarav M.', 'Priya K.', 'Kabir R.', 'Neha S.', 'Dev P.'];
+                const member = names[Math.floor(Math.random() * names.length)];
+                const latency = 9 + Math.floor(Math.random() * 9);
+                logEl.textContent = `RFID #${randomSlot.textContent.trim()} · ${member} · Verified (${latency}ms)`;
+            }
+
             if (window.showToast) {
                 window.showToast(`Turnstile Verified: Station ${randomSlot.textContent.trim()} Occupied`, 'success');
             }
         } else {
+            // Reset back to baseline 11/16 so user can keep testing
+            slots.forEach((s, idx) => {
+                if (idx >= 11) s.classList.remove('active', 'occupied');
+            });
+            const countEl = document.getElementById('hero-gym-count');
+            if (countEl) {
+                countEl.setAttribute('data-count', 11);
+                countEl.textContent = '11 / 16 Stations';
+            }
+            if (logEl) logEl.textContent = 'Shift reset · 11 active stations online';
             if (window.showToast) {
-                window.showToast('All 16 training stations at peak capacity!', 'info');
+                window.showToast('Peak capacity reached — floor matrix reset to 11/16', 'info');
             }
         }
     };
@@ -124,7 +203,9 @@
 
     function updateEstimatorTotal() {
         const total = Math.round(estimatorState.scopePrice * estimatorState.timelineMultiplier);
-        const formatted = new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(total);
+        const formatted = heroCurrency === 'USD'
+            ? new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(Math.round(total / USD_RATE))
+            : new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(total);
 
         const estVal = document.getElementById('est-summary-val');
         if (estVal) estVal.textContent = formatted;
@@ -137,6 +218,29 @@
             subjectInput.value = `Project Inquiry: ${estimatorState.scopeLabel} (${estimatorState.timelineLabel}) ~ ${formatted}`;
         }
     }
+
+    // Interactive BI Card Preview Switcher
+    window.switchBiPreview = function (mode, btn) {
+        const parent = btn?.closest('.card-preview-box');
+        if (!parent) return;
+        parent.querySelectorAll('.preview-pill-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        const metricEl = document.getElementById('bi-preview-metric');
+        const subEl = document.getElementById('bi-preview-sub');
+        const bars = parent.querySelectorAll('.bi-mini-bar');
+        const presets = {
+            cashflow: { metric: '+₹68,400/mo', sub: 'Net Rental Yield · 8.4% Cap Rate', heights: [38, 52, 48, 66, 74, 92] },
+            sip: { metric: '₹1.42 Cr', sub: '15Y Step-Up SIP · 14.2% XIRR', heights: [22, 34, 49, 64, 81, 100] },
+            tax: { metric: '₹1.12L Saved', sub: 'LTCG Harvest Window · FY26', heights: [60, 45, 72, 58, 84, 78] }
+        };
+        const p = presets[mode] || presets.cashflow;
+        if (metricEl) metricEl.textContent = p.metric;
+        if (subEl) subEl.textContent = p.sub;
+        bars.forEach((bar, i) => {
+            if (p.heights[i] !== undefined) bar.style.height = `${p.heights[i]}%`;
+        });
+    };
 
     // ==========================================
     // 3. UNIVERSAL COMMAND PALETTE (CMD + K)

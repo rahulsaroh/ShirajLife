@@ -718,6 +718,7 @@ header.scrolled {
 
 .work-card-meta {
     display: flex;
+    flex-wrap: wrap;
     gap: 6px;
     margin-bottom: 12px;
 }
@@ -1074,10 +1075,16 @@ footer::before {
     }
 }
 
+.ecosystem-card .star-impact-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+}
+
 .star-col {
     display: flex;
     flex-direction: column;
     gap: 4px;
+    min-width: 0;
 }
 
 .star-tag {
@@ -1093,6 +1100,7 @@ footer::before {
     font-size: 0.8rem;
     line-height: 1.45;
     color: var(--txt-1);
+    overflow-wrap: anywhere;
 }
 
 .star-desc strong {
@@ -1551,6 +1559,7 @@ footer::before {
     justify-content: space-between;
     position: relative;
     overflow: hidden;
+    min-width: 0;
     transition: all 0.3s var(--ease-expo);
     box-shadow: var(--sh-sm);
 }
@@ -1563,6 +1572,7 @@ footer::before {
 
 .ecosystem-card-top {
     margin-bottom: var(--sp-md);
+    min-width: 0;
 }
 
 .ecosystem-icon {

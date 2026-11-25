@@ -122,48 +122,62 @@ const PortalViews = {
                     </div>
                 </a>
 
-                <a href="#/tools/spreadsheets" class="p-launch-card">
-                    <span class="p-launch-card-badge">BI & Analytics</span>
-                    <div class="p-launch-icon-wrap">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
-                    </div>
-                    <div>
-                        <h3>Spreadsheet & Underwriter Suite</h3>
-                        <p>Interactive mathematical engines for Real Estate cashflow, SaaS runway forecasting, and sales commission pipelines.</p>
-                    </div>
-                    <div class="p-launch-card-footer">
-                        <span>Open Calculators</span> →
-                    </div>
-                </a>
+			<a href="#/tools/spreadsheets" class="p-launch-card">
+				<span class="p-launch-card-badge">BI &amp; Underwriting</span>
+				<div class="p-launch-icon-wrap">
+					<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+				</div>
+				<div>
+					<h3>Airbnb &amp; BRRRR PRO Models</h3>
+					<p>Turnkey real estate underwriting engines with Cap Rate, CoC, seasonality curves, and lender pitch decks.</p>
+				</div>
+				<div class="p-launch-card-footer">
+					<span>Open Calculators &amp; Demos</span>
+				</div>
+			</a>
 
-                <a href="#/tools/finance" class="p-launch-card">
-                    <span class="p-launch-card-badge">FinTech</span>
-                    <div class="p-launch-icon-wrap">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-                    </div>
-                    <div>
-                        <h3>AI Finance Manager</h3>
-                        <p>Offline CAS statement parser, portfolio asset rebalancer, and capital gains tax optimization architecture.</p>
-                    </div>
-                    <div class="p-launch-card-footer">
-                        <span>View Architecture</span> →
-                    </div>
-                </a>
+			<a href="forge-agent.html" class="p-launch-card">
+				<span class="p-launch-card-badge">AI Desktop IDE</span>
+				<div class="p-launch-icon-wrap">
+					<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+				</div>
+				<div>
+					<h3>Forge AI Desktop Agent</h3>
+					<p>Electron/TypeScript autonomous coding IDE with Monaco editor, RAG indexing, and 50+ tokenized design tokens.</p>
+				</div>
+				<div class="p-launch-card-footer">
+					<span>View Architecture &amp; Specs</span>
+				</div>
+			</a>
 
-                <a href="#/showcases/ironpulse" class="p-launch-card">
-                    <span class="p-launch-card-badge">Client Showcase</span>
-                    <div class="p-launch-icon-wrap">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m10 15 5-3-5-3v6z"/></svg>
-                    </div>
-                    <div>
-                        <h3>IronPulse Gym Demo</h3>
-                        <p>Client landing page with interactive multi-duration membership pricing calculator and facility preview.</p>
-                    </div>
-                    <div class="p-launch-card-footer">
-                        <span>Open Showcase</span> →
-                    </div>
-                </a>
-            </div>
+			<a href="#/tools/finance" class="p-launch-card">
+				<span class="p-launch-card-badge">FinTech</span>
+				<div class="p-launch-icon-wrap">
+					<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+				</div>
+				<div>
+					<h3>AI Finance Manager</h3>
+					<p>Offline CAS statement parser, portfolio asset rebalancer, and capital gains tax optimization architecture.</p>
+				</div>
+				<div class="p-launch-card-footer">
+					<span>View Architecture</span>
+				</div>
+			</a>
+
+			<a href="#/showcases/ironpulse" class="p-launch-card">
+				<span class="p-launch-card-badge">Client Showcase</span>
+				<div class="p-launch-icon-wrap">
+					<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
+				</div>
+				<div>
+					<h3>IronPulse Gym Demo</h3>
+					<p>Client landing page with interactive multi-duration membership pricing calculator and facility preview.</p>
+				</div>
+				<div class="p-launch-card-footer">
+					<span>Open Showcase</span>
+				</div>
+			</a>
+		</div>
         `;
     },
 
